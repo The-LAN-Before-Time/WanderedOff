@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "188616078574",
+    "project_id": "wandered-off",
+    "storage_bucket": "wandered-off.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188616078574:android:effae83bee07ea50986fff",
+        "android_client_info": {
+          "package_name": "com.reactnativefirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "188616078574-ar9cq1a1bsifd92a2ajge5cslkdjjvr4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_kspQpSfdWAE4QhB0hrZM6ok1vJvj_yw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "188616078574-ar9cq1a1bsifd92a2ajge5cslkdjjvr4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "188616078574-t16hnmd9pqgbolil992g4gk3mbb6ip6e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.reactnativefirebase"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
