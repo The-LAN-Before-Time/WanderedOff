@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0f05a6d6-6822-4ad6-8f1b-11e537ee08a0" name="Default Changelist" comment="" />
+    <list default="true" id="0f05a6d6-6822-4ad6-8f1b-11e537ee08a0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MapScreen/googleMap.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MapScreen/GoogleMap.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +28,34 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gant" />
   </component>
+  <component name="RunManager">
+    <configuration name="android" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="android" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="ios" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="ios" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.android" />
+        <item itemvalue="npm.ios" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -38,14 +69,16 @@
     </task>
     <servers />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="304" y="154" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1616024258415">
-      <screen x="0" y="25" width="1680" height="940" />
-    </state>
-    <state x="304" y="154" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1680.940@0.25.1680.940" timestamp="1616024258415" />
-    <state x="222" y="242" width="1200" height="700" key="AVDManager" timestamp="1616027295177">
-      <screen x="0" y="25" width="1680" height="940" />
-    </state>
-    <state x="222" y="242" width="1200" height="700" key="AVDManager/0.25.1680.940@0.25.1680.940" timestamp="1616027295177" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
