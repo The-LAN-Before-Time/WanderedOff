@@ -14,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.reactnativefirebase",
       "supportsTablet": true,
@@ -24,10 +22,7 @@
         "googleMapsApiKey": "AIzaSyCRvhObtY3ZRIMOf2doHUCq5t0VA2x_v5Y"
       },
       "infoPlist": {
-        "UIBackgroundModes": [
-          "location",
-          "fetch"
-        ]
+        "UIBackgroundModes": ["location", "fetch"]
       }
     },
     "android": {
@@ -35,14 +30,15 @@
       "package": "com.reactnativefirebase",
       "config": {
         "googleMaps": {
-           "apiKey": "AIzaSyCRvhObtY3ZRIMOf2doHUCq5t0VA2x_v5Y"
-         }
+          "apiKey": "AIzaSyCRvhObtY3ZRIMOf2doHUCq5t0VA2x_v5Y"
+        }
       },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "permissions": [
+        "SYSTEM_ALERT_WINDOW",
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION"
       ]
