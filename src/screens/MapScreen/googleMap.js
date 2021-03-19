@@ -226,15 +226,19 @@ import {
   View,
   PermissionsAndroid,
 } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, AnimatedRegion } from 'react-native-maps';
 import * as Permission from 'expo-permissions';
 export default class GoogleMap extends React.Component {
-  // constructor(props) {
-  //     this.state = {
-  //         permissionStatus: false
-  //     }
-  //     this.getPermissions = this.getPermissions.bind(this);
-  // }
+  //   constructor(props) {
+  //       this.state = {
+  //         region: {
+  //             latitude: 37.78825,
+  //             longitude: -122.4324,
+  //             latitudeDelta: 0.0922,
+  //             longitudeDelta: 0.0421
+  //         }
+  //       }
+  //   }
   // async getPermissions() {
   //     try {
   //         const { status } = await Permission.askAsync(Permission.LOCATION)
@@ -243,6 +247,29 @@ export default class GoogleMap extends React.Component {
   //         console.error(err)
   //     }
   // }
+
+  //   async getCurrentLocation() {
+  //     navigator.geolocation.getCurrentPosition(
+  //         position => {
+  //             let region = {
+  //                     latitude: parseFloat(position.coords.latitude),
+  //                     longitude: parseFloat(position.coords.longitude),
+  //                     latitudeDelta: 5,
+  //                     longitudeDelta: 5
+  //                 };
+  //                 await this.setState({
+  //                     initialRegion: region
+  //                 });
+  //             },
+  //             error => console.log(error),
+  //             {
+  //                 enableHighAccuracy: true,
+  //                 timeout: 20000,
+  //                 maximumAge: 1000
+  //             }
+  //         );
+  //     }
+
   render() {
     // this.getPermissions();
     const latitude = 37.78825;
@@ -255,13 +282,15 @@ export default class GoogleMap extends React.Component {
     });
     return (
       <MapView
-        onMapReady={() => {
-          PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-          ).then((granted) => {
-            alert(granted); // just to ensure that permissions were granted
-          });
-        }}
+        // onMapReady={() => {
+        //   Platform.OS === 'android'
+        //     ? PermissionsAndroid.request(
+        //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+        //       ).then((granted) => {
+        //         alert(granted); // just to ensure that permissions were granted
+        //       })
+        //     : '';
+        // }}
         style={{ flex: 1 }}
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
