@@ -4,4 +4,4 @@ export { default as HomeScreen } from './HomeScreen/HomeScreen'
 
 export { default as RegistrationScreen } from './RegistrationScreen/RegistrationScreen'
 
-export { default as googleMap } from './MapScreen/googleMap'
+export { default as GoogleMap } from './MapScreen/GoogleMap'
