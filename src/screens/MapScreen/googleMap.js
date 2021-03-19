@@ -274,12 +274,12 @@ export default class GoogleMap extends React.Component {
     // this.getPermissions();
     const latitude = 37.78825;
     const longitude = -122.4324;
-    navigator.geolocation.getCurrentPosition((position) => {
-      latitude = JSON.stringify(position.coords.latitude);
-      longitude = JSON.stringify(position.coords.longitude);
-      console.log('lat: ', latitude);
-      console.log('long: ', longitude);
-    });
+    // navigator.geolocation.getCurrentPosition((position) => {
+    //   latitude = JSON.stringify(position.coords.latitude);
+    //   longitude = JSON.stringify(position.coords.longitude);
+    //   console.log('lat: ', latitude);
+    //   console.log('long: ', longitude);
+    // });
     return (
       <MapView
         // onMapReady={() => {
