@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "react-native-firebase",
-    "slug": "react-native-firebase",
+    "name": "Wandered Off",
+    "slug": "Wandered-Off",
     "version": "1.0.0",
+    "privacy": "public",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,13 +18,34 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.reactnativefirebase",
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyCRvhObtY3ZRIMOf2doHUCq5t0VA2x_v5Y"
+      },
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      }
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
+      "package": "com.reactnativefirebase",
+      "config": {
+        "googleMaps": {
+           "apiKey": "AIzaSyCRvhObtY3ZRIMOf2doHUCq5t0VA2x_v5Y"
+         }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
