@@ -28,7 +28,7 @@ import {
   LoginScreen,
   HomeScreen,
   RegistrationScreen,
-  GoogleMap,
+  MapScreen,
   SessionScreen,
 } from './src/screens';
 import { Text } from 'react-native';
@@ -104,7 +104,7 @@ export default function App() {
         {user ? (
           <>
             <Stack.Screen name='Home'>
-              {(props) => <SessionScreen {...props} extraData={user} />}
+              {(props) => <MapScreen {...props} extraData={user} />}
             </Stack.Screen>
             <Stack.Screen name='Login' component={LoginScreen} />
             <Stack.Screen name='Registration' component={RegistrationScreen} />
@@ -114,7 +114,7 @@ export default function App() {
             <Stack.Screen name='Login' component={LoginScreen} />
             <Stack.Screen name='Registration' component={RegistrationScreen} />
             <Stack.Screen name='Home'>
-              {(props) => <GoogleMap {...props} extraData={user} />}
+              {(props) => <MapScreen {...props} extraData={user} />}
             </Stack.Screen>
           </>
         )}

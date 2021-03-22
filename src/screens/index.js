@@ -4,6 +4,6 @@ export { default as HomeScreen } from './HomeScreen/HomeScreen';
 
 export { default as RegistrationScreen } from './RegistrationScreen/RegistrationScreen';
 
-export { default as GoogleMap } from './MapScreen/GoogleMap';
-
 export { default as SessionScreen } from './AddSessionScreen/AddSessionScreen';
+
+export { default as MapScreen } from './MapScreen/MapScreen';
