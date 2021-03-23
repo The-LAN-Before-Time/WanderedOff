@@ -16,6 +16,7 @@ import * as Permission from 'expo-permissions';
 import { firebase } from '../../firebase/config';
 // import { AccountCircleIcon, CheckBoxIcon } from '@material-ui/icons';
 import { Ionicons } from '@expo/vector-icons';
+import haversine from 'haversine';
 
 export default function MapScreen(props) {
   let mapRef = useRef(null);
@@ -36,10 +37,10 @@ export default function MapScreen(props) {
   const [mapReady, setMapReady] = useState(false);
 
   const [userLocationFound, setUserLocationFound] = useState(false);
-  const [radius, setRadius] = useState(15000);
+  const [radius, setRadius] = useState(12000);
   const [sessionUsers, setSessionUsers] = useState([]);
   const colors = ['red', 'green', 'purple'];
-  const defaultPadding = {top: 20, right: 20, bottom: 20, left: 20 };
+  const defaultPadding = { top: 20, right: 20, bottom: 20, left: 20 };
 
   const getCurrentLocation = () => {
     // navigator.geolocation.getCurrentPosition(
@@ -58,17 +59,21 @@ export default function MapScreen(props) {
     //     maximumAge: 1000,
     //   }
     // );
-    let watchID = navigator.geolocation.watchPosition(position => {
-      setRegion({
+    let watchID = navigator.geolocation.watchPosition(
+      (position) => {
+        setRegion({
           latitude: parseFloat(position.coords.latitude),
           longitude: parseFloat(position.coords.longitude),
           latitudeDelta: 5,
           longitudeDelta: 5,
         });
-      setUserLocationFound(true);
-      //save new position to proxy db evey 5-10 seconds
-      console.log("WATCH", region);
-    }, error => console.log(error.message), {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
+        setUserLocationFound(true);
+        //save new position to proxy db evey 5-10 seconds
+        console.log('WATCH', region);
+      },
+      (error) => console.log(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
   };
 
   const goToInitialRegion = () => {
@@ -86,37 +91,42 @@ export default function MapScreen(props) {
     //     longitude: user.location.longitude,
     //   }))
     // );
-    if(usersLoaded) {
-      console.log("HI FROM MAPREADY")
+    if (usersLoaded) {
+      console.log('HI FROM MAPREADY');
       let coords = sessionUsers.map((user) => ({
-          latitude: user.location.latitude,
-          longitude: user.location.longitude,
-        }));
+        latitude: user.location.latitude,
+        longitude: user.location.longitude,
+      }));
 
       coords.push({
         latitude: center.latitude + radius * 0.0000089,
         longitude: center.longitude,
-      })
+      });
 
       coords.push({
         latitude: center.latitude - radius * 0.0000089,
         longitude: center.longitude,
-      })
+      });
 
       coords.push({
         latitude: center.latitude,
-        longitude: center.longitude + radius * 0.0000089 / Math.cos(center.latitude * 0.018),
-      })
+        longitude:
+          center.longitude +
+          (radius * 0.0000089) / Math.cos(center.latitude * 0.018),
+      });
 
       coords.push({
         latitude: center.latitude,
-        longitude: center.longitude - radius * 0.0000089 / Math.cos(center.latitude * 0.018),
-      })
-      console.log("COORDS", coords);
+        longitude:
+          center.longitude -
+          (radius * 0.0000089) / Math.cos(center.latitude * 0.018),
+      });
+      console.log('COORDS', coords);
       //mapRef.current.fitToElements(true);
-      mapRef.current.fitToCoordinates(coords,
-        { edgePadding: defaultPadding, animated: true }
-      );
+      mapRef.current.fitToCoordinates(coords, {
+        edgePadding: defaultPadding,
+        animated: true,
+      });
       console.log('animate complete');
     }
   };
@@ -145,6 +155,20 @@ export default function MapScreen(props) {
         });
         //if (notZoomed) goToInitialRegion(activeUsers);
         setNotZoomed(false);
+        activeUsers.forEach((user) => {
+          console.log('user: ', user.fullName);
+          console.log(
+            'distance from center: ',
+            haversine(center, user.location, { unit: 'meter' })
+          );
+          console.log(
+            'in range: ',
+            haversine(center, user.location, {
+              threshold: radius,
+              unit: 'meter',
+            })
+          );
+        });
       },
       (error) => {
         console.log(error);
@@ -162,52 +186,58 @@ export default function MapScreen(props) {
 
   useEffect(() => {
     goToInitialRegion();
-  }, [mapReady])
+  }, [mapReady]);
 
-  if(userLocationFound && usersLoaded) {
-  return (
-    <MapView
-      style={{ flex: 1 }}
-      provider={PROVIDER_GOOGLE}
-      showsUserLocation={true}
-      followUserLocation={true}
-      zoomEnabled={true}
-      ref={mapRef}
-      // ref={(ref) => (mapRef = ref)}
-      onMapReady={()=>setMapReady(true)}
-      // onMapReady={() => {setTimeout(() => {goToInitialRegion()}, 2000)}}
-      initialRegion={region}
-      // onPress={goToInitialRegion}
-    >
-      {sessionUsers.map((user, idx) => {
-        return (
-          <Marker
-            key={user.id}
-            coordinate={{
-              latitude: user.location.latitude,
-              longitude: user.location.longitude,
-            }}
-            title={user.fullName}
-            pinColor={colors[idx]}
-          >
-            <View style={{ padding: 10, alignItems: "center" }}>
-              <Text style={{ color: colors[idx], textAlign: "center" }}>
-                {user.fullName
-                  .split(' ')
-                  .map((name) => name[0])
-                  .join('')}
-              </Text>
-              <Ionicons name="person-circle" size={24} color={colors[idx]}/>
-            </View>
-          </Marker>
-        );
-      })}
-      <Circle center={center} radius={radius} fillColor='rgba(20,20,240,0.1)' />
-    </MapView>
-  );
+  if (userLocationFound && usersLoaded) {
+    return (
+      <MapView
+        style={{ flex: 1 }}
+        provider={PROVIDER_GOOGLE}
+        showsUserLocation={true}
+        followUserLocation={true}
+        zoomEnabled={true}
+        ref={mapRef}
+        // ref={(ref) => (mapRef = ref)}
+        onMapReady={() => setMapReady(true)}
+        // onMapReady={() => {setTimeout(() => {goToInitialRegion()}, 2000)}}
+        initialRegion={region}
+        // onPress={goToInitialRegion}
+      >
+        {sessionUsers.map((user, idx) => {
+          return (
+            <Marker
+              key={user.id}
+              coordinate={{
+                latitude: user.location.latitude,
+                longitude: user.location.longitude,
+              }}
+              title={user.fullName}
+              pinColor={colors[idx]}
+            >
+              <View style={{ padding: 10, alignItems: 'center' }}>
+                <Text style={{ color: colors[idx], textAlign: 'center' }}>
+                  {user.fullName
+                    .split(' ')
+                    .map((name) => name[0])
+                    .join('')}
+                </Text>
+                <Ionicons name='person-circle' size={24} color={colors[idx]} />
+              </View>
+            </Marker>
+          );
+        })}
+        <Circle
+          center={center}
+          radius={radius}
+          fillColor='rgba(20,20,240,0.1)'
+        />
+      </MapView>
+    );
   } else {
     return (
-      <View><Text>Loading</Text></View>
-    )
+      <View>
+        <Text>Loading</Text>
+      </View>
+    );
   }
 }
