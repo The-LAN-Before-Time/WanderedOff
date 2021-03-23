@@ -155,20 +155,6 @@ export default function MapScreen(props) {
         });
         //if (notZoomed) goToInitialRegion(activeUsers);
         setNotZoomed(false);
-        activeUsers.forEach((user) => {
-          console.log('user: ', user.fullName);
-          console.log(
-            'distance from center: ',
-            haversine(center, user.location, { unit: 'meter' })
-          );
-          console.log(
-            'in range: ',
-            haversine(center, user.location, {
-              threshold: radius,
-              unit: 'meter',
-            })
-          );
-        });
       },
       (error) => {
         console.log(error);
@@ -189,6 +175,26 @@ export default function MapScreen(props) {
   }, [mapReady]);
 
   if (userLocationFound && usersLoaded) {
+    sessionUsers.forEach((user) => {
+      console.log('user: ', user.fullName);
+      console.log(
+        'distance from center: ',
+        haversine(center, user.location, { unit: 'meter' })
+      );
+      if (
+        haversine(center, user.location, {
+          threshold: radius,
+          unit: 'meter',
+        })
+      ) {
+        console.log('out of radius');
+        props.notify({
+          title: `${user.fullName} is out of range`,
+          body: `Your friend, ${user.fullName}, has fallen outside your radius. Please have them catch up to you.`,
+          data: 'no data',
+        });
+      }
+    });
     return (
       <MapView
         style={{ flex: 1 }}

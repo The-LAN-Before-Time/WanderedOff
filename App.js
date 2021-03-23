@@ -1,27 +1,5 @@
-// import { StatusBar } from 'expo-status-bar';
-// import React from 'react';
-// import { StyleSheet, Text, View } from 'react-native';
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
-
 import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
@@ -31,8 +9,13 @@ import {
   MapScreen,
   SessionScreen,
 } from './src/screens';
-import { Text } from 'react-native';
+import { Text, Platform } from 'react-native';
 import { decode, encode } from 'base-64';
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+
 if (!global.btoa) {
   global.btoa = encode;
 }
@@ -43,26 +26,22 @@ import { firebase } from './src/firebase/config';
 
 const Stack = createStackNavigator();
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-
-  // return (
-  //   <NavigationContainer>
-  //     <Stack.Navigator>
-  //       { user ? (
-  //         <Stack.Screen name="Home">
-  //           {props => <HomeScreen {...props} extraData={user} />}
-  //         </Stack.Screen>
-  //       ) : (
-  //         <>
-  //           <Stack.Screen name="Login" component={LoginScreen} />
-  //           <Stack.Screen name="Registration" component={RegistrationScreen} />
-  //         </>
-  //       )}
-  //     </Stack.Navigator>
-  //   </NavigationContainer>
-  // );
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  const [locationPermission, setLocationPermission] = useState(false);
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection('users');
@@ -85,7 +64,84 @@ export default function App() {
     });
   }, []);
 
-  if (loading) {
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((token) => setExpoPushToken(token))
+      .then(() => {
+        console.log('token established');
+        sendPushNotification({
+          title: 'test',
+          body: 'heres the body',
+          data: '',
+        });
+      });
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification);
+      }
+    );
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log(response);
+      }
+    );
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      } else {
+        setLocationPermission(true);
+      }
+    })();
+  }, []);
+
+  async function sendPushNotification(content) {
+    console.log('in inApp scope notification function');
+    console.log('ZZ token: ', expoPushToken);
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: content.title,
+      body: content.body,
+      data: { data: 'goes here' },
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+  }
+
+  useEffect(() => {
+    if (expoPushToken) {
+      console.log('attempting to send notification from effect');
+      sendPushNotification({
+        title: 'here is the title',
+        body: 'here is the body',
+      });
+    }
+  }, [expoPushToken]);
+
+  if (loading && !locationPermission) {
     return (
       <>
         <Text>Loading</Text>
@@ -93,18 +149,24 @@ export default function App() {
     );
   }
 
-  if (!loading) {
-    console.log('This is the user');
-    console.log(user);
-  }
+  // if (!loading) {
+  //   console.log('This is the user');
+  //   console.log(user);
+  // }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer test='test'>
       <Stack.Navigator /*initialRouteName={user ? "Home" : "Login"}*/>
         {user ? (
           <>
             <Stack.Screen name='Home'>
-              {(props) => <MapScreen {...props} extraData={user} />}
+              {(props) => (
+                <MapScreen
+                  {...props}
+                  extraData={user}
+                  notify={sendPushNotification}
+                />
+              )}
             </Stack.Screen>
             <Stack.Screen name='Login' component={LoginScreen} />
             <Stack.Screen name='Registration' component={RegistrationScreen} />
@@ -121,4 +183,72 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
+}
+
+export async function schedulePushNotification(content) {
+  await Notifications.scheduleNotificationAsync({
+    content,
+    trigger: { seconds: 0 },
+  });
+}
+async function sendPushNotification(expoPushToken) {
+  console.log('in outside scope notification function');
+  console.log('ZZ token: ', expoPushToken);
+  const message = {
+    to: expoPushToken,
+    sound: 'default',
+    title: "You've got mail! 📬",
+    body: 'Here is the notification body',
+    data: { data: 'goes here' },
+  };
+
+  await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  });
+}
+async function registerForPushNotificationsAsync() {
+  console.log('registering');
+  let token;
+  if (Constants.isDevice) {
+    console.log('its a device');
+    const {
+      status: existingStatus,
+    } = await Notifications.getPermissionsAsync();
+    console.log('got permissions');
+    console.log('existing status: ', existingStatus);
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      console.log('permissions ungranted');
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    console.log('attempting to retreve token');
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log('token recieved: ', token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    console.log('its an android');
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+  console.log('XXX token:', token);
+  // sendPushNotification(token);
+  return token;
 }
