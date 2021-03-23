@@ -17,6 +17,7 @@ import { firebase } from '../../firebase/config';
 // import { AccountCircleIcon, CheckBoxIcon } from '@material-ui/icons';
 import { Ionicons } from '@expo/vector-icons';
 
+
 export default function MapScreen(props) {
   let mapRef = useRef(null);
   const sessionRef = firebase.firestore().collection('sessions');
@@ -164,7 +165,7 @@ export default function MapScreen(props) {
     goToInitialRegion();
   }, [mapReady])
 
-  if(userLocationFound && usersLoaded) {
+ // if(userLocationFound && usersLoaded) {
   return (
     <MapView
       style={{ flex: 1 }}
@@ -205,9 +206,9 @@ export default function MapScreen(props) {
       <Circle center={center} radius={radius} fillColor='rgba(20,20,240,0.1)' />
     </MapView>
   );
-  } else {
-    return (
-      <View><Text>Loading</Text></View>
-    )
-  }
+  // } else {
+  //   return (
+  //     <View><Text>Loading</Text></View>
+  //   )
+  // }
 }

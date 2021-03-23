@@ -33,6 +33,7 @@
           "apiKey": "AIzaSyCRvhObtY3ZRIMOf2doHUCq5t0VA2x_v5Y"
         }
       },
+      "useNextNotificationsApi": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

@@ -33,6 +33,10 @@ import {
 } from './src/screens';
 import { Text } from 'react-native';
 import { decode, encode } from 'base-64';
+// import Constants from 'expo-constants';
+// import * as Notifications from 'expo-notifications';
+// import * as Permissions from 'expo-permissions'
+
 if (!global.btoa) {
   global.btoa = encode;
 }
@@ -64,6 +68,7 @@ export default function App() {
   //   </NavigationContainer>
   // );
 
+
   useEffect(() => {
     const usersRef = firebase.firestore().collection('users');
     firebase.auth().onAuthStateChanged((user) => {
@@ -84,6 +89,7 @@ export default function App() {
       }
     });
   }, []);
+
 
   if (loading) {
     return (
