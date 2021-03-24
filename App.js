@@ -44,6 +44,7 @@ export default function App() {
   const responseListener = useRef();
   const [locationPermission, setLocationPermission] = useState(false);
 
+  //keeps user signed
   useEffect(() => {
     const usersRef = firebase.firestore().collection('users');
     firebase.auth().onAuthStateChanged((user) => {
@@ -65,6 +66,7 @@ export default function App() {
     });
   }, []);
 
+  //sets push notifcations permissions
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((token) => setExpoPushToken(token))
@@ -132,17 +134,17 @@ export default function App() {
     });
   }
 
-  useEffect(() => {
-    if (expoPushToken) {
-      console.log('attempting to send notification from effect');
-      sendPushNotification({
-        title: 'here is the title',
-        body: 'here is the body',
-      });
-    }
-  }, [expoPushToken]);
+  // useEffect(() => {
+  //   if (expoPushToken) {
+  //     console.log('attempting to send notification from effect');
+  //     sendPushNotification({
+  //       title: 'here is the title',
+  //       body: 'here is the body',
+  //     });
+  //   }
+  // }, [expoPushToken]);
 
-  if (loading && !locationPermission) {
+  if (loading || !locationPermission) {
     return (
       <>
         <Text>Loading</Text>
@@ -186,12 +188,6 @@ export default function App() {
   );
 }
 
-export async function schedulePushNotification(content) {
-  await Notifications.scheduleNotificationAsync({
-    content,
-    trigger: { seconds: 0 },
-  });
-}
 async function sendPushNotification(expoPushToken) {
   console.log('in outside scope notification function');
   console.log('ZZ token: ', expoPushToken);
