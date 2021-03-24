@@ -31,31 +31,7 @@ export default function LocationSharing(props) {
   const [running, toggle] = useState(true);
   const [locationSent, setLocationSent] = useState(false);
   console.log('page rendering');
-  // const sendLocation = async () => {
-  //   console.log('attempting to send location');
-  //   const locationData = {
-  //     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-  //     sessionId: '123456',
-  //     userId: props.extraData.id,
-  //     location: {},
-  //   };
-  //   console.log('setup base data');
-  //   new Promise(function (resolve, reject) {
-  //     navigator.geolocation.getCurrentPosition(resolve, reject);
-  //   })
-  //     .then((position) => {
-  //       console.log('here is our position: ', position);
-  //       locationData.location.latitude = parseFloat(position.coords.latitude);
-  //       locationData.location.longitude = parseFloat(position.coords.longitude);
-  //       console.log('got current location');
-  //       console.log('data to send: ', locationData);
-  //       userLocationRef.add(locationData);
-  //       console.log('data sent');
-  //     })
-  //     .catch((err) => {
-  //       console.error(err.message);
-  //     });
-  // };
+
   const sendLocation = () => {
     console.log('attempting to send location');
     console.log('my location: ', myPosition);
@@ -68,7 +44,6 @@ export default function LocationSharing(props) {
         location: myPosition,
       });
       console.log('sent');
-      setLocationSent(true);
     }
   };
 
@@ -92,24 +67,27 @@ export default function LocationSharing(props) {
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
   }
-  // let watchID = navigator.geolocation.watchPosition(
-  //   (position) => {
-  //     console.log('new position: ', position);
-  //     console.log(
-  //       'distance: ',
-  //       haversine(myPosition, position.coords, { unit: 'meter' }),
-  //       ' meters'
-  //     );
-  //     myPosition = position.coords;
-  //   },
-  //   (error) => console.log(error.message),
-  //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-  // );
-  if (running) {
-    const timeout = setTimeout(getPosition, 3000);
-  }
+  let watchID = navigator.geolocation.watchPosition(
+    (position) => {
+      console.log('new position: ', position);
+      console.log(
+        'distance: ',
+        haversine(myPosition, position.coords, { unit: 'meter' }),
+        ' meters'
+      );
+      myPosition = position.coords;
+    },
+    (error) => console.log(error.message),
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+  );
+  useEffect(() => {
+    const interval = setInterval(getPosition, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   function toggleRunning(status) {
     // if (!status) getPosition();
+    clearInterval(interval);
     toggle(!status);
   }
   // useEffect(() => sendLocation(), [myPosition]);
