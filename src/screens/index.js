@@ -7,3 +7,5 @@ export { default as RegistrationScreen } from './RegistrationScreen/Registration
 export { default as SessionScreen } from './AddSessionScreen/AddSessionScreen';
 
 export { default as MapScreen } from './MapScreen/MapScreen';
+
+export { default as LocationSharingScreen } from './LocationSharingScreen/LocationSharingScreen';

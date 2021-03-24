@@ -8,6 +8,7 @@ import {
   RegistrationScreen,
   MapScreen,
   SessionScreen,
+  LocationSharingScreen,
 } from './src/screens';
 import { Text, Platform } from 'react-native';
 import { decode, encode } from 'base-64';
@@ -161,7 +162,7 @@ export default function App() {
           <>
             <Stack.Screen name='Home'>
               {(props) => (
-                <MapScreen
+                <LocationSharingScreen
                   {...props}
                   extraData={user}
                   notify={sendPushNotification}
