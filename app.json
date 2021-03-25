@@ -22,9 +22,7 @@
         "googleMapsApiKey": "AIzaSyCRvhObtY3ZRIMOf2doHUCq5t0VA2x_v5Y"
       },
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch"],
-        "NSLocationWhenInUseUsageDescription": "description",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "description"
+        "UIBackgroundModes": ["location", "fetch"]
       }
     },
     "android": {
