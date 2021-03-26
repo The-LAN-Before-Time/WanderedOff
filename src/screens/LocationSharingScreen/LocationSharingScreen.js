@@ -22,19 +22,22 @@ import haversine from 'haversine';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-import * as geofirex from 'geofirex';
-const geo = geofirex.init(firebase);
+// import * as geofirex from 'geofirex';
+// const geo = geofirex.init(firebase);
 
 export default function LocationSharing(props) {
   const firestore = firebase.firestore();
   const userLocationRef = firestore.collection('sessionLocations');
-  const lastPositionRef = userLocationRef.where('sessionId', '==', '123456').orderBy('createdAt').limit(5);
-  const geoQuery = geo.query(lastPositionRef)
+  const lastPositionRef = userLocationRef
+    .where('sessionId', '==', '123456')
+    .orderBy('createdAt')
+    .limit(5);
+  // const geoQuery = geo.query(lastPositionRef)
   // geoQuery.subscribe(locations => {
   //   console.log('This is our subscription')
   //   console.log(locations)
   // })
-  let subscribed = false
+  let subscribed = false;
   let myPosition = false;
   const [lastSent, setLastSent] = useState(1616612900920);
   const [running, toggle] = useState(true);
@@ -45,13 +48,13 @@ export default function LocationSharing(props) {
     console.log('attempting to send location');
     console.log('my location: ', myPosition);
     if (myPosition) {
-      const point = geo.point(myPosition.latitude, myPosition.longitude)
+      // const point = geo.point(myPosition.latitude, myPosition.longitude)
       console.log('send ing');
       userLocationRef.add({
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         sessionId: '123456',
         userId: props.extraData.id,
-        point
+        location: myPosition,
       });
       console.log('sent');
     }
@@ -59,31 +62,31 @@ export default function LocationSharing(props) {
 
   function getPosition() {
     if (running) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        console.log('new position: ', position);
-        // console.log(
-        //   'distance: ',
-        //   haversine(myPosition, position.coords, { unit: 'meter' }),
-        //   ' meters'
-        // );
-        myPosition = {
-          latitude: parseFloat(position.coords.latitude),
-          longitude: parseFloat(position.coords.longitude),
-        };
-        console.log('position set');
-        if (!subscribed) {
-          geoQuery.within(geo.point(myPosition.latitude, myPosition.longitude), 100, 'position').subscribe(locations => {
-            console.log('This is our subscription')
-            console.log(locations)
-          })
-        }
-        sendLocation();
-      },
-      (error) => console.log(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
-    };
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log('new position: ', position);
+          // console.log(
+          //   'distance: ',
+          //   haversine(myPosition, position.coords, { unit: 'meter' }),
+          //   ' meters'
+          // );
+          myPosition = {
+            latitude: parseFloat(position.coords.latitude),
+            longitude: parseFloat(position.coords.longitude),
+          };
+          console.log('position set');
+          // if (!subscribed) {
+          //   geoQuery.within(geo.point(myPosition.latitude, myPosition.longitude), 100, 'position').subscribe(locations => {
+          //     console.log('This is our subscription')
+          //     console.log(locations)
+          //   })
+          // }
+          sendLocation();
+        },
+        (error) => console.log(error.message),
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
+    }
   }
 
   // let watchID = navigator.geolocation.watchPosition(
@@ -99,7 +102,6 @@ export default function LocationSharing(props) {
   //   (error) => console.log(error.message),
   //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
   // );
-
 
   useEffect(() => {
     const interval = setInterval(getPosition, 3000);
