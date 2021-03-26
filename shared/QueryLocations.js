@@ -12,6 +12,7 @@ export default function (sessionId, setActiveUsers) {
       const activeUsers = [];
       let center = {};
       querySnapshot.forEach((doc) => {
+        console.log('lastUpdate: ', doc.data().lastUpdate);
         const user = doc.data();
         user.id = doc.id;
         activeUsers.push(user);
@@ -24,7 +25,7 @@ export default function (sessionId, setActiveUsers) {
       setActiveUsers({ list: activeUsers, loaded: true, center });
     },
     (error) => {
-      console.log(error);
+      console.log(error.message);
     }
   );
   return query;

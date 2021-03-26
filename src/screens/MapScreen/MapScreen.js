@@ -5,10 +5,10 @@ import { firebase } from '../../firebase/config';
 import { Ionicons } from '@expo/vector-icons';
 import haversine from 'haversine';
 
-export default function MapScreen({ center, activeUsers, region }) {
+export default function MapScreen({ center, activeUsers, region, extraData }) {
   let mapRef = useRef(null);
   const [mapReady, setMapReady] = useState(false);
-  const [radius, setRadius] = useState(12000);
+  const [radius, setRadius] = useState(4000);
   const colors = ['red', 'green', 'purple'];
   const defaultPadding = { top: 20, right: 20, bottom: 20, left: 20 };
 
@@ -70,34 +70,47 @@ export default function MapScreen({ center, activeUsers, region }) {
       onMapReady={() => setMapReady(true)}
       initialRegion={region}
     >
-      {activeUsers.map((user, idx) => {
-        return (
-          <Marker
-            key={user.id}
-            coordinate={{
-              latitude: user.location.latitude,
-              longitude: user.location.longitude,
-            }}
-            title={user.fullName}
-            pinColor={colors[idx % colors.length]}
-          >
-            <View style={{ padding: 10, alignItems: 'center' }}>
-              <Text
+      {activeUsers
+        .filter((user) => user.id !== extraData.id)
+        .filter((user) => {
+          const date = new Date();
+          return date.getTime() - user.lastUpdate.seconds > 300000;
+        })
+        .map((user, idx) => {
+          return (
+            <Marker
+              key={user.id}
+              coordinate={{
+                latitude: user.location.latitude,
+                longitude: user.location.longitude,
+              }}
+              title={user.fullName}
+              pinColor={colors[idx % colors.length]}
+            >
+              <View
                 style={{
-                  color: colors[idx % colors.length],
-                  textAlign: 'center',
+                  padding: 10,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: 'black',
                 }}
               >
-                {user.fullName
-                  .split(' ')
-                  .map((name) => name[0])
-                  .join('')}
-              </Text>
-              <Ionicons name='person-circle' size={24} color={colors[idx]} />
-            </View>
-          </Marker>
-        );
-      })}
+                <Text
+                  style={{
+                    color: colors[idx % colors.length],
+                    textAlign: 'center',
+                  }}
+                >
+                  {user.fullName
+                    .split(' ')
+                    .map((name) => name[0])
+                    .join('')}
+                </Text>
+                <Ionicons name='person-circle' size={24} color={colors[idx]} />
+              </View>
+            </Marker>
+          );
+        })}
       <Circle center={center} radius={radius} fillColor='rgba(20,20,240,0.1)' />
     </MapView>
   );

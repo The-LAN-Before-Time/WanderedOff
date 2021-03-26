@@ -14,7 +14,7 @@ export default function (setSessionUsers, sessionId) {
           console.log('adding user: ', doc.fullName);
         },
         (error) => {
-          console.log(error);
+          console.log(error.message);
         }
       );
       setSessionUsers({ list: activeUsers, loaded: true });
