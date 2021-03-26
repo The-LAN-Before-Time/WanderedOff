@@ -7,8 +7,11 @@ import MapScreen from '../MapScreen/MapScreen';
 
 const TabbedNavigation = (props) => {
   const [sessionId, setSessionId] = useState('123456');
-  const [activeUsers, setActiveUsers] = useState({ list: [], loaded: false });
-  const [center, setCenter] = useState(false);
+  const [activeUsers, setActiveUsers] = useState({
+    list: [],
+    loaded: false,
+    center: {},
+  });
   const Tab = createBottomTabNavigator();
   const [region, setRegion] = useState({
     latitude: 37.78825,
@@ -39,11 +42,7 @@ const TabbedNavigation = (props) => {
       () => updateLocation(props.extraData.id, sessionId),
       3000
     );
-    const unsubscribeToQuery = queryLocations(
-      sessionId,
-      setActiveUsers,
-      setCenter
-    );
+    const unsubscribeToQuery = queryLocations(sessionId, setActiveUsers);
     return () => {
       clearInterval(interval);
       unsubscribeToQuery();
@@ -51,15 +50,18 @@ const TabbedNavigation = (props) => {
   }, [sessionId]);
   useEffect(() => setInitialRegion());
   if (activeUsers.loaded) {
+    console.log('in loaded return, active users: ', activeUsers);
     return (
       <Tab.Navigator>
-        <Tab.Screen
-          name='Map'
-          component={MapScreen}
-          activeUsers={activeUsers.list}
-          center={center}
-          region={region}
-        />
+        <Tab.Screen name='Map'>
+          {() => (
+            <MapScreen
+              activeUsers={activeUsers.list}
+              center={activeUsers.center}
+              region={region}
+            />
+          )}
+        </Tab.Screen>
         {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
       </Tab.Navigator>
     );

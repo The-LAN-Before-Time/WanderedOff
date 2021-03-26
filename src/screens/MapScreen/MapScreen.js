@@ -1,11 +1,6 @@
-import React, { Component, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Text, View } from 'react-native';
-import MapView, {
-  PROVIDER_GOOGLE,
-  AnimateRegion,
-  Marker,
-  Circle,
-} from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import { firebase } from '../../firebase/config';
 import { Ionicons } from '@expo/vector-icons';
 import haversine from 'haversine';
@@ -18,10 +13,9 @@ export default function MapScreen({ center, activeUsers, region }) {
   const defaultPadding = { top: 20, right: 20, bottom: 20, left: 20 };
 
   const goToInitialRegion = () => {
-    let initialRegion = Object.assign({}, props.region);
+    let initialRegion = Object.assign({}, region);
     initialRegion['latitudeDelta'] = 0.005;
     initialRegion['longitudeDelta'] = 0.005;
-    console.log('session users: ', activeUsers);
     if (mapReady) {
       /*
       adds outer points of radius circle to fit to map

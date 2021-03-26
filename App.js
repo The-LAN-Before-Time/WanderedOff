@@ -4,11 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
   LoginScreen,
-  HomeScreen,
   RegistrationScreen,
-  MapScreen,
-  SessionScreen,
-  LocationSharingScreen,
   TabbedNavigator,
 } from './src/screens';
 import { Text, Platform } from 'react-native';
@@ -114,8 +110,6 @@ export default function App() {
   }, []);
 
   async function sendPushNotification(content) {
-    console.log('in inApp scope notification function');
-    console.log('ZZ token: ', expoPushToken);
     const message = {
       to: expoPushToken,
       sound: 'default',
