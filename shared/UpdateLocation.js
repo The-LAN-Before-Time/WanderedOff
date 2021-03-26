@@ -1,5 +1,4 @@
-import { firebase } from '../../firebase/config';
-
+import { firebase } from '../src/firebase/config';
 export default function (userId, sessionId) {
   if (!userId || !sessionId) return;
   const userLocationRef = firebase.firestore().collection('users').doc(userId);
@@ -16,6 +15,7 @@ export default function (userId, sessionId) {
         userLocationRef.update({
           lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
           location,
+          sessionId,
         });
         console.log('sent');
       }

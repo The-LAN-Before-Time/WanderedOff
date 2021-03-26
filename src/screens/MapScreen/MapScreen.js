@@ -10,7 +10,7 @@ import { firebase } from '../../firebase/config';
 import { Ionicons } from '@expo/vector-icons';
 import haversine from 'haversine';
 
-export default function MapScreen({ center, activeUsers }) {
+export default function MapScreen({ center, activeUsers, region }) {
   let mapRef = useRef(null);
   const [mapReady, setMapReady] = useState(false);
   const [radius, setRadius] = useState(12000);
@@ -64,58 +64,54 @@ export default function MapScreen({ center, activeUsers }) {
     goToInitialRegion();
   }, [mapReady]);
 
-  if (userLocationFound && usersLoaded) {
-    return (
-      <MapView
-        style={{ flex: 1 }}
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation={true}
-        followUserLocation={true}
-        zoomEnabled={true}
-        ref={mapRef}
-        onMapReady={() => setMapReady(true)}
-        initialRegion={region}
-      >
-        {sessionUsers.map((user, idx) => {
-          return (
-            <Marker
-              key={user.id}
-              coordinate={{
-                latitude: user.location.latitude,
-                longitude: user.location.longitude,
-              }}
-              title={user.fullName}
-              pinColor={colors[idx % colors.length]}
-            >
-              <View style={{ padding: 10, alignItems: 'center' }}>
-                <Text
-                  style={{
-                    color: colors[idx % colors.length],
-                    textAlign: 'center',
-                  }}
-                >
-                  {user.fullName
-                    .split(' ')
-                    .map((name) => name[0])
-                    .join('')}
-                </Text>
-                <Ionicons name='person-circle' size={24} color={colors[idx]} />
-              </View>
-            </Marker>
-          );
-        })}
-        <Circle
-          center={center}
-          radius={radius}
-          fillColor='rgba(20,20,240,0.1)'
-        />
-      </MapView>
-    );
-  } else {
-    return (
-      <View>
-        <Text>Loading</Text>
-      </View>
-    );
-  }
+  // if (userLocationFound && usersLoaded) {
+  return (
+    <MapView
+      style={{ flex: 1 }}
+      provider={PROVIDER_GOOGLE}
+      showsUserLocation={true}
+      followUserLocation={true}
+      zoomEnabled={true}
+      ref={mapRef}
+      onMapReady={() => setMapReady(true)}
+      initialRegion={region}
+    >
+      {activeUsers.map((user, idx) => {
+        return (
+          <Marker
+            key={user.id}
+            coordinate={{
+              latitude: user.location.latitude,
+              longitude: user.location.longitude,
+            }}
+            title={user.fullName}
+            pinColor={colors[idx % colors.length]}
+          >
+            <View style={{ padding: 10, alignItems: 'center' }}>
+              <Text
+                style={{
+                  color: colors[idx % colors.length],
+                  textAlign: 'center',
+                }}
+              >
+                {user.fullName
+                  .split(' ')
+                  .map((name) => name[0])
+                  .join('')}
+              </Text>
+              <Ionicons name='person-circle' size={24} color={colors[idx]} />
+            </View>
+          </Marker>
+        );
+      })}
+      <Circle center={center} radius={radius} fillColor='rgba(20,20,240,0.1)' />
+    </MapView>
+  );
+  // } else {
+  //   return (
+  //     <View>
+  //       <Text>Loading</Text>
+  //     </View>
+  //   );
+  // }
 }

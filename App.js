@@ -9,6 +9,7 @@ import {
   MapScreen,
   SessionScreen,
   LocationSharingScreen,
+  TabbedNavigator,
 } from './src/screens';
 import { Text, Platform } from 'react-native';
 import { decode, encode } from 'base-64';
@@ -164,7 +165,7 @@ export default function App() {
           <>
             <Stack.Screen name='Home'>
               {(props) => (
-                <LocationSharingScreen
+                <TabbedNavigator
                   {...props}
                   extraData={user}
                   notify={sendPushNotification}
@@ -179,7 +180,7 @@ export default function App() {
             <Stack.Screen name='Login' component={LoginScreen} />
             <Stack.Screen name='Registration' component={RegistrationScreen} />
             <Stack.Screen name='Home'>
-              {(props) => <MapScreen {...props} extraData={user} />}
+              {(props) => <TabbedNavigator {...props} extraData={user} />}
             </Stack.Screen>
           </>
         )}

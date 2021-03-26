@@ -7,7 +7,7 @@ import MapScreen from '../MapScreen/MapScreen';
 
 const TabbedNavigation = (props) => {
   const [sessionId, setSessionId] = useState('123456');
-  const [activeUsers, setActiveUsers] = useState(false);
+  const [activeUsers, setActiveUsers] = useState({ list: [], loaded: false });
   const [center, setCenter] = useState(false);
   const Tab = createBottomTabNavigator();
   const [region, setRegion] = useState({
@@ -50,13 +50,13 @@ const TabbedNavigation = (props) => {
     };
   }, [sessionId]);
   useEffect(() => setInitialRegion());
-  if (activeUsers) {
+  if (activeUsers.loaded) {
     return (
       <Tab.Navigator>
         <Tab.Screen
           name='Map'
           component={MapScreen}
-          activeUsers={activeUsers}
+          activeUsers={activeUsers.list}
           center={center}
           region={region}
         />

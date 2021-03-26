@@ -1,4 +1,4 @@
-import { firebase } from '../../firebase/config';
+import { firebase } from '../src/firebase/config';
 
 export default function (setSessionUsers, sessionId) {
   const usersRef = firebase.firestore().collection('users');
@@ -17,7 +17,7 @@ export default function (setSessionUsers, sessionId) {
           console.log(error);
         }
       );
-      setSessionUsers(activeUsers);
+      setSessionUsers({ list: activeUsers, loaded: true });
     });
   return sessionUsers();
 }
