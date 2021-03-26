@@ -72,10 +72,10 @@ export default function MapScreen({ center, activeUsers, region, extraData }) {
     >
       {activeUsers
         .filter((user) => user.id !== extraData.id)
-        .filter((user) => {
-          const date = new Date();
-          return date.getTime() - user.lastUpdate.seconds > 300000;
-        })
+        // .filter((user) => {
+        //   const date = new Date();
+        //   return date.getTime() - user.lastUpdate.seconds > 300000;
+        // })
         .map((user, idx) => {
           return (
             <Marker
@@ -114,11 +114,4 @@ export default function MapScreen({ center, activeUsers, region, extraData }) {
       <Circle center={center} radius={radius} fillColor='rgba(20,20,240,0.1)' />
     </MapView>
   );
-  // } else {
-  //   return (
-  //     <View>
-  //       <Text>Loading</Text>
-  //     </View>
-  //   );
-  // }
 }
