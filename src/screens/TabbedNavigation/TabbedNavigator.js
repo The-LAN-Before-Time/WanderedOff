@@ -7,7 +7,7 @@ import MapScreen from '../MapScreen/MapScreen';
 import OptionsScreen from '../Options/OptionsScreen';
 
 const TabbedNavigation = (props) => {
-  var [sessionId, setSessionId] = useState('123456');
+  const [sessionId, setSessionId] = useState('123456');
   const [activeUsers, setActiveUsers] = useState({
     list: [],
     loaded: false,
@@ -21,6 +21,8 @@ const TabbedNavigation = (props) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
+  const [radius, setRadius] = useState(4000);
+
   const setInitialRegion = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -39,11 +41,13 @@ const TabbedNavigation = (props) => {
       }
     );
   };
-  const handleSessionChange = (code, runningStatus = running) => {
-    setRunning(false);
-    setSessionId(code);
-    setRunning(runningStatus);
-  };
+
+  // const handleSessionChange = (code, runningStatus = running) => {
+  //   setRunning(false);
+  //   setSessionId(code);
+  //   setRunning(runningStatus);
+  // };
+
   useEffect(() => {
     if (running) {
       const interval = setInterval(
@@ -57,7 +61,9 @@ const TabbedNavigation = (props) => {
       };
     }
   }, [sessionId, running]);
+
   useEffect(() => setInitialRegion());
+
   if (activeUsers.loaded) {
     return (
       <Tab.Navigator>
@@ -68,17 +74,20 @@ const TabbedNavigation = (props) => {
               activeUsers={activeUsers.list}
               center={activeUsers.center}
               region={region}
+              radius={radius}
             />
           )}
         </Tab.Screen>
-        {/* <Tab.Screen name='Options'>
+        <Tab.Screen name='Options'>
           {() => (
             <OptionsScreen
-              changeSession={handleSessionChange}
+              setSessionId={setSessionId}
               sessionId={sessionId}
+              radius={radius}
+              setRadius={setRadius}
             />
           )}
-        </Tab.Screen> */}
+        </Tab.Screen>
       </Tab.Navigator>
     );
   } else {

@@ -5,10 +5,10 @@ import { firebase } from '../../firebase/config';
 import { Ionicons } from '@expo/vector-icons';
 import haversine from 'haversine';
 
-export default function MapScreen({ center, activeUsers, region, extraData }) {
+export default function MapScreen({ center, activeUsers, region, extraData, radius }) {
   let mapRef = useRef(null);
   const [mapReady, setMapReady] = useState(false);
-  const [radius, setRadius] = useState(4000);
+  // const [radius, setRadius] = useState(4000);
   const colors = ['red', 'green', 'purple'];
   const defaultPadding = { top: 20, right: 20, bottom: 20, left: 20 };
 
