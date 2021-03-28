@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, Keyboard, StyleSheet, ScrollView } from 'react-native';
+//import leaveSession from '../../../shared/LeaveSession';
 
-const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
+const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius, leaveSession }) => {
   const [newCode, setNewCode] = useState(sessionId);
   const [newRadius, setNewRadius] = useState(radius);
   const navigation = useNavigation();
 
   const handleSubmit = () => {
     setSessionId(newCode);
-    setRadius(Number(newRadius));
+    setRadius(newRadius);
     navigation.navigate('Map')
   }
 
@@ -37,6 +38,13 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
             style={styles.button}
             title='Update Session'
             onPress={handleSubmit}
+          />
+        </View>
+        <View>
+          <Button
+            style={styles.button}
+            title='Leave Session'
+            onPress={leaveSession}
           />
         </View>
       </View>

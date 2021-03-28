@@ -13,14 +13,13 @@ export default function MapScreen({ center, activeUsers, region, extraData, radi
   const defaultPadding = { top: 20, right: 20, bottom: 20, left: 20 };
 
   const goToInitialRegion = () => {
-    let initialRegion = Object.assign({}, region);
-    initialRegion['latitudeDelta'] = 0.005;
-    initialRegion['longitudeDelta'] = 0.005;
     if (mapReady) {
       /*
       adds outer points of radius circle to fit to map
       */
+      radius = Number(radius);
       console.log('HI FROM MAPREADY');
+
       let coords = activeUsers.map((user) => ({
         latitude: user.location.latitude,
         longitude: user.location.longitude,
@@ -45,6 +44,7 @@ export default function MapScreen({ center, activeUsers, region, extraData, radi
           center.longitude -
           (radius * 0.0000089) / Math.cos(center.latitude * 0.018),
       });
+
       console.log('COORDS', coords);
       mapRef.current.fitToCoordinates(coords, {
         edgePadding: defaultPadding,
@@ -55,10 +55,11 @@ export default function MapScreen({ center, activeUsers, region, extraData, radi
   };
 
   useEffect(() => {
-    goToInitialRegion();
+    if(activeUsers.length) {
+      goToInitialRegion();
+    }
   }, [mapReady]);
 
-  // if (userLocationFound && usersLoaded) {
   return (
     <MapView
       style={{ flex: 1 }}
@@ -70,7 +71,7 @@ export default function MapScreen({ center, activeUsers, region, extraData, radi
       onMapReady={() => setMapReady(true)}
       initialRegion={region}
     >
-      {activeUsers
+      {activeUsers.length && activeUsers
         .filter((user) => user.id !== extraData.id)
         // .filter((user) => {
         //   const date = new Date();
@@ -111,7 +112,7 @@ export default function MapScreen({ center, activeUsers, region, extraData, radi
             </Marker>
           );
         })}
-      <Circle center={center} radius={radius} fillColor='rgba(20,20,240,0.1)' />
+      {center.latitude && <Circle center={center} radius={Number(radius)} fillColor='rgba(20,20,240,0.1)' />}
     </MapView>
   );
 }

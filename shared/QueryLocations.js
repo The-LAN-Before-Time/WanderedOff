@@ -2,6 +2,7 @@ import { firebase } from '../src/firebase/config';
 
 export default function (sessionId, setActiveUsers) {
   console.log('attempting query');
+  if(sessionId !== '') {
   const usersRef = firebase.firestore().collection('users');
 
   const query = usersRef.where('sessionId', '==', sessionId).onSnapshot(
@@ -28,4 +29,5 @@ export default function (sessionId, setActiveUsers) {
     }
   );
   return query;
+  }
 }

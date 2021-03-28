@@ -5,6 +5,7 @@ import queryLocations from '../../../shared/QueryLocations';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapScreen from '../MapScreen/MapScreen';
 import OptionsScreen from '../Options/OptionsScreen';
+import { firebase } from '../../firebase/config';
 
 const TabbedNavigation = (props) => {
   const [sessionId, setSessionId] = useState('123456');
@@ -13,7 +14,6 @@ const TabbedNavigation = (props) => {
     loaded: false,
     center: {},
   });
-  const [running, setRunning] = useState(true);
   const Tab = createBottomTabNavigator();
   const [region, setRegion] = useState({
     latitude: 37.78825,
@@ -21,7 +21,7 @@ const TabbedNavigation = (props) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-  const [radius, setRadius] = useState(4000);
+  const [radius, setRadius] = useState("4000");
 
   const setInitialRegion = () => {
     navigator.geolocation.getCurrentPosition(
@@ -42,31 +42,54 @@ const TabbedNavigation = (props) => {
     );
   };
 
-  // const handleSessionChange = (code, runningStatus = running) => {
-  //   setRunning(false);
-  //   setSessionId(code);
-  //   setRunning(runningStatus);
-  // };
+  const leaveSession = () => {
+    setSessionId('');
+    setActiveUsers({ list: [], loaded: true, center: {} });
+    console.log("hello from leavesession")
+    const userRef = firebase.firestore().collection('users').doc(props.extraData.id);
+
+    userRef.update({
+      sessionId: '',
+    });
+    console.log("LEAVING leavesession")
+}
 
   useEffect(() => {
-    if (running) {
-      const interval = setInterval(
-        () => updateLocation(props.extraData.id, sessionId),
-        3000
-      );
+    const interval = setInterval(
+      () => updateLocation(props.extraData.id, sessionId),
+      3000
+    );
+    return () => {
+        clearInterval(interval);
+      };
+  }, [sessionId]);
+
+  useEffect(() => {
+    if(sessionId !== '') {
       const unsubscribeToQuery = queryLocations(sessionId, setActiveUsers);
       return () => {
-        clearInterval(interval);
         unsubscribeToQuery();
       };
     }
-  }, [sessionId, running]);
+  }, [sessionId]);
 
   useEffect(() => setInitialRegion());
 
-  if (activeUsers.loaded) {
+  //if (activeUsers.loaded) {
     return (
       <Tab.Navigator>
+        <Tab.Screen name='Options'>
+          {() => (
+            <OptionsScreen
+              {...props}
+              setSessionId={setSessionId}
+              sessionId={sessionId}
+              radius={radius}
+              setRadius={setRadius}
+              leaveSession={leaveSession}
+            />
+          )}
+        </Tab.Screen>
         <Tab.Screen name='Map'>
           {() => (
             <MapScreen
@@ -78,25 +101,15 @@ const TabbedNavigation = (props) => {
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name='Options'>
-          {() => (
-            <OptionsScreen
-              setSessionId={setSessionId}
-              sessionId={sessionId}
-              radius={radius}
-              setRadius={setRadius}
-            />
-          )}
-        </Tab.Screen>
       </Tab.Navigator>
     );
-  } else {
-    return (
-      <View>
-        <Text>Loading</Text>
-      </View>
-    );
-  }
+  // } else {
+  //   return (
+  //     <View>
+  //       <Text>Loading</Text>
+  //     </View>
+    //);
+  //}
 };
 
 export default TabbedNavigation;

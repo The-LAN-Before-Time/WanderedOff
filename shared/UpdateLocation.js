@@ -1,7 +1,7 @@
 import { firebase } from '../src/firebase/config';
 
 export default function (userId, sessionId) {
-  if (!userId || !sessionId) return;
+  if (!userId) return;
   const userLocationRef = firebase.firestore().collection('users').doc(userId);
   navigator.geolocation.getCurrentPosition(
     (position) => {
