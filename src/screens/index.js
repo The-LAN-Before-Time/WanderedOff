@@ -1,4 +1,5 @@
 export { default as LoginScreen } from './LoginScreen/LoginScreen';
+export { default as PhoneScreen } from './RegistrationScreen/phoneRegistration';
 
 // export { default as HomeScreen } from './HomeScreen/HomeScreen';
 

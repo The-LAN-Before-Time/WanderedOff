@@ -6,6 +6,7 @@ import {
   LoginScreen,
   RegistrationScreen,
   TabbedNavigator,
+    PhoneScreen
 } from './src/screens';
 import { Text, Platform } from 'react-native';
 import { decode, encode } from 'base-64';
@@ -167,12 +168,12 @@ export default function App() {
               )}
             </Stack.Screen>
             <Stack.Screen name='Login' component={LoginScreen} />
-            <Stack.Screen name='Registration' component={RegistrationScreen} />
+            <Stack.Screen name='Registration' component={PhoneScreen} />
           </>
         ) : (
           <>
             <Stack.Screen name='Login' component={LoginScreen} />
-            <Stack.Screen name='Registration' component={RegistrationScreen} />
+            <Stack.Screen name='Registration' component={PhoneScreen} />
             <Stack.Screen name='Home'>
               {(props) => <TabbedNavigator {...props} extraData={user} />}
             </Stack.Screen>

@@ -2,17 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0f05a6d6-6822-4ad6-8f1b-11e537ee08a0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/screens/RegistrationScreen/phoneRegistration.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AddSessionScreen/AddSessionScreen.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/AddSessionScreen/styles.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FirebaseLocations/FirebaseLocations.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/HomeScreen/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/HomeScreen/HomeScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/LocationSharingScreen/LocationSharingScreen.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/MapScreen/GoogleMap 2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/MapScreen/oldMapScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/Options/OptionsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Options/OptionsScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/Notifications.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +17,23 @@
   <component name="CompilerWorkspaceConfiguration">
     <option name="MAKE_PROJECT_ON_SAVE" value="true" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1puD9XkCipCsHYQrSz4orID2lAQ" />
   <component name="ProjectViewState">

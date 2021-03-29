@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Keyboard,
+  TouchableWithoutFeedback,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity
+} from 'react-native';
+import {firebase} from "../../firebase/config";
 
 const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
   const [newCode, setNewCode] = useState(sessionId);
@@ -12,6 +23,15 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
     setRadius(Number(newRadius));
     navigation.navigate('Map')
   }
+
+  const onLogoutButtonPress = () => {
+    firebase
+        .auth()
+        .signOut()
+        .then((response) => {
+          navigation.navigate('Login');
+        });
+  };
 
   return (
     <ScrollView>
@@ -32,6 +52,9 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
             keyboardType='number-pad'
           />
         </View>
+        <TouchableOpacity style={styles.button} onPress={onLogoutButtonPress}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
         <View>
           <Button
             style={styles.button}
