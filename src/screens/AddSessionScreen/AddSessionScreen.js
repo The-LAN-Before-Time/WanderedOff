@@ -26,49 +26,65 @@ import styles from './styles';
 import { firebase } from '../../firebase/config';
 
 export default function HomeScreen(props) {
+  let latitude = 0;
+  let longitude = 0;
+  navigator.geolocation.getCurrentPosition((position) => {
+    latitude = parseFloat(position.coords.latitude);
+    longitude = parseFloat(position.coords.longitude);
+  });
   const [entityText, setEntityText] = useState('');
   const [entities, setEntities] = useState([]);
 
   const entityRef = firebase.firestore().collection('entities');
+  const sessionRef = firebase.firestore().collection('sessions');
+  const usersRef = firebase.firestore().collection('users');
   const userID = props.extraData ? props.extraData.id : null;
 
   useEffect(() => {
-    entityRef
-      .where('authorID', '==', userID)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot(
-        (querySnapshot) => {
-          const newEntities = [];
-          querySnapshot.forEach((doc) => {
-            const entity = doc.data();
-            entity.id = doc.id;
-            newEntities.push(entity);
-          });
-          setEntities(newEntities);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    console.log('in effect');
+    usersRef.where('session', '==', '123456').onSnapshot(
+      (querySnapshot) => {
+        const newEntities = [];
+        querySnapshot.forEach((doc) => {
+          const entity = doc.data();
+          entity.id = doc.id;
+          newEntities.push(entity);
+          console.log('session user: ', entity);
+        });
+        setEntities(newEntities);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }, []);
 
-  const onAddButtonPress = () => {
-    if (entityText && entityText.length > 0) {
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-      const data = {
-        text: entityText,
-        authorID: userID,
-        createdAt: timestamp,
-      };
-      entityRef
-        .add(data)
-        .then((_doc) => {
-          setEntityText('');
-          Keyboard.dismiss();
-        })
-        .catch((error) => {
-          alert(error);
-        });
+  const onAddButtonPress = async () => {
+    try {
+      if (entityText && entityText.length > 0) {
+        const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+        const data = {
+          fullname: props.extraData.fullname,
+          location: [latitude, longitude],
+        };
+        let activeSession = await sessionRef
+          .where('token', '==', entityText)
+          .get()
+          //   .then((session) => (activeUsers = session.collection('activeUsers')));
+          // activeUsers
+          //   // .collection('activeUsers')
+          //   .add(data)
+          // .then((_doc) => {
+          //   setEntityText('');
+          //   Keyboard.dismiss();
+          // })
+          .catch((error) => {
+            alert(error);
+          });
+        // console.log(activeSession['value']);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -76,7 +92,7 @@ export default function HomeScreen(props) {
     return (
       <View style={styles.entityContainer}>
         <Text style={styles.entityText}>
-          {index}. {item.text}
+          {index}. {item.fullName}
         </Text>
       </View>
     );
