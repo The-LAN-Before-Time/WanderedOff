@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, Keyboard, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Keyboard,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 //import leaveSession from '../../../shared/LeaveSession';
 
-const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius, leaveSession }) => {
+const OptionsScreen = ({
+  setSessionId,
+  radius,
+  setRadius,
+  leaveSession,
+  sessionId,
+}) => {
   const [newCode, setNewCode] = useState(sessionId);
   const [newRadius, setNewRadius] = useState(radius);
   const navigation = useNavigation();
@@ -11,8 +25,8 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius, leaveSessio
   const handleSubmit = () => {
     setSessionId(newCode);
     setRadius(newRadius);
-    navigation.navigate('Map')
-  }
+    navigation.navigate('Map');
+  };
 
   return (
     <ScrollView>
@@ -20,14 +34,14 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius, leaveSessio
         <View>
           <TextInput
             style={styles.input}
-            placeholder="Enter code"
+            placeholder='Enter code'
             value={newCode}
             onChangeText={(val) => setNewCode(val)}
             keyboardType='number-pad'
           />
           <TextInput
             style={styles.input}
-            placeholder="Enter radius"
+            placeholder='Enter radius'
             value={newRadius}
             onChangeText={(val) => setNewRadius(val)}
             keyboardType='number-pad'
@@ -44,7 +58,7 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius, leaveSessio
           <Button
             style={styles.button}
             title='Leave Session'
-            onPress={leaveSession}
+            onPress={() => leaveSession()}
           />
         </View>
       </View>
@@ -67,10 +81,10 @@ const styles = StyleSheet.create({
     width: 200,
   },
   button: {
-    alignItems: "center",
-    backgroundColor: "blue",
+    alignItems: 'center',
+    backgroundColor: 'blue',
     padding: 10,
-  }
-})
+  },
+});
 
 export default OptionsScreen;

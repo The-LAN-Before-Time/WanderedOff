@@ -43,13 +43,13 @@ const TabbedNavigation = (props) => {
   };
 
   const leaveSession = () => {
-    setSessionId('');
+    setSessionId(false);
     setActiveUsers({ list: [], loaded: true, center: {} });
     console.log("hello from leavesession")
     const userRef = firebase.firestore().collection('users').doc(props.extraData.id);
 
     userRef.update({
-      sessionId: '',
+      sessionId: false,
     });
     console.log("LEAVING leavesession")
 }
@@ -65,7 +65,7 @@ const TabbedNavigation = (props) => {
   }, [sessionId]);
 
   useEffect(() => {
-    if(sessionId !== '') {
+    if(sessionId) {
       const unsubscribeToQuery = queryLocations(sessionId, setActiveUsers);
       return () => {
         unsubscribeToQuery();

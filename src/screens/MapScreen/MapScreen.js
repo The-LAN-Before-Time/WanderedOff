@@ -112,7 +112,7 @@ export default function MapScreen({ center, activeUsers, region, extraData, radi
             </Marker>
           );
         })}
-      {center.latitude && <Circle center={center} radius={Number(radius)} fillColor='rgba(20,20,240,0.1)' />}
+      {activeUsers.length && <Circle center={center} radius={Number(radius)} fillColor='rgba(20,20,240,0.1)' />}
     </MapView>
   );
 }
