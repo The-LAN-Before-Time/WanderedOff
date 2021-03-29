@@ -1,17 +1,3 @@
-// import React from 'react'
-// import { useReducer } from 'react'
-// import { Text, View } from 'react-native'
-
-// export default function HomeScreen(props) {
-//     console.log('These are the props')
-//     console.log(props)
-//     return (
-//         <View>
-//             <div>Welcome {props.extraData.fullName}</div>
-//         </View>
-//     )
-// }
-
 import React, { useEffect, useState } from 'react';
 import {
   FlatList,

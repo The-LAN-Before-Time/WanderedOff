@@ -27,7 +27,7 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
           <TextInput
             style={styles.input}
             placeholder="Enter radius"
-            value={newRadius}
+            value={String(newRadius)}
             onChangeText={(val) => setNewRadius(val)}
             keyboardType='number-pad'
           />
