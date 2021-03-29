@@ -5,6 +5,11 @@ import queryLocations from '../../../shared/QueryLocations';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapScreen from '../MapScreen/MapScreen';
 import OptionsScreen from '../Options/OptionsScreen';
+// import SessionMgmtStack from '../../routes/SessionMgmt';
+import SessionHome from '../SessionMgmt/SessionHome';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 
 const TabbedNavigation = (props) => {
   const [sessionId, setSessionId] = useState('123456');
@@ -22,6 +27,7 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
+  const Stack = createStackNavigator();
 
   const setInitialRegion = () => {
     navigator.geolocation.getCurrentPosition(
@@ -86,6 +92,11 @@ const TabbedNavigation = (props) => {
               radius={radius}
               setRadius={setRadius}
             />
+          )}
+        </Tab.Screen>
+        <Tab.Screen name='Sessions'>
+          {() => (
+            <SessionHome/>
           )}
         </Tab.Screen>
       </Tab.Navigator>
