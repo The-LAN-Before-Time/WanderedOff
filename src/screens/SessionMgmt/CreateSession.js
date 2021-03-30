@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Button, Text, ScrollView, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { firebase } from '../../firebase/config';
+import { UserContext } from '../../../shared/UserContext'
 
 const CreateSession = (props) => {
+  const userData = useContext(UserContext)
   const navigation = useNavigation();
   const [initialState, setInitialState] = useState({
     name: '',
-    radius: 4000,
+    code: '',
+    radius: '4000',
     centerMovable: 'true',
+    owner: userData.id,
+    active: true,
+    expirationDate: new Date(Date.now() + 24*60*60*1000)
   })
 
   const handleSubmit = () => {
+    const sessionRef = firebase.firestore().collection('sessions')
+    sessionRef.add(initialState)
     navigation.navigate("Tabbed Nav");
   }
 
@@ -22,18 +31,24 @@ const CreateSession = (props) => {
           <TextInput
             placeholder="Session Name"
             value={initialState.name}
-            // onChangeText={(val) => setInitialState(...initialState, initialState.name: val)}
+            onChangeText={(val) => setInitialState({...initialState, name: val})}
+          />
+          <TextInput  //Remove this input later
+            placeholder="Token *phone number*"
+            value={initialState.code}
+            onChangeText={(val) => setInitialState({...initialState, code: val})}
+            keyboardType='number-pad'
           />
           <TextInput
             placeholder="Enter radius"
             value={String(initialState.radius)}
-            // onChangeText={(val) => setInitialState(...initialState, initialState.radius: val)}
+            onChangeText={(val) => setInitialState({...initialState, radius: val})}
             keyboardType='number-pad'
           />
           <TextInput
             placeholder="Center movable?"
             value={initialState.centerMovable}
-            // onChangeText={(val) => setInitialState(...initialState, initialState.centerMovable: val)}
+            onChangeText={(val) => setInitialState({...initialState, centerMovable: val})}
           />
         </View>
         <View>

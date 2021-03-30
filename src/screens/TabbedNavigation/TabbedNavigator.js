@@ -10,7 +10,7 @@ import { UserContext } from '../../../shared/UserContext';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
-  console.log("CONTEXT", userData)
+  // console.log("CONTEXT", userData)
   const [sessionId, setSessionId] = useState('123456');
   const [activeUsers, setActiveUsers] = useState({
     list: [],
