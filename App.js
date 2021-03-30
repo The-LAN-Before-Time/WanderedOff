@@ -168,12 +168,15 @@ export default function App() {
               )}
             </Stack.Screen>
             <Stack.Screen name='Login' component={LoginScreen} />
-            <Stack.Screen name='Registration' component={PhoneScreen} />
+            <Stack.Screen name='Verify Phone' component={PhoneScreen} />
+            <Stack.Screen name='Registration' component={RegistrationScreen} />
           </>
         ) : (
           <>
             <Stack.Screen name='Login' component={LoginScreen} />
-            <Stack.Screen name='Registration' component={PhoneScreen} />
+            <Stack.Screen name='Verify Phone' component={PhoneScreen} />
+            <Stack.Screen name='Registration' component={RegistrationScreen} />
+
             <Stack.Screen name='Home'>
               {(props) => <TabbedNavigator {...props} extraData={user} />}
             </Stack.Screen>

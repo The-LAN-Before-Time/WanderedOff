@@ -4,12 +4,13 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import styles from './styles';
 import { firebase } from '../../firebase/config'
 
-export default function RegistrationScreen({navigation}) {
+export default function RegistrationScreen(props) {
+    const {navigation} = props
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-
+console.log("-- Props: ", props)
     const onFooterLinkPress = () => {
         navigation.navigate('Login')
     }
@@ -19,6 +20,7 @@ export default function RegistrationScreen({navigation}) {
             alert("Passwords don't match.")
             return
         }
+
         firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
@@ -28,6 +30,9 @@ export default function RegistrationScreen({navigation}) {
                     id: uid,
                     email,
                     fullName,
+                    phoneNumber: props.route.params.cleanPhoneNumber,
+                    sessionId: props.route.params.cleanPhoneNumber.slice(-10),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
                 const usersRef = firebase.firestore().collection('users')
                 usersRef
@@ -44,7 +49,7 @@ export default function RegistrationScreen({navigation}) {
                 alert(error)
         });
     }
-
+        console.log("-- Phone Number", props.route.params.phoneNumber)
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView

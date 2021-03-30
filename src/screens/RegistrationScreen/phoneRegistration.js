@@ -14,7 +14,7 @@ import {firebase} from '../../firebase/config'
 
 import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
 
-function PhoneAuthScreen() {
+function PhoneAuthScreen( {navigation} ) {
 
     const recaptchaVerifier = useRef(null);
     const [phoneNumber, setPhoneNumber] = useState();
@@ -30,14 +30,6 @@ function PhoneAuthScreen() {
             : undefined
     );
     const attemptInvisibleVerification = true;
-
-    const validatePhoneNumber = () => {
-        console.log("Validate Phone Number")
-        let regexp = /^\+[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
-        // return regexp.test(Number(phone))
-        return true
-    }
-
     return(
         <View style={{ padding: 20, marginTop: 50 }}>
             <FirebaseRecaptchaVerifierModal
@@ -77,7 +69,7 @@ function PhoneAuthScreen() {
                     } catch (err) {
                         showMessage({ text: `Error: ${err.message} ${phoneNumber}`, color: 'red' });
                     }
-                }}r
+                }}
             />
             <Text style={{ marginTop: 20 }}>Enter Verification code</Text>
             <TextInput
@@ -95,10 +87,16 @@ function PhoneAuthScreen() {
                             verificationId,
                             verificationCode
                         );
-                        await firebase.auth().signInWithCredential(credential);
+                        const cleanPhoneNumber =  phoneNumber.replace(/[^\d]/g, '')
+                        console.log("--- CREDENTIAL -- ")
+                        await firebase.auth().signInWithCredential(credential).then( (result)=>{
+                            console.log(result)
+                            navigation.navigate('Registration', {cleanPhoneNumber})
+                        } );
+
                         showMessage({ text: 'Phone authentication successful 👍' });
                     } catch (err) {
-                        showMessage({ text: `Error: ${err.message} ${typeof phoneNumber}`, color: 'darkred' });
+                        showMessage({ text: `Error: ${err.message}`, color: 'darkred' });
                     }
                 }}
             />
