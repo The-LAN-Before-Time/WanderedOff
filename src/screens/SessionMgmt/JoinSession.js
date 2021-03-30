@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Button, Text, ScrollView, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../../../shared/UserContext'
+import { firebase } from '../../firebase/config';
+import { PinDropSharp } from '@material-ui/icons';
 
 const JoinSession = () => {
+  const userData = useContext(UserContext)
   const navigation = useNavigation();
   const [newCode, setNewCode] = useState('');
 
   const handleSubmit = () => {
-    navigation.navigate("Confirm");
+    let session = {};
+    const sessionRef = firebase.firestore().collection('sessions').where('code', '==', newCode).orderBy('expirationDate', 'desc').limit(1);
+    sessionRef.get().then((doc) => {
+      doc.forEach((individualDoc) => {
+        // console.log('This is the individualDoc, mangos', individualDoc)
+          session = individualDoc.data();
+          session.id = individualDoc.id;
+          // console.log('This is the doc.id, cherries', individualDoc.id)
+          console.log('This is our session, apples', session)
+      })
+      if (!session.id) {
+        console.log('Hitting the IF')
+      } else {
+      navigation.navigate("Confirm", {session});
+      };
+    }).catch((error) => {
+  });  
   }
 
   return (

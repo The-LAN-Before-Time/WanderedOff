@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
 import { View, Button, Text, ScrollView, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { firebase } from '../../firebase/config';
 
-const ConfirmJoinSession = () => {
+const ConfirmJoinSession = (props) => {
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-    navigation.navigate("Tabbed Nav");
+    navigation.navigate("Tabbed Nav", props.route.params.session);
+    //Grab the user,
+    //update the user's sessionId to this props sessionId
+
+    //SessionUsers table
+    //sessionUsers has a mapped object for each user userId keyvalue pair
+
+    
+
+
   }
 
   return (
     <View>
       <View>
-        <Text>You are about to join session name</Text>
+        <Text>You are about to join {props.route.params.session.name}</Text>
       </View>
       <View>
         <Button

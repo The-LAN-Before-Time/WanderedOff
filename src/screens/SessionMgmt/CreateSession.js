@@ -19,8 +19,13 @@ const CreateSession = (props) => {
 
   const handleSubmit = () => {
     const sessionRef = firebase.firestore().collection('sessions')
-    sessionRef.add(initialState)
-    navigation.navigate("Tabbed Nav");
+    sessionRef.add(initialState).then(response => {
+      firebase.firestore().collection('sessionUsers').doc(response.id).set({});
+      // console.log('This is the id', response.id);
+      const session = Object.assign({}, initialState);
+      session.id = response.id;
+      navigation.navigate("Tabbed Nav", {session});
+    })
   }
 
   return (

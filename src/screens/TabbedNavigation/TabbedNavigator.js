@@ -9,9 +9,10 @@ import SessionTab from '../SessionMgmt/SessionTab';
 import { UserContext } from '../../../shared/UserContext';
 
 const TabbedNavigation = (props) => {
+  console.log('These are the props on TabbedNavigation, mangos', props.route.params)
   const userData = useContext(UserContext);
   // console.log("CONTEXT", userData)
-  const [sessionId, setSessionId] = useState('123456');
+  const [sessionId, setSessionId] = useState(props.route.params.session.id);
   const [activeUsers, setActiveUsers] = useState({
     list: [],
     loaded: false,
@@ -48,7 +49,7 @@ const TabbedNavigation = (props) => {
 
   useEffect(() => {
       const interval = setInterval(
-        () => updateLocation(userData.id, sessionId),
+        () => updateLocation(userData, sessionId),
         3000
       );
       const unsubscribeToQuery = queryLocations(sessionId, setActiveUsers);
