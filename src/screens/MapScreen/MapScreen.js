@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import { firebase } from '../../firebase/config';
 import { Ionicons } from '@expo/vector-icons';
 import haversine from 'haversine';
+import { UserContext } from '../../../shared/UserContext';
 
-export default function MapScreen({ center, activeUsers, region, extraData, radius }) {
+export default function MapScreen({ center, activeUsers, region, radius }) {
   let mapRef = useRef(null);
+  const userData = useContext(UserContext);
   const [mapReady, setMapReady] = useState(false);
   // const [radius, setRadius] = useState(4000);
   const colors = ['red', 'green', 'purple'];
@@ -71,7 +73,7 @@ export default function MapScreen({ center, activeUsers, region, extraData, radi
       initialRegion={region}
     >
       {activeUsers
-        .filter((user) => user.id !== extraData.id)
+        .filter((user) => user.id !== userData.id)
         // .filter((user) => {
         //   const date = new Date();
         //   return date.getTime() - user.lastUpdate.seconds > 300000;

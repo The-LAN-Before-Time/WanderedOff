@@ -13,6 +13,9 @@ import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import SessionStackCreator from './src/screens/SessionMgmt/SessionStackCreator';
+import { firebase } from './src/firebase/config';
+import { UserContext } from './shared/UserContext';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -20,7 +23,6 @@ if (!global.btoa) {
 if (!global.atob) {
   global.atob = decode;
 }
-import { firebase } from './src/firebase/config';
 
 const Stack = createStackNavigator();
 
@@ -151,34 +153,47 @@ export default function App() {
   //   console.log('This is the user');
   //   console.log(user);
   // }
-
+  //const userData = user;
   return (
     <NavigationContainer test='test'>
-      <Stack.Navigator /*initialRouteName={user ? "Home" : "Login"}*/>
-        {user ? (
-          <>
-            <Stack.Screen name='Home'>
+      <UserContext.Provider value={user}>
+        <Stack.Navigator /*initialRouteName={user ? "Home" : "Login"}*/>
+          {user ? (
+            <>
+              <Stack.Screen name="Session Mgmt Screens" options={{ headerShown: false }}>
               {(props) => (
-                <TabbedNavigator
+                <SessionStackCreator
                   {...props}
-                  extraData={user}
+                  // extraData={user}
                   notify={sendPushNotification}
                 />
-              )}
-            </Stack.Screen>
-            <Stack.Screen name='Login' component={LoginScreen} />
-            <Stack.Screen name='Registration' component={RegistrationScreen} />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name='Login' component={LoginScreen} />
-            <Stack.Screen name='Registration' component={RegistrationScreen} />
-            <Stack.Screen name='Home'>
-              {(props) => <TabbedNavigator {...props} extraData={user} />}
-            </Stack.Screen>
-          </>
-        )}
-      </Stack.Navigator>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name='Tabbed Nav'
+              options={{
+                headerLeft: () => {
+                  return null;
+              }}}>
+                {(props) => (
+                  <TabbedNavigator
+                    {...props}
+                    notify={sendPushNotification}
+                  />
+                )}
+              </Stack.Screen>
+
+            </>
+          ) : (
+            <>
+              <Stack.Screen name='Login' component={LoginScreen} />
+              <Stack.Screen name='Registration' component={RegistrationScreen} />
+              <Stack.Screen name='Home'>
+                {(props) => <TabbedNavigator {...props} />}
+              </Stack.Screen>
+            </>
+          )}
+        </Stack.Navigator>
+      </UserContext.Provider>
     </NavigationContainer>
   );
 }
