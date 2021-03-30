@@ -5,13 +5,10 @@ import queryLocations from '../../../shared/QueryLocations';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapScreen from '../MapScreen/MapScreen';
 import OptionsScreen from '../Options/OptionsScreen';
-// import SessionMgmtStack from '../../routes/SessionMgmt';
-import SessionHome from '../SessionMgmt/SessionHome';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
+import SessionTab from '../SessionMgmt/SessionTab';
 
 const TabbedNavigation = (props) => {
+  //console.log("PROPS TABBED NAV", props)
   const [sessionId, setSessionId] = useState('123456');
   const [activeUsers, setActiveUsers] = useState({
     list: [],
@@ -27,7 +24,6 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
-  const Stack = createStackNavigator();
 
   const setInitialRegion = () => {
     navigator.geolocation.getCurrentPosition(
@@ -48,14 +44,7 @@ const TabbedNavigation = (props) => {
     );
   };
 
-  // const handleSessionChange = (code, runningStatus = running) => {
-  //   setRunning(false);
-  //   setSessionId(code);
-  //   setRunning(runningStatus);
-  // };
-
   useEffect(() => {
-    if (running) {
       const interval = setInterval(
         () => updateLocation(props.extraData.id, sessionId),
         3000
@@ -65,7 +54,6 @@ const TabbedNavigation = (props) => {
         clearInterval(interval);
         unsubscribeToQuery();
       };
-    }
   }, [sessionId, running]);
 
   useEffect(() => setInitialRegion());
@@ -73,6 +61,11 @@ const TabbedNavigation = (props) => {
   if (activeUsers.loaded) {
     return (
       <Tab.Navigator>
+        <Tab.Screen name='Sessions'>
+          {() => (
+            <SessionTab/>
+          )}
+        </Tab.Screen>
         <Tab.Screen name='Map'>
           {() => (
             <MapScreen
@@ -92,11 +85,6 @@ const TabbedNavigation = (props) => {
               radius={radius}
               setRadius={setRadius}
             />
-          )}
-        </Tab.Screen>
-        <Tab.Screen name='Sessions'>
-          {() => (
-            <SessionHome/>
           )}
         </Tab.Screen>
       </Tab.Navigator>

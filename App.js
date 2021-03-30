@@ -13,6 +13,8 @@ import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import SessionStackCreator from './src/screens/SessionMgmt/SessionStackCreator';
+import { firebase } from './src/firebase/config';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -20,7 +22,7 @@ if (!global.btoa) {
 if (!global.atob) {
   global.atob = decode;
 }
-import { firebase } from './src/firebase/config';
+
 
 const Stack = createStackNavigator();
 
@@ -31,6 +33,7 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
+
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -157,7 +160,7 @@ export default function App() {
       <Stack.Navigator /*initialRouteName={user ? "Home" : "Login"}*/>
         {user ? (
           <>
-            <Stack.Screen name='Home'>
+            {/* <Stack.Screen name='Tabbed Nav' options={{ headerShown: false }}>
               {(props) => (
                 <TabbedNavigator
                   {...props}
@@ -165,9 +168,16 @@ export default function App() {
                   notify={sendPushNotification}
                 />
               )}
+            </Stack.Screen> */}
+            <Stack.Screen name="Session Mgmt Screens" options={{ headerShown: false }}>
+            {(props) => (
+              <SessionStackCreator
+                {...props}
+                extraData={user}
+                notify={sendPushNotification}
+              />
+              )}
             </Stack.Screen>
-            <Stack.Screen name='Login' component={LoginScreen} />
-            <Stack.Screen name='Registration' component={RegistrationScreen} />
           </>
         ) : (
           <>
