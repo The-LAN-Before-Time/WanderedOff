@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text } from 'react-native';
 import updateLocation from '../../../shared/UpdateLocation';
 import queryLocations from '../../../shared/QueryLocations';
@@ -6,9 +6,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapScreen from '../MapScreen/MapScreen';
 import OptionsScreen from '../Options/OptionsScreen';
 import SessionTab from '../SessionMgmt/SessionTab';
+import { UserContext } from '../../../shared/UserContext';
 
 const TabbedNavigation = (props) => {
-  //console.log("PROPS TABBED NAV", props)
+  const userData = useContext(UserContext);
+  console.log("CONTEXT", userData)
   const [sessionId, setSessionId] = useState('123456');
   const [activeUsers, setActiveUsers] = useState({
     list: [],
@@ -46,7 +48,7 @@ const TabbedNavigation = (props) => {
 
   useEffect(() => {
       const interval = setInterval(
-        () => updateLocation(props.extraData.id, sessionId),
+        () => updateLocation(userData.id, sessionId),
         3000
       );
       const unsubscribeToQuery = queryLocations(sessionId, setActiveUsers);
