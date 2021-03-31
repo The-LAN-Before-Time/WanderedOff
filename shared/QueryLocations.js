@@ -9,18 +9,25 @@ export default function (sessionId, setActiveUsers) {
       let lats = 0;
       let longs = 0;
       let center = {};
-      const activeUsers = Object.values(doc.data());
-      console.log("ACTIVE USERS MANGOS", activeUsers);
-      activeUsers.forEach((user) => {
-      console.log("USER CHERRY LOCATION", user.location);
-        if(user.userId) {
-          lats += user.location.latitude;
-          longs += user.location.longitude;
-        }
-      });
-      center.latitude = lats / activeUsers.length;
-      center.longitude = longs / activeUsers.length;
-      setActiveUsers({ list: activeUsers, loaded: true, center });
+
+      let activeUsers = [];
+
+      if(doc.data() && Object.keys(doc.data()).length ){
+          activeUsers = Object.values(doc.data());
+          console.log("-- Doc Data: ", doc.data());
+
+          console.log("ACTIVE USERS MANGOS", activeUsers);
+          activeUsers.forEach((user) => {
+              // console.log("USER CHERRY LOCATION", user.location);
+
+              lats += user.location.latitude;
+              longs += user.location.longitude;
+
+          });
+          center.latitude = lats / activeUsers.length;
+          center.longitude = longs / activeUsers.length;
+          setActiveUsers({ list: activeUsers, loaded: true, center });
+      }
 
       // querySnapshot.forEach((doc) => {
       //   console.log('DOC', doc.data())

@@ -63,7 +63,7 @@ export default function MapScreen({ center, activeUsers, region, radius }) {
     goToInitialRegion();
   }, [mapReady]);
 
-console.log("CENTER GRAPES FROM MAP", center)
+// console.log("CENTER GRAPES FROM MAP", center)
   // if (userLocationFound && usersLoaded) {
   return (
     <MapView
