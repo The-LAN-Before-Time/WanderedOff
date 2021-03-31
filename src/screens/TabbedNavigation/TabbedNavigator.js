@@ -107,6 +107,8 @@ const TabbedNavigation = (props) => {
           {() => (
             <SessionTab
             exitSession={exitSession}
+            sessionInfo={props.route.params.session}
+            activeUsers={activeUsers.list}
             />
           )}
         </Tab.Screen>
