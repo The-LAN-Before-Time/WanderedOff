@@ -14,7 +14,7 @@ const TabbedNavigation = (props) => {
   // console.log("CONTEXT", userData)
   const [sessionId, setSessionId] = useState(props.route.params.session.id);
   const [activeUsers, setActiveUsers] = useState({
-    list: [],
+    list: {},
     loaded: false,
     center: {},
   });
@@ -51,7 +51,7 @@ const TabbedNavigation = (props) => {
         () => updateLocation(userData, sessionId),
         3000
       );
-      const unsubscribeToQuery = queryLocations(sessionId, setActiveUsers);
+      const unsubscribeToQuery = queryLocations(sessionId, setActiveUsers, activeUsers, radius);
       return () => {
         clearInterval(interval);
         unsubscribeToQuery();

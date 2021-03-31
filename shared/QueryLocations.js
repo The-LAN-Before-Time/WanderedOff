@@ -1,6 +1,7 @@
 import { firebase } from '../src/firebase/config';
+import haversine from 'haversine'
 
-export default function (sessionId, setActiveUsers) {
+export default function (sessionId, setActiveUsers, activeUsers, radius) {
   console.log('attempting query');
   const usersRef = firebase.firestore().collection('sessionUsers');
   const query = firebase.firestore().collection('sessionUsers').doc(sessionId).onSnapshot(
@@ -10,23 +11,31 @@ export default function (sessionId, setActiveUsers) {
       let longs = 0;
       let center = {};
 
-      let activeUsers = [];
-
+      let newUsers = {};
+        console.log('If doc && OBj Key on doc.data length')
       if(doc.data() && Object.keys(doc.data()).length ){
-          activeUsers = Object.values(doc.data());
-          console.log("-- Doc Data: ", doc.data());
-
-          console.log("ACTIVE USERS MANGOS", activeUsers);
-          activeUsers.forEach((user) => {
-              // console.log("USER CHERRY LOCATION", user.location);
-
+          newUsers = doc.data();
+          let max = 0;
+          console.log("ACTIVE USERS MANGOS", newUsers);
+          Object.entries(newUsers).forEach( ([id, user]) => {
               lats += user.location.latitude;
               longs += user.location.longitude;
+              if(!activeUsers.list[id]) {
+                  Object.values(activeUsers.list).forEach( userData => {
+                      console.log('user Index: ', userData.index);
+                      if(userData.index > max ){
+                          max = userData.index
+                      }
+                  })
+                  max++
+                  newUsers[id].index = max;
+                  newUsers[id].inbounds = true;
+              }
 
-          });
-          center.latitude = lats / activeUsers.length;
-          center.longitude = longs / activeUsers.length;
-          setActiveUsers({ list: activeUsers, loaded: true, center });
+          })
+          center.latitude = lats / Object.keys(newUsers).length;
+          center.longitude = longs / Object.keys(newUsers).length;
+          setActiveUsers({ list: newUsers, loaded: true, center });
       }
 
       // querySnapshot.forEach((doc) => {
