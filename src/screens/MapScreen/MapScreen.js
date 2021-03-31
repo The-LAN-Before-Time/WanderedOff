@@ -15,9 +15,6 @@ export default function MapScreen({ center, activeUsers, region, radius }) {
   const defaultPadding = { top: 20, right: 20, bottom: 20, left: 20 };
 
   const goToInitialRegion = () => {
-    let initialRegion = Object.assign({}, region);
-    initialRegion['latitudeDelta'] = 0.005;
-    initialRegion['longitudeDelta'] = 0.005;
     if (mapReady) {
       /*
       adds outer points of radius circle to fit to map
@@ -60,6 +57,7 @@ export default function MapScreen({ center, activeUsers, region, radius }) {
     goToInitialRegion();
   }, [mapReady]);
 
+console.log("CENTER GRAPES FROM MAP", center)
   // if (userLocationFound && usersLoaded) {
   return (
     <MapView
@@ -73,7 +71,7 @@ export default function MapScreen({ center, activeUsers, region, radius }) {
       initialRegion={region}
     >
       {activeUsers
-        .filter((user) => user.id !== userData.id)
+        .filter((user) => user.userId !== userData.id)
         // .filter((user) => {
         //   const date = new Date();
         //   return date.getTime() - user.lastUpdate.seconds > 300000;
@@ -81,7 +79,7 @@ export default function MapScreen({ center, activeUsers, region, radius }) {
         .map((user, idx) => {
           return (
             <Marker
-              key={user.id}
+              key={user.userId}
               coordinate={{
                 latitude: user.location.latitude,
                 longitude: user.location.longitude,
@@ -97,7 +95,7 @@ export default function MapScreen({ center, activeUsers, region, radius }) {
                   border: 'black',
                 }}
               >
-                <Text
+                {/* <Text
                   style={{
                     color: colors[idx % colors.length],
                     textAlign: 'center',
@@ -107,7 +105,7 @@ export default function MapScreen({ center, activeUsers, region, radius }) {
                     .split(' ')
                     .map((name) => name[0])
                     .join('')}
-                </Text>
+                </Text> */}
                 <Ionicons name='person-circle' size={24} color={colors[idx]} />
               </View>
             </Marker>

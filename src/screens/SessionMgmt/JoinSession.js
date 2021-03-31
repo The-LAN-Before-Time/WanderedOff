@@ -24,10 +24,10 @@ const JoinSession = () => {
       if (!session.id) {
         console.log('Hitting the IF')
       } else {
-      navigation.navigate("Confirm", {session});
+      navigation.navigate("Confirm", {session, userData});
       };
     }).catch((error) => {
-  });  
+  });
   }
 
   return (

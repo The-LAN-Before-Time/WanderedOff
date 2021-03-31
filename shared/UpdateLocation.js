@@ -14,7 +14,7 @@ export default function (user, sessionId) {
       if (location) {
         console.log('sending');
         userLocationRef.update({
-          [user.id]: {lastUpdate: firebase.firestore.FieldValue.serverTimestamp(), location, name: user.fullName, status: user.status || 'active'},
+          [user.id]: {lastUpdate: firebase.firestore.FieldValue.serverTimestamp(), location, name: user.fullName, status: user.status || 'active', userId: user.id},
         });
         console.log('sent');
       }

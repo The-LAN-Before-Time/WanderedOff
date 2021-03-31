@@ -2,26 +2,42 @@ import { firebase } from '../src/firebase/config';
 
 export default function (sessionId, setActiveUsers) {
   console.log('attempting query');
-  const usersRef = firebase.firestore().collection('users');
+  const usersRef = firebase.firestore().collection('sessionUsers');
 
-  const query = usersRef.where('sessionId', '==', sessionId).onSnapshot(
-    (querySnapshot) => {
+  const query = firebase.firestore().collection('sessionUsers').doc(sessionId).onSnapshot(
+    (doc) => {
       console.log('got snapshot');
       let lats = 0;
       let longs = 0;
-      const activeUsers = [];
       let center = {};
-      querySnapshot.forEach((doc) => {
-        const user = doc.data();
-        user.id = doc.id;
-        activeUsers.push(user);
-        lats += user.location.latitude;
-        longs += user.location.longitude;
+      const activeUsers = Object.values(doc.data());
+      console.log("ACTIVE USERS MANGOS", activeUsers);
+      activeUsers.forEach((user) => {
+      console.log("USER CHERRY LOCATION", user.location);
+        if(user.userId) {
+          lats += user.location.latitude;
+          longs += user.location.longitude;
+        }
       });
-      // setUsersLoaded(true);
       center.latitude = lats / activeUsers.length;
       center.longitude = longs / activeUsers.length;
+      console.log("LATS", lats);
+      // console.log("USER CHERRY CENTER", center);
       setActiveUsers({ list: activeUsers, loaded: true, center });
+
+
+      // querySnapshot.forEach((doc) => {
+      //   console.log('DOC', doc.data())
+        // const user = doc.data();
+        // user.id = doc.id;
+        // activeUsers.push(user);
+        // lats += user.location.latitude;
+        // longs += user.location.longitude;
+      //});
+      // // setUsersLoaded(true);
+      // center.latitude = lats / activeUsers.length;
+      // center.longitude = longs / activeUsers.length;
+      // setActiveUsers({ list: activeUsers, loaded: true, center });
     },
     (error) => {
       console.log(error.message);

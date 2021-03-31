@@ -9,7 +9,7 @@ import SessionTab from '../SessionMgmt/SessionTab';
 import { UserContext } from '../../../shared/UserContext';
 
 const TabbedNavigation = (props) => {
-  console.log('These are the props on TabbedNavigation, mangos', props.route.params)
+  // console.log('These are the props on TabbedNavigation, mangos', props.route.params)
   const userData = useContext(UserContext);
   // console.log("CONTEXT", userData)
   const [sessionId, setSessionId] = useState(props.route.params.session.id);
