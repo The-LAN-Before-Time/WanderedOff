@@ -22,7 +22,6 @@ export default function (sessionId, setActiveUsers) {
       center.longitude = longs / activeUsers.length;
       setActiveUsers({ list: activeUsers, loaded: true, center });
 
-
       // querySnapshot.forEach((doc) => {
       //   console.log('DOC', doc.data())
         // const user = doc.data();

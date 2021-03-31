@@ -20,36 +20,42 @@ export default function MapScreen({ center, activeUsers, region, radius }) {
       adds outer points of radius circle to fit to map
       */
       console.log('HI FROM MAPREADY');
-      let coords = activeUsers.map((user) => ({
-        latitude: user.location.latitude,
-        longitude: user.location.longitude,
-      }));
-      coords.push({
-        latitude: center.latitude + radius * 0.0000089,
-        longitude: center.longitude,
-      });
-      coords.push({
-        latitude: center.latitude - radius * 0.0000089,
-        longitude: center.longitude,
-      });
-      coords.push({
-        latitude: center.latitude,
-        longitude:
-          center.longitude +
-          (radius * 0.0000089) / Math.cos(center.latitude * 0.018),
-      });
-      coords.push({
-        latitude: center.latitude,
-        longitude:
-          center.longitude -
-          (radius * 0.0000089) / Math.cos(center.latitude * 0.018),
-      });
-      console.log('COORDS', coords);
-      mapRef.current.fitToCoordinates(coords, {
-        edgePadding: defaultPadding,
-        animated: true,
-      });
-      console.log('animate complete');
+      activeUsers.forEach((user) => {
+        if(user.userId) {
+
+        console.log("USER ID HI", user.location.latitude)
+          let coords = activeUsers.map((user) => ({
+              latitude: user.location.latitude,
+              longitude: user.location.longitude,
+          }));
+          coords.push({
+            latitude: center.latitude + radius * 0.0000089,
+            longitude: center.longitude,
+          });
+          coords.push({
+            latitude: center.latitude - radius * 0.0000089,
+            longitude: center.longitude,
+          });
+          coords.push({
+            latitude: center.latitude,
+            longitude:
+              center.longitude +
+              (radius * 0.0000089) / Math.cos(center.latitude * 0.018),
+          });
+          coords.push({
+            latitude: center.latitude,
+            longitude:
+              center.longitude -
+              (radius * 0.0000089) / Math.cos(center.latitude * 0.018),
+          });
+          console.log('COORDS', coords);
+          mapRef.current.fitToCoordinates(coords, {
+            edgePadding: defaultPadding,
+            animated: true,
+          });
+          console.log('animate complete');
+       }
+      })
     }
   };
 
@@ -77,6 +83,7 @@ console.log("CENTER GRAPES FROM MAP", center)
         //   return date.getTime() - user.lastUpdate.seconds > 300000;
         // })
         .map((user, idx) => {
+            if(user.userId) {
           return (
             <Marker
               key={user.userId}
@@ -109,7 +116,9 @@ console.log("CENTER GRAPES FROM MAP", center)
                 <Ionicons name='person-circle' size={24} color={colors[idx]} />
               </View>
             </Marker>
+
           );
+            }
         })}
       <Circle center={center} radius={radius} fillColor='rgba(20,20,240,0.1)' />
     </MapView>
