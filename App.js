@@ -7,7 +7,9 @@ import {
   RegistrationScreen,
   TabbedNavigator,
 } from './src/screens';
-import { Text, Platform } from 'react-native';
+import { Text, Platform, LogBox } from 'react-native';
+LogBox.ignoreLogs(['Setting a timer']);
+
 import { decode, encode } from 'base-64';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';

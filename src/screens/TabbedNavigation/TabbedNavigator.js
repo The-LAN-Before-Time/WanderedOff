@@ -9,15 +9,16 @@ import SessionTab from '../SessionMgmt/SessionTab';
 import { UserContext } from '../../../shared/UserContext';
 
 const TabbedNavigation = (props) => {
+  // console.log('These are the props on TabbedNavigation, mangos', props.route.params)
   const userData = useContext(UserContext);
-  console.log("CONTEXT", userData)
-  const [sessionId, setSessionId] = useState('123456');
+  // console.log("CONTEXT", userData)
+  const [sessionId, setSessionId] = useState(props.route.params.session.id);
   const [activeUsers, setActiveUsers] = useState({
-    list: [],
+    list: {},
     loaded: false,
     center: {},
   });
-  const [running, setRunning] = useState(true);
+  const [newUsers, setNewUsers] = useState({});
   const Tab = createBottomTabNavigator();
   const [region, setRegion] = useState({
     latitude: 37.78825,
@@ -48,17 +49,50 @@ const TabbedNavigation = (props) => {
 
   useEffect(() => {
       const interval = setInterval(
-        () => updateLocation(userData.id, sessionId),
+        () => updateLocation(userData, sessionId),
         3000
       );
-      const unsubscribeToQuery = queryLocations(sessionId, setActiveUsers);
+      const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
       return () => {
         clearInterval(interval);
         unsubscribeToQuery();
       };
-  }, [sessionId, running]);
+  }, [sessionId]);
 
-  useEffect(() => setInitialRegion());
+  useEffect(() => setInitialRegion(),[]);
+
+  useEffect(() => {
+
+    if(Object.keys(newUsers).length) {
+      let max = 0;
+      let lats = 0;
+      let longs = 0;
+      let center = {};
+      Object.entries(newUsers).forEach( ([id, user]) => {
+        lats += user.location.latitude;
+        longs += user.location.longitude;
+        console.log("activeUsers.list", activeUsers.list)
+        if(!activeUsers.list[id]) {
+            Object.values(activeUsers.list).forEach( userData => {
+                console.log('user Index: ', userData.index);
+                if(userData.index > max ){
+                    max = userData.index;
+                }
+            })
+            max++;
+            console.log("Assigning new index to:", user.fullName);
+            newUsers[id].index = max;
+            newUsers[id].inbounds = true;
+        } else {
+            newUsers[id].index = activeUsers.list[id].index;
+            newUsers[id].inbounds = activeUsers.list[id].inbounds;
+        }
+      })
+      center.latitude = lats / Object.keys(newUsers).length;
+      center.longitude = longs / Object.keys(newUsers).length;
+      setActiveUsers({ list: newUsers, loaded: true, center });
+    }
+  }, [newUsers]);
 
   if (activeUsers.loaded) {
     return (

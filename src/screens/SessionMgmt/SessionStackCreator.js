@@ -18,15 +18,6 @@ const SessionStackCreator = (extraData, notify) => {
         <Stack.Screen name="Join Session" component={JoinSession}/>
         <Stack.Screen name="Confirm" component={ConfirmJoinSession}/>
         <Stack.Screen name="Sessions" component={SessionTab}/>
-        {/* <Stack.Screen name='Tabbed Nav' >
-              {(props) => (
-                <TabbedNavigator
-                  {...props}
-                  extraData={extraData}
-                  notify={notify}
-                />
-              )}
-        </Stack.Screen> */}
       </Stack.Navigator>
   )
 }

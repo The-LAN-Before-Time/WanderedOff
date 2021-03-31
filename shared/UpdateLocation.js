@@ -1,8 +1,8 @@
 import { firebase } from '../src/firebase/config';
 
-export default function (userId, sessionId) {
-  if (!userId || !sessionId) return;
-  const userLocationRef = firebase.firestore().collection('users').doc(userId);
+export default function (user, sessionId) {
+  if (!user.id || !sessionId) return;
+  const userLocationRef = firebase.firestore().collection('sessionUsers').doc(sessionId);
   navigator.geolocation.getCurrentPosition(
     (position) => {
       console.log('new position: ', position.coords);
@@ -14,9 +14,7 @@ export default function (userId, sessionId) {
       if (location) {
         console.log('sending');
         userLocationRef.update({
-          lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
-          location,
-          sessionId,
+          [user.id]: {lastUpdate: firebase.firestore.FieldValue.serverTimestamp(), location, fullName: user.fullName, status: user.status || 'active', userId: user.id},
         });
         console.log('sent');
       }
