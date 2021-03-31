@@ -7,14 +7,7 @@ const ConfirmJoinSession = (props) => {
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-    // firebase.firestore().collection('sessionUsers').doc(props.route.params.session.id).update({ [props.route.params.userData.id]: {} });
-
     navigation.navigate("Tabbed Nav", props.route.params);
-    //Grab the user,
-    //update the user's sessionId to this props sessionId
-
-    //SessionUsers table
-    //sessionUsers has a mapped object for each user userId keyvalue pair
   }
 
   return (

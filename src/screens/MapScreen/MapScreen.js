@@ -13,7 +13,6 @@ export default function MapScreen({center, activeUsers, region, radius}) {
     const colors = ['red', 'green', 'purple', 'orange'];
     const defaultPadding = {top: 20, right: 20, bottom: 20, left: 20};
     const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index)
-    console.log("USERLIST INDEXES", userList.map((user) => [user.index, user.fullName]));
     const goToInitialRegion = () => {
         if (mapReady) {
             /* adds outer points of radius circle to fit to map */
