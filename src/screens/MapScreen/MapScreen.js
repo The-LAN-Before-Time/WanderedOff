@@ -95,7 +95,7 @@ console.log("CENTER GRAPES FROM MAP", center)
                   border: 'black',
                 }}
               >
-                {/* <Text
+                <Text
                   style={{
                     color: colors[idx % colors.length],
                     textAlign: 'center',
@@ -105,7 +105,7 @@ console.log("CENTER GRAPES FROM MAP", center)
                     .split(' ')
                     .map((name) => name[0])
                     .join('')}
-                </Text> */}
+                </Text>
                 <Ionicons name='person-circle' size={24} color={colors[idx]} />
               </View>
             </Marker>

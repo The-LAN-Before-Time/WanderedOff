@@ -18,7 +18,6 @@ const TabbedNavigation = (props) => {
     loaded: false,
     center: {},
   });
-  const [running, setRunning] = useState(true);
   const Tab = createBottomTabNavigator();
   const [region, setRegion] = useState({
     latitude: 37.78825,
@@ -57,7 +56,7 @@ const TabbedNavigation = (props) => {
         clearInterval(interval);
         unsubscribeToQuery();
       };
-  }, [sessionId, running]);
+  }, [sessionId]);
 
   useEffect(() => setInitialRegion());
 

@@ -3,7 +3,6 @@ import { firebase } from '../src/firebase/config';
 export default function (sessionId, setActiveUsers) {
   console.log('attempting query');
   const usersRef = firebase.firestore().collection('sessionUsers');
-
   const query = firebase.firestore().collection('sessionUsers').doc(sessionId).onSnapshot(
     (doc) => {
       console.log('got snapshot');
@@ -21,8 +20,6 @@ export default function (sessionId, setActiveUsers) {
       });
       center.latitude = lats / activeUsers.length;
       center.longitude = longs / activeUsers.length;
-      console.log("LATS", lats);
-      // console.log("USER CHERRY CENTER", center);
       setActiveUsers({ list: activeUsers, loaded: true, center });
 
 
