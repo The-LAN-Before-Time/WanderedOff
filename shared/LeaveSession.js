@@ -8,7 +8,7 @@ const LeaveSession = (sessionId, setSessionId, userId) => {
     userLocationRef.update({
       [userId]: firebase.firestore.FieldValue.delete(),
     })
-  }, 8000);
+  }, 15000);
 }
 
 export default LeaveSession;
