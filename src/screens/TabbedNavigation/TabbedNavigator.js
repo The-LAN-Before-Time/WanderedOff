@@ -18,6 +18,7 @@ const TabbedNavigation = (props) => {
     loaded: false,
     center: {},
   });
+  const [newUsers, setNewUsers] = useState({});
   const Tab = createBottomTabNavigator();
   const [region, setRegion] = useState({
     latitude: 37.78825,
@@ -51,14 +52,47 @@ const TabbedNavigation = (props) => {
         () => updateLocation(userData, sessionId),
         3000
       );
-      const unsubscribeToQuery = queryLocations(sessionId, setActiveUsers, activeUsers, radius);
+      const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
       return () => {
         clearInterval(interval);
         unsubscribeToQuery();
       };
   }, [sessionId]);
 
-  useEffect(() => setInitialRegion());
+  useEffect(() => setInitialRegion(),[]);
+
+  useEffect(() => {
+
+    if(Object.keys(newUsers).length) {
+      let max = 0;
+      let lats = 0;
+      let longs = 0;
+      let center = {};
+      Object.entries(newUsers).forEach( ([id, user]) => {
+        lats += user.location.latitude;
+        longs += user.location.longitude;
+        console.log("activeUsers.list", activeUsers.list)
+        if(!activeUsers.list[id]) {
+            Object.values(activeUsers.list).forEach( userData => {
+                console.log('user Index: ', userData.index);
+                if(userData.index > max ){
+                    max = userData.index;
+                }
+            })
+            max++;
+            console.log("Assigning new index to:", user.fullName);
+            newUsers[id].index = max;
+            newUsers[id].inbounds = true;
+        } else {
+            newUsers[id].index = activeUsers.list[id].index;
+            newUsers[id].inbounds = activeUsers.list[id].inbounds;
+        }
+      })
+      center.latitude = lats / Object.keys(newUsers).length;
+      center.longitude = longs / Object.keys(newUsers).length;
+      setActiveUsers({ list: newUsers, loaded: true, center });
+    }
+  }, [newUsers]);
 
   if (activeUsers.loaded) {
     return (
