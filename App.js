@@ -7,7 +7,7 @@ import {
   RegistrationScreen,
   TabbedNavigator,
 } from './src/screens';
-import { Text, Platform, LogBox } from 'react-native';
+import { Text, Platform, LogBox, SafeAreaView } from 'react-native';
 LogBox.ignoreLogs(['Setting a timer']);
 
 import { decode, encode } from 'base-64';

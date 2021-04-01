@@ -7,7 +7,7 @@ import MapScreen from '../MapScreen/MapScreen';
 import OptionsScreen from '../Options/OptionsScreen';
 import SessionTab from '../SessionMgmt/SessionTab';
 import { UserContext } from '../../../shared/UserContext';
-import LeaveSession from '../../../shared/LeaveSession';
+// import LeaveSession from '../../../shared/LeaveSession';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -56,22 +56,25 @@ const TabbedNavigation = (props) => {
       );
       const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
       return () => {
+        console.log('ATTEMPTING TO UNOUNT')
         clearInterval(interval);
         unsubscribeToQuery();
+        console.log('UNMOUNT COMPLETED')
       };
   }, [sessionId]);
 
-   const exitSession = () => {
-    console.log("EXITING SESSION");
-    LeaveSession(sessionId, setSessionId, userData.id);
-    clearInterval(interval);
-  }
+  //  const exitSession = () => {
+  //   console.log("EXITING SESSION");
+  //   LeaveSession(sessionId, setSessionId, userData.id);
+  //   clearInterval(interval);
+  // }
 
   /** Set initial region */
   useEffect(() => setInitialRegion(),[]);
 
   /** Add new users */
   useEffect(() => {
+    console.log('THIRD USEEFFECT')
     if(Object.keys(newUsers).length) {
       let max = 0;
       let lats = 0;
@@ -114,9 +117,11 @@ const TabbedNavigation = (props) => {
         <Tab.Screen name='Sessions'>
           {() => (
             <SessionTab
-            exitSession={exitSession}
+            // exitSession={exitSession}
             sessionInfo={props.route.params.session}
             activeUsers={activeUsers.list}
+            setSessionId={setSessionId}
+            sessionId={sessionId}
             />
           )}
         </Tab.Screen>
