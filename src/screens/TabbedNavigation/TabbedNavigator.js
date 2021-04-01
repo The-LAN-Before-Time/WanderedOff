@@ -8,6 +8,9 @@ import OptionsScreen from '../Options/OptionsScreen';
 import { UserContext } from '../../../shared/UserContext';
 // import LeaveSession from '../../../shared/LeaveSession';
 import SessionStackCreator from '../SessionMgmt/SessionStackCreator';
+import haversine from 'haversine';
+import { firebase } from '../../firebase/config';
+import { useNavigation } from '@react-navigation/native';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -27,6 +30,7 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
+  const navigation = useNavigation();
   let interval;
 
   /** Set the initial region on user */
@@ -49,34 +53,50 @@ const TabbedNavigation = (props) => {
     );
   };
 
+  const leaveSession = () => {
+    const oldSessionId = sessionId;
+    setSessionId('');
+    setActiveUsers({
+      list: {},
+      loaded: false,
+      center: {},
+    });
+    console.log('ATTEMPTING TO REMOVE ID', oldSessionId);
+    const userLocationRef = firebase
+      .firestore()
+      .collection('sessionUsers')
+      .doc(oldSessionId);
+
+    setTimeout(() => {
+      console.log('IN TIMEOUT');
+      userLocationRef.update({
+        [userData.id]: firebase.firestore.FieldValue.delete(),
+      });
+      console.log('USER LOCATION DELETED');
+    }, 15000);
+    navigation.navigate('Get Started');
+    console.log('TIMEOUT SET');
+  };
+
   /** Updates location on session */
   useEffect(() => {
-      interval = setInterval(
-        () => updateLocation(userData, sessionId),
-        3000
-      );
-      const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
-      return () => {
-        console.log('ATTEMPTING TO UNOUNT')
-        clearInterval(interval);
-        unsubscribeToQuery();
-        console.log('UNMOUNT COMPLETED')
-      };
+    interval = setInterval(() => updateLocation(userData, sessionId), 3000);
+    const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
+    return () => {
+      console.log('ATTEMPTING TO UNOUNT');
+      clearInterval(interval);
+      unsubscribeToQuery();
+      console.log('UNMOUNT COMPLETED');
+    };
   }, [sessionId]);
 
-  //  const exitSession = () => {
-  //   console.log("EXITING SESSION");
-  //   LeaveSession(sessionId, setSessionId, userData.id);
-  //   clearInterval(interval);
-  // }
-
   /** Set initial region */
-  useEffect(() => setInitialRegion(),[]);
+  useEffect(() => setInitialRegion(), []);
 
   /** Add new users */
   useEffect(() => {
-    console.log('THIRD USEEFFECT')
-    if(Object.keys(newUsers).length) {
+    console.log('THIRD USEEFFECT');
+    if (Object.keys(newUsers).length) {
       let max = 0;
       let lats = 0;
       let longs = 0;
@@ -86,79 +106,99 @@ const TabbedNavigation = (props) => {
        *  Checks Active Users List and sets new users with the next index id
        *  and adds & sets inbound property
        *  */
-      Object.entries(newUsers).forEach( ([id, user]) => {
+      Object.entries(newUsers).forEach(([id, user]) => {
         lats += user.location.latitude;
         longs += user.location.longitude;
 
-        if(!activeUsers.list[id]) {
-            Object.values(activeUsers.list).forEach( userData => {
-                if(userData.index > max ){
-                    max = userData.index;
-                }
-            })
-            max++;
-            newUsers[id].index = max;
-            newUsers[id].inbounds = true;
+        if (!activeUsers.list[id]) {
+          Object.values(activeUsers.list).forEach((userData) => {
+            if (userData.index > max) {
+              max = userData.index;
+            }
+          });
+          max++;
+          newUsers[id].index = max;
         } else {
-            newUsers[id].index = activeUsers.list[id].index;
-            newUsers[id].inbounds = activeUsers.list[id].inbounds;
+          newUsers[id].index = activeUsers.list[id].index;
         }
-      })
+      });
 
-        /** Set Center Radius */
+      /** Set Center Radius */
       center.latitude = lats / Object.keys(newUsers).length;
       center.longitude = longs / Object.keys(newUsers).length;
+      Object.entries(newUsers).forEach(([id, user]) => {
+        newUsers[id].inbounds = haversine(center, newUsers[id].location, {
+          unit: 'meter',
+          threshold: radius,
+        });
+        console.log(
+          newUsers[id].fullName,
+          ' is ',
+          newUsers[id].inbounds ? 'inbounds' : 'out of bounds'
+        );
+        if (
+          !newUsers[id].inbounds &&
+          activeUsers.list[id] &&
+          activeUsers.list[id].inbounds
+        ) {
+          props.notify({
+            title: `${newUsers[id].fullName} has fallen out of range`,
+            title: `Your friend, ${newUsers[id].fullName}, has fallen out of range. Please check to make sure they are not lost`,
+          });
+        }
+      });
+
       setActiveUsers({ list: newUsers, loaded: true, center });
     }
   }, [newUsers]);
 
   // if (activeUsers.loaded) {
-    return (
-      <Tab.Navigator>
-        <Tab.Screen name='Sessions'>
-          {() => (
-            <SessionStackCreator
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name='Sessions'>
+        {() => (
+          <SessionStackCreator
             // exitSession={exitSession}
             // sessionInfo={props.route.params.session}
             setActiveUsers={setActiveUsers}
             activeUsers={activeUsers.list}
             setSessionId={setSessionId}
             sessionId={sessionId}
-            />
-          )}
-        </Tab.Screen>
-        <Tab.Screen name='Map'>
-          {() => (
-            <MapScreen
-              {...props}
-              activeUsers={activeUsers.list}
-              center={activeUsers.center}
-              region={region}
-              radius={radius}
-              loaded={activeUsers.loaded}
-            />
-          )}
-        </Tab.Screen>
-        <Tab.Screen name='Options' >
-          {() => (
-            <OptionsScreen
-              setSessionId={setSessionId}
-              sessionId={sessionId}
-              radius={radius}
-              setRadius={setRadius}
-
-            />
-          )}
-        </Tab.Screen>
-      </Tab.Navigator>
-    );
-//   } else {
-//     return (
-//       <View>
-//         <Text>Loading</Text>
-//       </View>
-//     );
-//  }
+            leaveSession={leaveSession}
+          />
+        )}
+      </Tab.Screen>
+      <Tab.Screen name='Map'>
+        {() => (
+          <MapScreen
+            {...props}
+            activeUsers={activeUsers.list}
+            center={activeUsers.center}
+            region={region}
+            radius={radius}
+            loaded={activeUsers.loaded}
+          />
+        )}
+      </Tab.Screen>
+      <Tab.Screen name='Options'>
+        {() => (
+          <OptionsScreen
+            setSessionId={setSessionId}
+            sessionId={sessionId}
+            radius={radius}
+            setRadius={setRadius}
+          />
+        )}
+      </Tab.Screen>
+    </Tab.Navigator>
+  );
+  //   } else {
+  //     return (
+  //       <View>
+  //         <Text>Loading</Text>
+  //       </View>
+  //     );
+  //  }
 };
 
 export default TabbedNavigation;
