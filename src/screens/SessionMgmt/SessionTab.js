@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { View, Button, Text, ScrollView, FlatList, Modal } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 const SessionTab = (props) => {
-  const navigation = useNavigation();
   const { exitSession, sessionInfo, activeUsers } = props;
   const [modalVisible, setModalVisible] = useState(false);
   const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index)
@@ -31,7 +29,7 @@ const SessionTab = (props) => {
             <Button title="Confirm" onPress={exitSession} />
           </View>
           <View>
-            <Button title="Cancel" onPress={() => navigation.goBack()} />
+            <Button title="Cancel" onPress={() => setModalVisible(false)} />
           </View>
           {/* End for all button will render if user is owner */}
           <View>
