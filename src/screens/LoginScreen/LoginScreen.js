@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+import styles from './styles';
 import formStyles from '../../styles/formStyles';
 
 import { firebase } from '../../firebase/config'
@@ -47,9 +49,10 @@ export default function LoginScreen({navigation}) {
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
                 <Image
-                    style={styles.logo}
+                    style={formStyles.logo}
                     source={require('../../../assets/icon.png')}
                 />
+                <Text style={formStyles.label}>E-mail</Text>
                 <TextInput
                     style={formStyles.input}
                     placeholder='E-mail'
@@ -59,6 +62,7 @@ export default function LoginScreen({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={formStyles.label}>Password</Text>
                 <TextInput
                     style={formStyles.input}
                     placeholderTextColor="#aaaaaa"
@@ -70,9 +74,9 @@ export default function LoginScreen({navigation}) {
                     autoCapitalize="none"
                 />
                 <TouchableOpacity
-                    style={styles.button}
+                    style={formStyles.button}
                     onPress={() => onLoginPress()}>
-                    <Text style={styles.buttonTitle}>Log in</Text>
+                    <Text style={formStyles.buttonTitle}>Log in</Text>
                 </TouchableOpacity>
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Don't have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text></Text>

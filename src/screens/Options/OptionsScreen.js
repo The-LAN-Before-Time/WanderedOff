@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback, StyleSheet, ScrollView } from 'react-native';
-
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Keyboard,
+  TouchableWithoutFeedback,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity
+} from 'react-native';
+import formStyles from '../../styles/formStyles';
 
 const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
   const [newCode, setNewCode] = useState(sessionId);
@@ -17,17 +27,17 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
   return (
     <ScrollView >
       <View style={{marginTop: 50}}><Text>Option</Text></View>
-      <View style={styles.container}>
+      <View style={formStyles.container}>
         <View>
           <TextInput
-            style={styles.input}
+            style={formStyles.input}
             placeholder="Enter code"
             value={newCode}
             onChangeText={(val) => setNewCode(val)}
             keyboardType='number-pad'
           />
           <TextInput
-            style={styles.input}
+            style={formStyles.input}
             placeholder="Enter radius"
             value={String(newRadius)}
             onChangeText={(val) => setNewRadius(val)}
@@ -35,37 +45,14 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
           />
         </View>
         <View>
-          <Button
-            style={styles.button}
-            title='Update Session'
-            onPress={handleSubmit}
-          />
+          <TouchableOpacity
+              style={formStyles.button}
+              onPress={handleSubmit}>
+            <Text style={formStyles.buttonTitle}>Update Session</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#777',
-    padding: 8,
-    margin: 10,
-    width: 200,
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "blue",
-    padding: 10,
-  }
-})
-
 export default OptionsScreen;

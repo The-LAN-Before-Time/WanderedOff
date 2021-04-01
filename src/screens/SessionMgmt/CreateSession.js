@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import {View, Button, Text, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import {View, Button, Text, ScrollView, TextInput, TouchableOpacity, Switch} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { firebase } from '../../firebase/config';
 import { UserContext } from '../../../shared/UserContext'
@@ -9,11 +9,12 @@ const CreateSession = (props) => {
   const {setSessionId} = props;
   const userData = useContext(UserContext)
   const navigation = useNavigation();
+  const [toggle, setToggle] = useState(true);
   const [initialState, setInitialState] = useState({
     name: '',
     code: '',
     radius: '4000',
-    centerMovable: 'true',
+    centerMovable: toggle,
     owner: userData.id,
     active: true,
     expirationDate: new Date(Date.now() + 24*60*60*1000)
@@ -23,7 +24,6 @@ const CreateSession = (props) => {
     const sessionRef = firebase.firestore().collection('sessions')
     sessionRef.add(initialState).then(response => {
       firebase.firestore().collection('sessionUsers').doc(response.id).set({});
-      // console.log('This is the id', response.id);
       const session = Object.assign({}, initialState);
       session.id = response.id;
       setSessionId(session.id);
@@ -59,20 +59,28 @@ const CreateSession = (props) => {
             onChangeText={(val) => setInitialState({...initialState, radius: val})}
             keyboardType='number-pad'
           />
-          <Text style={styles.label}>Center movable?</Text>
-          <TextInput
-              style={styles.input}
-            placeholder="Center movable?"
-            value={initialState.centerMovable}
-            onChangeText={(val) => setInitialState({...initialState, centerMovable: val})}
-          />
-        </View>
-        <View style={styles.container}>
-          {/*<Button*/}
-          {/*  title='Create Session'*/}
-          {/*  onPress={handleSubmit}*/}
+
+
+          {/*<TextInput*/}
+          {/*    style={styles.input}*/}
+          {/*  placeholder="Center movable?"*/}
+          {/*  value={initialState.centerMovable}*/}
+          {/*  onChangeText={(val) => setInitialState({...initialState, centerMovable: val})}*/}
           {/*/>*/}
 
+          <Text style={styles.label}>Center movable?</Text>
+            <Switch
+                style={styles.switch}
+                trackColor={{false: 'gray', true: '#59b3ff'}}
+                thumbColor="white"
+                ios_backgroundColor="gray"
+                onValueChange={(value) => setToggle(value)}
+                value={toggle}
+            />
+
+        </View>
+
+        <View style={styles.container}>
           <TouchableOpacity
               style={styles.button}
               onPress={handleSubmit}>

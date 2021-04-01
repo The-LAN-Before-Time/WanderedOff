@@ -3,11 +3,15 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
     container: {
         flex: 1,
+        // backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+
     },
     logo: {
         flex: 1,
         height: 120,
-        width: 90,
+        width: 100,
         alignSelf: "center",
         margin: 30
     },
@@ -32,6 +36,7 @@ export default StyleSheet.create({
     label: {
         fontSize: 18,
         paddingTop: 15,
+        paddingBottom: 5,
         paddingLeft: 15,
         fontWeight: "bold"
     },
@@ -43,16 +48,29 @@ export default StyleSheet.create({
         paddingLeft: 16,
         flex: 1,
         marginLeft: 15,
-        marginRight: 5
+        marginRight: 15
     },
     button: {
         marginTop: 20,
         height: 47,
-        padding: 15,
+        padding: 13,
         borderRadius: 5,
         backgroundColor: '#0061b2',
         alignItems: "center",
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight:20,
+    },
+    buttonDanger: {
+        marginTop: 20,
+        height: 47,
+        padding: 13,
+        borderRadius: 5,
+        backgroundColor: '#d9202b',
+        alignItems: "center",
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight:20,
     },
     buttonText: {
         color: 'white',
@@ -60,4 +78,7 @@ export default StyleSheet.create({
         fontWeight: "bold",
 
     },
+    switch:{
+        marginLeft: 15
+    }
 })

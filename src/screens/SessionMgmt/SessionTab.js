@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Button, Text, ScrollView, FlatList, Modal } from 'react-native';
+import {View, Button, Text, ScrollView, FlatList, Modal, TouchableOpacity} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../../../styles';
 import { useNavigation } from '@react-navigation/native';
@@ -86,11 +86,18 @@ const SessionTab = (props) => {
         </View>
       </View>
       <View>
-        <Button title='Invite' />
-        <Button
-          title='Exit Session'
-          onPress={() => navigation.navigate('Confirm Leave Session')}
-        />
+          <TouchableOpacity
+              style={styles.button}
+              onPress={()=>{}}>
+              <Text style={styles.buttonText}>Invite</Text>
+          </TouchableOpacity>
+      </View>
+      <View>
+          <TouchableOpacity
+              style={styles.buttonDanger}
+              onPress={() => navigation.navigate('Confirm Leave Session')}>
+              <Text style={styles.buttonText}>Exit Session</Text>
+          </TouchableOpacity>
       </View>
     </View>
   );
