@@ -6,7 +6,10 @@ import {Ionicons} from '@expo/vector-icons';
 import haversine from 'haversine';
 import {UserContext} from '../../../shared/UserContext';
 
-export default function MapScreen({center, activeUsers, region, radius}) {
+export default function MapScreen({center, activeUsers, region, radius, loaded}) {
+    if (!loaded) {
+        return <View><Text>Loading...</Text></View>
+    }
     let mapRef = useRef(null);
     const userData = useContext(UserContext);
     const [mapReady, setMapReady] = useState(false);

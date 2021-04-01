@@ -5,13 +5,14 @@ import queryLocations from '../../../shared/QueryLocations';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapScreen from '../MapScreen/MapScreen';
 import OptionsScreen from '../Options/OptionsScreen';
-import SessionTab from '../SessionMgmt/SessionTab';
 import { UserContext } from '../../../shared/UserContext';
 // import LeaveSession from '../../../shared/LeaveSession';
+import SessionStackCreator from '../SessionMgmt/SessionStackCreator';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
-  const [sessionId, setSessionId] = useState(props.route.params.session.id);
+  // const [sessionId, setSessionId] = useState(props.route.params.session.id);
+  const [sessionId, setSessionId] = useState(null);
   const [activeUsers, setActiveUsers] = useState({
     list: {},
     loaded: false,
@@ -111,14 +112,15 @@ const TabbedNavigation = (props) => {
     }
   }, [newUsers]);
 
-  if (activeUsers.loaded) {
+  // if (activeUsers.loaded) {
     return (
       <Tab.Navigator>
         <Tab.Screen name='Sessions'>
           {() => (
-            <SessionTab
+            <SessionStackCreator
             // exitSession={exitSession}
-            sessionInfo={props.route.params.session}
+            // sessionInfo={props.route.params.session}
+            setActiveUsers={setActiveUsers}
             activeUsers={activeUsers.list}
             setSessionId={setSessionId}
             sessionId={sessionId}
@@ -133,6 +135,7 @@ const TabbedNavigation = (props) => {
               center={activeUsers.center}
               region={region}
               radius={radius}
+              loaded={activeUsers.loaded}
             />
           )}
         </Tab.Screen>
@@ -148,13 +151,13 @@ const TabbedNavigation = (props) => {
         </Tab.Screen>
       </Tab.Navigator>
     );
-  } else {
-    return (
-      <View>
-        <Text>Loading</Text>
-      </View>
-    );
-  }
+//   } else {
+//     return (
+//       <View>
+//         <Text>Loading</Text>
+//       </View>
+//     );
+//  }
 };
 
 export default TabbedNavigation;

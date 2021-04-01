@@ -7,7 +7,8 @@ const ConfirmJoinSession = (props) => {
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-    navigation.navigate("Tabbed Nav", props.route.params);
+    props.setSessionId(props.route.params.session.id)
+    navigation.navigate("Sessions", props.route.params);
   }
 
   return (

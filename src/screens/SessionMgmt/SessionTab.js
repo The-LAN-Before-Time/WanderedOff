@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Button, Text, ScrollView, FlatList, Modal } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context'
 import styles from '../../../styles'
 import { useNavigation } from '@react-navigation/native';
 import { firebase } from '../../firebase/config';
+import { UserContext } from '../../../shared/UserContext'
 
 const SessionTab = (props) => {
+  const userData = useContext(UserContext)
   const navigation = useNavigation();
-  const { userData, sessionId, /*setSessionId,*/ exitSession, sessionInfo, activeUsers } = props;
+  const sessionInfo = props.route.params.session;
+  const { setActiveUsers, setSessionId, exitSession, activeUsers } = props;
   const [modalVisible, setModalVisible] = useState(false);
   const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index)
   const renderItem = ({ item }) => {
@@ -21,15 +24,25 @@ const SessionTab = (props) => {
 
   const leaveSession = () => {
     
-    // setSessionId('');
-    const userLocationRef = firebase.firestore().collection('sessionUsers').doc(sessionId);
+    setSessionId('');
+    setActiveUsers({
+      list: {},
+      loaded: false,
+      center: {},
+    });
+    console.log('ATTEMPTING TO REMOVE ID')
+    const userLocationRef = firebase.firestore().collection('sessionUsers').doc(sessionInfo.id);
+    console.log('CREATED REFERENCE', sessionInfo.id)
   
     setTimeout(() => {
+      console.log('IN TIMEOUT')
       userLocationRef.update({
         [userData.id]: firebase.firestore.FieldValue.delete(),
       })
+      console.log('USER LOCATION DELETED')
     }, 15000);
-  
+
+    console.log('ABOUT TO NAVIGATE')
     navigation.navigate('Get Started')
   }
 

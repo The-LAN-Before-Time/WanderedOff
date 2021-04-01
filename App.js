@@ -162,7 +162,7 @@ export default function App() {
         <Stack.Navigator /*initialRouteName={user ? "Home" : "Login"}*/>
           {user ? (
             <>
-              <Stack.Screen name="Session Mgmt Screens" options={{ headerShown: false }}>
+              {/* <Stack.Screen name="Session Mgmt Screens" options={{ headerShown: false }}>
               {(props) => (
                 <SessionStackCreator
                   {...props}
@@ -170,7 +170,7 @@ export default function App() {
                   notify={sendPushNotification}
                 />
                 )}
-              </Stack.Screen>
+              </Stack.Screen> */}
               <Stack.Screen name='Tabbed Nav'
               options={{
                 headerLeft: () => {
