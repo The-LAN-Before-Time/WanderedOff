@@ -16,6 +16,7 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
 
   return (
     <ScrollView >
+      <View style={{marginTop: 50}}><Text>Option</Text></View>
       <View style={styles.container}>
         <View>
           <TextInput
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+
   },
   input: {
     borderWidth: 1,
