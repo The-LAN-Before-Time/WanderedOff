@@ -9,6 +9,8 @@ import { UserContext } from '../../../shared/UserContext';
 // import LeaveSession from '../../../shared/LeaveSession';
 import SessionStackCreator from '../SessionMgmt/SessionStackCreator';
 import haversine from 'haversine';
+import { firebase } from '../../firebase/config';
+import { useNavigation } from '@react-navigation/native';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -28,6 +30,7 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
+  const navigation = useNavigation();
   let interval;
 
   /** Set the initial region on user */
@@ -50,6 +53,31 @@ const TabbedNavigation = (props) => {
     );
   };
 
+  const leaveSession = () => {
+    const oldSessionId = sessionId;
+    setSessionId('');
+    setActiveUsers({
+      list: {},
+      loaded: false,
+      center: {},
+    });
+    console.log('ATTEMPTING TO REMOVE ID', oldSessionId);
+    const userLocationRef = firebase
+      .firestore()
+      .collection('sessionUsers')
+      .doc(oldSessionId);
+
+    setTimeout(() => {
+      console.log('IN TIMEOUT');
+      userLocationRef.update({
+        [userData.id]: firebase.firestore.FieldValue.delete(),
+      });
+      console.log('USER LOCATION DELETED');
+    }, 15000);
+    navigation.navigate('Get Started');
+    console.log('TIMEOUT SET');
+  };
+
   /** Updates location on session */
   useEffect(() => {
     interval = setInterval(() => updateLocation(userData, sessionId), 3000);
@@ -61,12 +89,6 @@ const TabbedNavigation = (props) => {
       console.log('UNMOUNT COMPLETED');
     };
   }, [sessionId]);
-
-  //  const exitSession = () => {
-  //   console.log("EXITING SESSION");
-  //   LeaveSession(sessionId, setSessionId, userData.id);
-  //   clearInterval(interval);
-  // }
 
   /** Set initial region */
   useEffect(() => setInitialRegion(), []);
@@ -142,6 +164,7 @@ const TabbedNavigation = (props) => {
             activeUsers={activeUsers.list}
             setSessionId={setSessionId}
             sessionId={sessionId}
+            leaveSession={leaveSession}
           />
         )}
       </Tab.Screen>
