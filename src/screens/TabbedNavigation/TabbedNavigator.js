@@ -9,11 +9,8 @@ import SessionTab from '../SessionMgmt/SessionTab';
 import { UserContext } from '../../../shared/UserContext';
 import LeaveSession from '../../../shared/LeaveSession';
 
-
 const TabbedNavigation = (props) => {
-  // console.log('These are the props on TabbedNavigation, mangos', props.route.params)
   const userData = useContext(UserContext);
-  // console.log("CONTEXT", userData)
   const [sessionId, setSessionId] = useState(props.route.params.session.id);
   const [activeUsers, setActiveUsers] = useState({
     list: {},
@@ -30,6 +27,8 @@ const TabbedNavigation = (props) => {
   });
   const [radius, setRadius] = useState(4000);
   let interval;
+
+  /** Set the initial region on user */
   const setInitialRegion = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -49,6 +48,7 @@ const TabbedNavigation = (props) => {
     );
   };
 
+  /** Updates location on session */
   useEffect(() => {
       interval = setInterval(
         () => updateLocation(userData, sessionId),
@@ -67,27 +67,32 @@ const TabbedNavigation = (props) => {
     clearInterval(interval);
   }
 
+  /** Set initial region */
   useEffect(() => setInitialRegion(),[]);
 
+  /** Add new users */
   useEffect(() => {
     if(Object.keys(newUsers).length) {
       let max = 0;
       let lats = 0;
       let longs = 0;
       let center = {};
+
+      /**
+       *  Checks Active Users List and sets new users with the next index id
+       *  and adds & sets inbound property
+       *  */
       Object.entries(newUsers).forEach( ([id, user]) => {
         lats += user.location.latitude;
         longs += user.location.longitude;
-        console.log("activeUsers.list", activeUsers.list)
+
         if(!activeUsers.list[id]) {
             Object.values(activeUsers.list).forEach( userData => {
-                console.log('user Index: ', userData.index);
                 if(userData.index > max ){
                     max = userData.index;
                 }
             })
             max++;
-            console.log("Assigning new index to:", user.fullName);
             newUsers[id].index = max;
             newUsers[id].inbounds = true;
         } else {
@@ -95,6 +100,8 @@ const TabbedNavigation = (props) => {
             newUsers[id].inbounds = activeUsers.list[id].inbounds;
         }
       })
+
+        /** Set Center Radius */
       center.latitude = lats / Object.keys(newUsers).length;
       center.longitude = longs / Object.keys(newUsers).length;
       setActiveUsers({ list: newUsers, loaded: true, center });
