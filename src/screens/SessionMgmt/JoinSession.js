@@ -1,9 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { View, Button, Text, ScrollView, TextInput } from 'react-native';
+import {View, Button, Text, ScrollView, TextInput, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../../shared/UserContext'
 import { firebase } from '../../firebase/config';
 import { PinDropSharp } from '@material-ui/icons';
+import formStyles from '../../styles/formStyles';
+import styles from "../../styles/formStyles";
 
 const JoinSession = () => {
   const userData = useContext(UserContext)
@@ -34,7 +36,9 @@ const JoinSession = () => {
     <ScrollView>
       <View>
         <View>
+          <Text style={styles.label}>Enter Code</Text>
           <TextInput
+              style={formStyles.input}
             placeholder="Enter code"
             value={newCode}
             onChangeText={(val) => setNewCode(val)}
@@ -42,10 +46,11 @@ const JoinSession = () => {
           />
         </View>
         <View>
-          <Button
-            title='Join Session'
-            onPress={handleSubmit}
-          />
+          <TouchableOpacity
+              style={styles.button}
+              onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Join Session</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

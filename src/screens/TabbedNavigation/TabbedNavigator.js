@@ -139,13 +139,14 @@ const TabbedNavigation = (props) => {
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name='Options'>
+        <Tab.Screen name='Options' >
           {() => (
             <OptionsScreen
               setSessionId={setSessionId}
               sessionId={sessionId}
               radius={radius}
               setRadius={setRadius}
+
             />
           )}
         </Tab.Screen>

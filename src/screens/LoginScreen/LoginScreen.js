@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styles from './styles';
+import formStyles from '../../styles/formStyles';
+
 import { firebase } from '../../firebase/config'
 
 export default function LoginScreen({navigation}) {
@@ -40,7 +41,7 @@ export default function LoginScreen({navigation}) {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={formStyles.container}>
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
@@ -49,7 +50,7 @@ export default function LoginScreen({navigation}) {
                     source={require('../../../assets/icon.png')}
                 />
                 <TextInput
-                    style={styles.input}
+                    style={formStyles.input}
                     placeholder='E-mail'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setEmail(text)}
@@ -58,7 +59,7 @@ export default function LoginScreen({navigation}) {
                     autoCapitalize="none"
                 />
                 <TextInput
-                    style={styles.input}
+                    style={formStyles.input}
                     placeholderTextColor="#aaaaaa"
                     secureTextEntry
                     placeholder='Password'

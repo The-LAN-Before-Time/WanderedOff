@@ -159,7 +159,11 @@ export default function App() {
   return (
     <NavigationContainer test='test'>
       <UserContext.Provider value={user}>
-        <Stack.Navigator /*initialRouteName={user ? "Home" : "Login"}*/>
+        <Stack.Navigator
+            screenOptions={{
+          headerShown: false
+              }}
+            /*initialRouteName={user ? "Home" : "Login"}*/>
           {user ? (
             <>
               {/* <Stack.Screen name="Session Mgmt Screens" options={{ headerShown: false }}>
@@ -173,6 +177,7 @@ export default function App() {
               </Stack.Screen> */}
               <Stack.Screen name='Tabbed Nav'
               options={{
+                title: 'Wandered Off',
                 headerLeft: () => {
                   return null;
               }}}>

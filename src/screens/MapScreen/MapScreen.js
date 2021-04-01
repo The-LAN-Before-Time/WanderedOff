@@ -8,7 +8,7 @@ import {UserContext} from '../../../shared/UserContext';
 
 export default function MapScreen({center, activeUsers, region, radius, loaded}) {
     if (!loaded) {
-        return <View><Text>Loading...</Text></View>
+        return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}><Text>Loading...</Text></View>
     }
     let mapRef = useRef(null);
     const userData = useContext(UserContext);
@@ -64,6 +64,7 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
             ref={mapRef}
             onMapReady={() => setMapReady(true)}
             initialRegion={region}
+            screenOptions={{headerShown: false}}
         >
             {userList
                 .filter((user) => user.userId !== userData.id)

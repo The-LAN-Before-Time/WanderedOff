@@ -11,7 +11,9 @@ const SessionStackCreator = ({setActiveUsers, extraData, notify, activeUsers, se
   const Stack = createStackNavigator();
 
   return (
-      <Stack.Navigator>
+      <Stack.Navigator
+
+      >
         <Stack.Screen name="Get Started" component={SessionCreateJoin}/>
 
         <Stack.Screen name="Create Session">
@@ -33,16 +35,20 @@ const SessionStackCreator = ({setActiveUsers, extraData, notify, activeUsers, se
             />
           )}
         </Stack.Screen>
-
-        <Stack.Screen name="Sessions">
-          {(props) => (
-            <SessionTab
-            {...props}
-            setActiveUsers={setActiveUsers}
-            activeUsers={activeUsers}
-            setSessionId={setSessionId}
-            />
-          )}
+          <Stack.Screen name="Sessions"
+            options={{
+            headerLeft: () => {
+                return null;
+            },
+            gestureEnabled: false}}>
+              {(props) => (
+                  <SessionTab
+                      {...props}
+                      setActiveUsers={setActiveUsers}
+                      activeUsers={activeUsers}
+                      setSessionId={setSessionId}
+                  />
+              )}
           </Stack.Screen>
 
       </Stack.Navigator>
