@@ -7,6 +7,8 @@ import MapScreen from '../MapScreen/MapScreen';
 import OptionsScreen from '../Options/OptionsScreen';
 import SessionTab from '../SessionMgmt/SessionTab';
 import { UserContext } from '../../../shared/UserContext';
+import LeaveSession from '../../../shared/LeaveSession';
+
 
 const TabbedNavigation = (props) => {
   // console.log('These are the props on TabbedNavigation, mangos', props.route.params)
@@ -27,7 +29,7 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
-
+  let interval;
   const setInitialRegion = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -48,7 +50,7 @@ const TabbedNavigation = (props) => {
   };
 
   useEffect(() => {
-      const interval = setInterval(
+      interval = setInterval(
         () => updateLocation(userData, sessionId),
         3000
       );
@@ -59,10 +61,15 @@ const TabbedNavigation = (props) => {
       };
   }, [sessionId]);
 
+   const exitSession = () => {
+    console.log("EXITING SESSION");
+    LeaveSession(sessionId, setSessionId, userData.id);
+    clearInterval(interval);
+  }
+
   useEffect(() => setInitialRegion(),[]);
 
   useEffect(() => {
-
     if(Object.keys(newUsers).length) {
       let max = 0;
       let lats = 0;
@@ -99,7 +106,11 @@ const TabbedNavigation = (props) => {
       <Tab.Navigator>
         <Tab.Screen name='Sessions'>
           {() => (
-            <SessionTab/>
+            <SessionTab
+            exitSession={exitSession}
+            sessionInfo={props.route.params.session}
+            activeUsers={activeUsers.list}
+            />
           )}
         </Tab.Screen>
         <Tab.Screen name='Map'>
