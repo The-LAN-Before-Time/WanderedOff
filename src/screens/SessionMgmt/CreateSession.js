@@ -5,6 +5,7 @@ import { firebase } from '../../firebase/config';
 import { UserContext } from '../../../shared/UserContext'
 
 const CreateSession = (props) => {
+  const {setSessionId} = props;
   const userData = useContext(UserContext)
   const navigation = useNavigation();
   const [initialState, setInitialState] = useState({
@@ -24,7 +25,8 @@ const CreateSession = (props) => {
       // console.log('This is the id', response.id);
       const session = Object.assign({}, initialState);
       session.id = response.id;
-      navigation.navigate("Tabbed Nav", {session});
+      setSessionId(session.id);
+      navigation.navigate("Sessions", {session});
     })
   }
 

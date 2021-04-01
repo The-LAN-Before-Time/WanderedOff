@@ -6,18 +6,45 @@ import CreateSession from './CreateSession';
 import SessionTab from './SessionTab';
 import ConfirmJoinSession from './ConfirmJoinSession';
 import JoinSession from './JoinSession';
-import TabbedNavigator from '../TabbedNavigation/TabbedNavigator'
 
-const SessionStackCreator = (extraData, notify) => {
+const SessionStackCreator = ({setActiveUsers, extraData, notify, activeUsers, setSessionId, sessionId}) => {
   const Stack = createStackNavigator();
 
   return (
       <Stack.Navigator>
         <Stack.Screen name="Get Started" component={SessionCreateJoin}/>
-        <Stack.Screen name="Create Session" component={CreateSession}/>
+
+        <Stack.Screen name="Create Session">
+          {(props) => (
+            <CreateSession
+            {...props}
+            setSessionId={setSessionId}
+            />
+          )}
+        </Stack.Screen>
+
         <Stack.Screen name="Join Session" component={JoinSession}/>
-        <Stack.Screen name="Confirm" component={ConfirmJoinSession}/>
-        <Stack.Screen name="Sessions" component={SessionTab}/>
+
+        <Stack.Screen name="Confirm">
+        {(props) => (
+            <ConfirmJoinSession
+            {...props}
+            setSessionId={setSessionId}
+            />
+          )}
+        </Stack.Screen>
+
+        <Stack.Screen name="Sessions">
+          {(props) => (
+            <SessionTab
+            {...props}
+            setActiveUsers={setActiveUsers}
+            activeUsers={activeUsers}
+            setSessionId={setSessionId}
+            />
+          )}
+          </Stack.Screen>
+
       </Stack.Navigator>
   )
 }

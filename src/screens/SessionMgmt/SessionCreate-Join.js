@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-
 const SessionCreateJoin = (props) => {
+console.log('IN GET STARTED')
 const navigation = useNavigation();
   return (
     <View>
