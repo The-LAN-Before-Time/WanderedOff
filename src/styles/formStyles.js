@@ -72,6 +72,17 @@ export default StyleSheet.create({
         marginLeft: 20,
         marginRight:20,
     },
+    buttonConfirm: {
+        marginTop: 20,
+        height: 47,
+        padding: 13,
+        borderRadius: 5,
+        backgroundColor: '#198754',
+        alignItems: "center",
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight:20,
+    },
     buttonText: {
         color: 'white',
         fontSize: 18,

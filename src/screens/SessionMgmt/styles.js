@@ -5,6 +5,20 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center'
     },
+
+    text: {
+        fontSize: 20,
+        color: '#2e2e2d'
+    },
+    userName: {
+        marginLeft: 30,
+        fontSize: 20,
+        color: '#2e2e2d'
+    },
+    paddingLeft:{
+        paddingLeft: 20
+    },
+
     listContainer: {
         marginTop: 20,
         padding: 20,
@@ -14,6 +28,15 @@ export default StyleSheet.create({
         borderBottomColor: '#cccccc',
         borderBottomWidth: 1,
         paddingBottom: 16
+    },
+    userContainer: {
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+        borderTopColor: '#cccccc',
+        borderTopWidth: 1,
+        paddingTop: 15,
+        paddingBottom: 15,
+        // marginTop: -1
     },
     entityText: {
         fontSize: 20,
@@ -46,4 +69,28 @@ export default StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
     },
+    circleGreen: {
+        marginRight: 10,
+        width: 15,
+        height: 15,
+        borderRadius: 150 / 2,
+        backgroundColor: '#198754',
+    },
+    circleRed: {
+        marginRight: 10,
+        width: 15,
+        height: 15,
+        borderRadius: 150 / 2,
+        backgroundColor: '#d9202b',
+    },
+    label_underline:{
+        fontSize: 18,
+        paddingTop: 15,
+        paddingBottom: 5,
+        paddingLeft: 15,
+        fontWeight: "bold",
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+    }
+
 })
