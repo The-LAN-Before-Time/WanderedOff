@@ -8,7 +8,7 @@ import {
   TabbedNavigator,
 } from './src/screens';
 import { Text, Platform, LogBox, SafeAreaView } from 'react-native';
-LogBox.ignoreLogs(['Setting a timer']);
+LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
 
 import { decode, encode } from 'base-64';
 import Constants from 'expo-constants';
@@ -160,10 +160,11 @@ export default function App() {
     <NavigationContainer test='test'>
       <UserContext.Provider value={user}>
         <Stack.Navigator
-            screenOptions={{
-          headerShown: false
-              }}
-            /*initialRouteName={user ? "Home" : "Login"}*/>
+          screenOptions={{
+            headerShown: false,
+          }}
+          /*initialRouteName={user ? "Home" : "Login"}*/
+        >
           {user ? (
             <>
               {/* <Stack.Screen name="Session Mgmt Screens" options={{ headerShown: false }}>
@@ -175,25 +176,27 @@ export default function App() {
                 />
                 )}
               </Stack.Screen> */}
-              <Stack.Screen name='Tabbed Nav'
-              options={{
-                title: 'Wandered Off',
-                headerLeft: () => {
-                  return null;
-              }}}>
+              <Stack.Screen
+                name='Tabbed Nav'
+                options={{
+                  title: 'Wandered Off',
+                  headerLeft: () => {
+                    return null;
+                  },
+                }}
+              >
                 {(props) => (
-                  <TabbedNavigator
-                    {...props}
-                    notify={sendPushNotification}
-                  />
+                  <TabbedNavigator {...props} notify={sendPushNotification} />
                 )}
               </Stack.Screen>
-
             </>
           ) : (
             <>
               <Stack.Screen name='Login' component={LoginScreen} />
-              <Stack.Screen name='Registration' component={RegistrationScreen} />
+              <Stack.Screen
+                name='Registration'
+                component={RegistrationScreen}
+              />
               <Stack.Screen name='Home'>
                 {(props) => <TabbedNavigator {...props} />}
               </Stack.Screen>
