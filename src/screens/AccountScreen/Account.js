@@ -3,22 +3,34 @@ import { View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-nativ
 import styles from '../../styles/formStyles';
 import { UserContext } from '../../../shared/UserContext';
 import { firebase } from '../../firebase/config';
+import { useNavigation } from '@react-navigation/native';
 
-//activeUsers
-//sessionId
 
 const Account = ({ sessionId, activeUsers }) => {
+  const navigation = useNavigation();
   const userData = useContext(UserContext)
   const [newDisplayName, setNewDisplayName] = useState(userData.fullName);
 
   const handleSubmit = () => {
-    console.log("ACCOUNT BUTTON CLICKED")
-    const userSessionRef = firebase.firestore().collection('sessionUsers').doc(sessionId);
-    userSessionRef.update({
-      [userData.id]: { fullName: newDisplayName },
-    })
+    // const userSessionRef = firebase.firestore().collection('sessionUsers').doc(sessionId);
+    // userSessionRef.update({
+    //   [userData.id]: { fullName: newDisplayName },
+    // })
+    const userRef = firebase.firestore().collection('users').doc(userData.id);
+    userRef.update({ fullName: newDisplayName })
   }
 
+  const onLogoutButtonPress = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then((response) => {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Login" }]
+        })
+      });
+  };
 
   return (
     <ScrollView>
@@ -30,11 +42,20 @@ const Account = ({ sessionId, activeUsers }) => {
         value={newDisplayName}
         onChangeText={(val) => setNewDisplayName(val)}
         />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Update</Text>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Update</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={onLogoutButtonPress}>
+            <Text style={styles.buttonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   )

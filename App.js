@@ -18,6 +18,8 @@ import * as Permissions from 'expo-permissions';
 import SessionStackCreator from './src/screens/SessionMgmt/SessionStackCreator';
 import { firebase } from './src/firebase/config';
 import { UserContext } from './shared/UserContext';
+// import {navigationRef} from './shared/RootNavigation';
+
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -37,6 +39,7 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
+
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -163,18 +166,7 @@ export default function App() {
             screenOptions={{
           headerShown: true
               }}
-            /*initialRouteName={user ? "Home" : "Login"}*/>
-          {user ? (
-            <>
-              {/* <Stack.Screen name="Session Mgmt Screens" options={{ headerShown: false }}>
-              {(props) => (
-                <SessionStackCreator
-                  {...props}
-                  // extraData={user}
-                  notify={sendPushNotification}
-                />
-                )}
-              </Stack.Screen> */}
+            initialRouteName={user ? "Tabbed Nav" : "Login"}>
               <Stack.Screen name='Tabbed Nav'
               options={{
                 title: 'Wandered Off',
@@ -188,17 +180,22 @@ export default function App() {
                   />
                 )}
               </Stack.Screen>
-
-            </>
-          ) : (
-            <>
-              <Stack.Screen name='Login' component={LoginScreen} />
-              <Stack.Screen name='Registration' component={RegistrationScreen} />
-              <Stack.Screen name='Home'>
-                {(props) => <TabbedNavigator {...props} />}
+              <Stack.Screen name='Login'>
+                {(props) => (
+                  <LoginScreen
+                    {...props}
+                    setUser={setUser}
+                  />
+                )}
               </Stack.Screen>
-            </>
-          )}
+              <Stack.Screen name='Registration'>
+                {(props) => (
+                  <RegistrationScreen
+                    {...props}
+                    setUser={setUser}
+                  />
+                )}
+              </Stack.Screen>
         </Stack.Navigator>
       </UserContext.Provider>
     </NavigationContainer>
