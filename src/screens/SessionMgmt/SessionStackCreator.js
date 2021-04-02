@@ -20,7 +20,9 @@ const SessionStackCreator = ({
   const Stack = createStackNavigator();
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+          headerShown: false
+              }}>
       <Stack.Screen name='Get Started' component={SessionCreateJoin} />
 
       <Stack.Screen name='Create Session'>

@@ -7,7 +7,7 @@ import formStyles from '../../styles/formStyles';
 
 import { firebase } from '../../firebase/config'
 
-export default function LoginScreen({navigation}) {
+export default function LoginScreen({navigation, setUser }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -24,18 +24,31 @@ export default function LoginScreen({navigation}) {
                 const usersRef = firebase.firestore().collection('users')
                 usersRef
                     .doc(uid)
-                    .get()
-                    .then(firestoreDocument => {
-                        if (!firestoreDocument.exists) {
+                    .onSnapshot(
+                        (doc) => {
+                            if (!doc.exists) {
                             alert("User does not exist anymore.")
                             return;
+                            }
+                            setUser(doc.data());
+                        },
+                        (error) => {
+                            console.log(error.message);
                         }
-                        const user = firestoreDocument.data()
-                        navigation.navigate('Home', {user})
-                    })
-                    .catch(error => {
-                        alert(error)
-                    });
+                    )
+                    // .then(firestoreDocument => {
+                    //     if (!firestoreDocument.exists) {
+                    //         alert("User does not exist anymore.")
+                    //         return;
+                    //     }
+                    //     const user = firestoreDocument.data()
+                    //     setUser(user);
+
+                    // })
+                    // .catch(error => {
+                    //     alert(error)
+                    // });
+                    navigation.navigate('Tabbed Nav')
             })
             .catch(error => {
                 alert(error)
