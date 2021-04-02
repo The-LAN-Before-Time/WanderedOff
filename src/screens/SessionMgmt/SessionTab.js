@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { View, Button, Text, ScrollView, FlatList, Modal } from 'react-native';
+import {View, Button, Text, ScrollView, FlatList, Modal, TouchableOpacity} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import styles from '../../../styles';
+import styles from '../../screens/SessionMgmt/styles';
+import formStyles from '../../styles/formStyles'
 import { useNavigation } from '@react-navigation/native';
 import { firebase } from '../../firebase/config';
 import { UserContext } from '../../../shared/UserContext';
@@ -14,14 +15,7 @@ const SessionTab = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index);
 
-  const renderItem = ({ item }) => {
-    return (
-      <View>
-        <Text>{item.fullName}</Text>
-        <Text>{item.status}</Text>
-      </View>
-    );
-  };
+
 
   // const leaveSession = () => {
 
@@ -68,17 +62,36 @@ const SessionTab = (props) => {
   //   )
   // }
 
+    const renderItem = ({ item }) => {
+        return (
+            <View style={styles.userContainer}>
+                <Text style={styles.userName}>
+                    <View>
+                        {(item.status === 'active')?
+                            <View style={styles.circleGreen} /> :
+                            <View style={styles.circleRed} />}
+                    </View>
+                    {item.fullName}
+                </Text>
+
+            </View>
+        );
+    };
+
   return (
     <View>
-      <View>
-        <Text>Current Session</Text>
-        <Text>{sessionInfo.name}</Text>
-        <Text>{sessionInfo.code}</Text>
+      <View >
+        <Text style={formStyles.label}>Current Session:</Text>
+          <View style={styles.paddingLeft}>
+            <Text style={styles.text}>Name: {sessionInfo.name}</Text>
+            <Text style={styles.text}>Code: {sessionInfo.code}</Text>
+          </View>
       </View>
-      <View>
-        <Text>Active Users:</Text>
+      <View >
+        <Text style={styles.label_underline}>Active Users:</Text>
         <View>
           <FlatList
+            style={styles.text}
             data={userList}
             renderItem={renderItem}
             keyExtractor={(item) => item.userId}
@@ -86,11 +99,18 @@ const SessionTab = (props) => {
         </View>
       </View>
       <View>
-        <Button title='Invite' />
-        <Button
-          title='Exit Session'
-          onPress={() => navigation.navigate('Confirm Leave Session')}
-        />
+          <TouchableOpacity
+              style={formStyles.button}
+              onPress={()=>{}}>
+              <Text style={formStyles.buttonText}>Invite</Text>
+          </TouchableOpacity>
+      </View>
+      <View>
+          <TouchableOpacity
+              style={formStyles.buttonDanger}
+              onPress={() => navigation.navigate('Confirm Leave Session')}>
+              <Text style={formStyles.buttonText}>Exit Session</Text>
+          </TouchableOpacity>
       </View>
     </View>
   );

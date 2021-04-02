@@ -5,40 +5,23 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center'
     },
-    formContainer: {
-        flexDirection: 'row',
-        height: 80,
-        marginTop: 40,
-        marginBottom: 20,
-        flex: 1,
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 30,
-        paddingRight: 30,
-        justifyContent: 'center',
-        alignItems: 'center'
+    containerCenter: {
+        flex: 1, justifyContent: "center", alignItems: "center"
     },
-    input: {
-        height: 48,
-        borderRadius: 5,
-        overflow: 'hidden',
-        backgroundColor: 'white',
-        paddingLeft: 16,
-        flex: 1,
-        marginRight: 5
+
+    text: {
+        fontSize: 20,
+        color: '#2e2e2d'
     },
-    button: {
-        height: 47,
-        borderRadius: 5,
-        backgroundColor: '#788eec',
-        width: 80,
-        alignItems: "center",
-        justifyContent: 'center'
+    userName: {
+        marginLeft: 30,
+        fontSize: 20,
+        color: '#2e2e2d'
     },
-    buttonText: {
-        color: 'white',
-        fontSize: 16
+    paddingLeft:{
+        paddingLeft: 20
     },
+
     listContainer: {
         marginTop: 20,
         padding: 20,
@@ -49,8 +32,68 @@ export default StyleSheet.create({
         borderBottomWidth: 1,
         paddingBottom: 16
     },
+    userContainer: {
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+        borderTopColor: '#cccccc',
+        borderTopWidth: 1,
+        paddingTop: 15,
+        paddingBottom: 15,
+        // marginTop: -1
+    },
     entityText: {
         fontSize: 20,
         color: '#333333'
+    },
+    center:{
+        justifyContent: 'center',
+        alignItems: "center",
+        alignContent: "center"
+    },
+    sessionName: {
+        fontWeight: "bold",
+        fontSize: 20,
+        marginTop:20
+
+    },
+    button: {
+        marginTop: 20,
+        height: 47,
+        padding: 13,
+        borderRadius: 5,
+        backgroundColor: '#0061b2',
+        alignItems: "center",
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight:20,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+    circleGreen: {
+        marginRight: 10,
+        width: 15,
+        height: 15,
+        borderRadius: 150 / 2,
+        backgroundColor: '#198754',
+    },
+    circleRed: {
+        marginRight: 10,
+        width: 15,
+        height: 15,
+        borderRadius: 150 / 2,
+        backgroundColor: '#d9202b',
+    },
+    label_underline:{
+        fontSize: 18,
+        paddingTop: 15,
+        paddingBottom: 5,
+        paddingLeft: 15,
+        fontWeight: "bold",
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
     }
+
 })

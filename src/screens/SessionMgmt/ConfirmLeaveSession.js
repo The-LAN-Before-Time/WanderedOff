@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { View, Button, Text, ScrollView, FlatList, Modal } from 'react-native';
+import {View, Button, Text, ScrollView, FlatList, Modal, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import styles from "../../styles/formStyles";
 
 const ConfirmLeaveSession = ({ leaveSession }) => {
   const navigation = useNavigation();
@@ -12,9 +13,18 @@ const ConfirmLeaveSession = ({ leaveSession }) => {
   };
 
   return (
-    <View>
-      <Button title='Confirm' onPress={leaveSession} />
-      <Button title='Cancel' onPress={handleExit} />
+    <View style={styles.container}>
+        <TouchableOpacity
+            style={styles.button}
+            onPress={() =>{navigation.navigate('Sessions')}}>
+            <Text style={styles.buttonText}>Go Back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+            style={styles.buttonDanger}
+            onPress={handleExit}>
+            <Text style={styles.buttonText}>Exit Session</Text>
+        </TouchableOpacity>
+
       {/* End for all button will render if user is owner */}
       {/* <Button title="End for All" /> */}
     </View>
