@@ -1,6 +1,8 @@
 import { firebase } from '../src/firebase/config';
+// import {useContext} from 'react';
+// import { UserContext } from './UserContext';
 
-export default function (user, sessionId) {
+export default function (sessionId, user) {
   if (!user.id || !sessionId) return;
   const userLocationRef = firebase
     .firestore()

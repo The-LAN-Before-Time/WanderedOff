@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
 import styles from '../../styles/formStyles';
 import { UserContext } from '../../../shared/UserContext';
@@ -6,7 +6,7 @@ import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';
 
 
-const Account = ({ sessionId, activeUsers }) => {
+const Account = ({ sessionId, activeUsers, setUser }) => {
   const navigation = useNavigation();
   const userData = useContext(UserContext)
   const [newDisplayName, setNewDisplayName] = useState(userData.fullName);
@@ -31,6 +31,22 @@ const Account = ({ sessionId, activeUsers }) => {
         })
       });
   };
+
+  useEffect(() => {
+    const usersRef = firebase.firestore().collection('users')
+    const userQuery = usersRef
+    .doc(userData.id)
+    .onSnapshot(
+      (doc) => {
+        if (!doc.exists) {
+          alert("User does not exist anymore.")
+          return;
+      }
+      console.log('NEW USER DATA CHERRIES', doc.data())
+      setUser(doc.data());
+    })
+      return () => {userQuery()};
+  }, [])
 
   return (
     <ScrollView>

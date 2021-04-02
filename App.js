@@ -174,7 +174,7 @@ export default function App() {
                   return null;
               }}}>
                 {(props) => (
-                  <TabbedNavigator {...props} notify={sendPushNotification} />
+                  <TabbedNavigator {...props} notify={sendPushNotification} setUser={setUser} />
                 )}
               </Stack.Screen>
               <Stack.Screen name='Login'>
