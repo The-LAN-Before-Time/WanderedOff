@@ -1,15 +1,16 @@
 import React, {useState, useEffect, useRef, useContext} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Circle} from 'react-native-maps';
 import {firebase} from '../../firebase/config';
 import {Ionicons} from '@expo/vector-icons';
 import haversine from 'haversine';
 import {UserContext} from '../../../shared/UserContext';
+import { Navigation } from '@material-ui/icons';
+import { useNavigation } from '@react-navigation/native';
+import formStyles from '../../styles/formStyles';
 
 export default function MapScreen({center, activeUsers, region, radius, loaded}) {
-    if (!loaded) {
-        return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}><Text>Loading...</Text></View>
-    }
+    const navigation = useNavigation();
     let mapRef = useRef(null);
     const userData = useContext(UserContext);
     const [mapReady, setMapReady] = useState(false);
@@ -17,7 +18,7 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
     const defaultPadding = {top: 20, right: 20, bottom: 20, left: 20};
     const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index)
     const goToInitialRegion = () => {
-        if (mapReady) {
+        if (mapReady && loaded) {
             /* adds outer points of radius circle to fit to map */
             let coords = userList.map((user) => ({
                 latitude: user.location.latitude,
@@ -54,7 +55,12 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
         goToInitialRegion();
     }, [mapReady]);
 
-    return (
+    return (   
+        <View>
+        {loaded ? 
+            <TouchableOpacity onPress={()=>Navigation.navigate('Get Started')} style={styles.mapButton}>
+                <Text>Join a Session</Text>
+            </TouchableOpacity>: <></>};
         <MapView
             style={{flex: 1}}
             provider={PROVIDER_GOOGLE}
@@ -77,7 +83,7 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
                                     latitude: user.location.latitude,
                                     longitude: user.location.longitude,
                                 }}
-                                title={`${user.fullName} \n Status: ${user.status} `}
+                                title={`${user.fullName}, ${user.status} `}
                                 pinColor={colors[user.index % colors.length]}
                             >
                                 <View
@@ -108,5 +114,15 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
                 })}
             <Circle center={center} radius={radius} fillColor='rgba(20,20,240,0.1)'/>
         </MapView>
+    </View>
     );
 }
+
+const styles = StyleSheet.create({
+    mapButton: {
+        position: "absolute",
+        margin: "auto",
+        borderRadius: 5,
+        backgroundColor: '#0061b2',
+    }
+})
