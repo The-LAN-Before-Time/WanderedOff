@@ -81,7 +81,8 @@ const TabbedNavigation = (props) => {
 
   /** Updates location on session */
   useEffect(() => {
-    interval = setInterval(() => updateLocation(userData, sessionId), 3000);
+    console.log('USERNAME:', userData.fullName)
+    interval = setInterval(() => updateLocation(sessionId, userData), 3000);
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
       console.log('ATTEMPTING TO UNOUNT');
@@ -89,7 +90,7 @@ const TabbedNavigation = (props) => {
       unsubscribeToQuery();
       console.log('UNMOUNT COMPLETED');
     };
-  }, [sessionId]);
+  }, [sessionId, userData]);
 
   /** Set initial region */
   useEffect(() => setInitialRegion(), []);
@@ -178,6 +179,7 @@ const TabbedNavigation = (props) => {
       <Tab.Screen name='Account'>
         {() => (
           <Account
+            setUser={props.setUser}
             sessionId={sessionId}
             activeUsers={activeUsers.list}
             {...props}
