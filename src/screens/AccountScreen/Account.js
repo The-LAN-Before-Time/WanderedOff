@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
 import styles from '../../styles/formStyles';
 import { UserContext } from '../../../shared/UserContext';
 import { firebase } from '../../firebase/config';
@@ -9,8 +9,8 @@ import { firebase } from '../../firebase/config';
 
 const Account = ({ sessionId, activeUsers }) => {
   const userData = useContext(UserContext)
-
   const [newDisplayName, setNewDisplayName] = useState(userData.fullName);
+
   const handleSubmit = () => {
     console.log("ACCOUNT BUTTON CLICKED")
     const userSessionRef = firebase.firestore().collection('sessionUsers').doc(sessionId);
@@ -21,10 +21,12 @@ const Account = ({ sessionId, activeUsers }) => {
 
 
   return (
-    <View>
+    <ScrollView>
+      <View>
         <Text style={styles.label}>Display Name</Text>
         <TextInput
         style={styles.input}
+        placeholder="display name"
         value={newDisplayName}
         onChangeText={(val) => setNewDisplayName(val)}
         />
@@ -33,7 +35,8 @@ const Account = ({ sessionId, activeUsers }) => {
           onPress={handleSubmit}>
           <Text style={styles.buttonText}>Update</Text>
         </TouchableOpacity>
-    </View>
+      </View>
+    </ScrollView>
   )
 }
 

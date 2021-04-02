@@ -164,9 +164,6 @@ const TabbedNavigation = (props) => {
             setSessionId={setSessionId}
             sessionId={sessionId}
             leaveSession={leaveSession}
-            screenOptions={{
-          headerShown: false
-              }}
           />
         )}
       </Tab.Screen>
