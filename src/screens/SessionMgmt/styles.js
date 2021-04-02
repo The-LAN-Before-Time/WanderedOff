@@ -5,6 +5,9 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center'
     },
+    containerCenter: {
+        flex: 1, justifyContent: "center", alignItems: "center"
+    },
 
     text: {
         fontSize: 20,

@@ -3,12 +3,13 @@ import {View, Button, TouchableOpacity, Text} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import formStyles from '../../styles/formStyles'
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import styles from "../../styles/formStyles";
 
 const SessionCreateJoin = (props) => {
 console.log('IN GET STARTED')
 const navigation = useNavigation();
   return (
-    <View>
+    <View style={styles.container}>
       <View>
           <TouchableOpacity
               style={formStyles.button}

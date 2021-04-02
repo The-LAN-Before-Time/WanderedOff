@@ -13,19 +13,18 @@ const ConfirmLeaveSession = ({ leaveSession }) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
         <TouchableOpacity
             style={styles.button}
-            onPress={leaveSession}>
-            <Text style={styles.buttonText}>Confirm exit session</Text>
+            onPress={() =>{navigation.navigate('Sessions')}}>
+            <Text style={styles.buttonText}>Go Back</Text>
         </TouchableOpacity>
-      {/*<Button title='Confirm' onPress={leaveSession} />*/}
         <TouchableOpacity
             style={styles.buttonDanger}
             onPress={handleExit}>
-            <Text style={styles.buttonText}>Cancel / Go back</Text>
+            <Text style={styles.buttonText}>Exit Session</Text>
         </TouchableOpacity>
-      {/*<Button title='Cancel' onPress={handleExit} />*/}
+
       {/* End for all button will render if user is owner */}
       {/* <Button title="End for All" /> */}
     </View>
