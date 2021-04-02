@@ -4,6 +4,7 @@ import styles from '../../screens/SessionMgmt/styles';
 import formStyles from '../../styles/formStyles';
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../../shared/UserContext';
+import { Ionicons } from '@expo/vector-icons';
 
 const SessionTab = (props) => {
   const userData = useContext(UserContext);
@@ -51,7 +52,15 @@ const SessionTab = (props) => {
   return (
     <View>
       <View>
-        <Text style={formStyles.label}>Current Session:</Text>
+        <View style={styles.horizontalContainer}>
+          <Text style={styles.heading}>Current Session</Text>
+          <Ionicons
+            name='settings-outline'
+            size={30}
+            style={styles.cog}
+            onPress={() => navigation.navigate('Session Options')}
+          />
+        </View>
         <View style={styles.paddingLeft}>
           <Text style={styles.text}>Name: {sessionInfo.name}</Text>
           <Text style={styles.text}>Code: {sessionInfo.code}</Text>

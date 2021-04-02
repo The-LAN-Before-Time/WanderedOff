@@ -7,15 +7,15 @@ import SessionTab from './SessionTab';
 import ConfirmJoinSession from './ConfirmJoinSession';
 import JoinSession from './JoinSession';
 import ConfirmLeaveSession from './ConfirmLeaveSession';
+import SessionOptions from './SessionOptions';
 
 const SessionStackCreator = ({
   setActiveUsers,
-  extraData,
-  notify,
   activeUsers,
   setSessionId,
-  sessionId,
   leaveSession,
+  setRadius,
+  radius,
 }) => {
   const Stack = createStackNavigator();
 
@@ -49,6 +49,11 @@ const SessionStackCreator = ({
       <Stack.Screen name='Confirm Leave Session'>
         {(props) => (
           <ConfirmLeaveSession {...props} leaveSession={leaveSession} />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name='Session Options'>
+        {(props) => (
+          <SessionOptions {...props} setRadius={setRadius} radius={radius} />
         )}
       </Stack.Screen>
     </Stack.Navigator>
