@@ -8,7 +8,7 @@ import {
   TabbedNavigator,
 } from './src/screens';
 import { Text, Platform, LogBox, SafeAreaView } from 'react-native';
-LogBox.ignoreLogs(['Setting a timer']);
+LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
 
 import { decode, encode } from 'base-64';
 import Constants from 'expo-constants';
@@ -174,10 +174,7 @@ export default function App() {
                   return null;
               }}}>
                 {(props) => (
-                  <TabbedNavigator
-                    {...props}
-                    notify={sendPushNotification}
-                  />
+                  <TabbedNavigator {...props} notify={sendPushNotification} />
                 )}
               </Stack.Screen>
               <Stack.Screen name='Login'>

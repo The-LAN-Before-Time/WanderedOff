@@ -96,7 +96,6 @@ const TabbedNavigation = (props) => {
 
   /** Add new users */
   useEffect(() => {
-    console.log('THIRD USEEFFECT');
     if (Object.keys(newUsers).length) {
       let max = 0;
       let lats = 0;
@@ -132,11 +131,6 @@ const TabbedNavigation = (props) => {
           unit: 'meter',
           threshold: radius,
         });
-        console.log(
-          newUsers[id].fullName,
-          ' is ',
-          newUsers[id].inbounds ? 'inbounds' : 'out of bounds'
-        );
         if (
           !newUsers[id].inbounds &&
           activeUsers.list[id] &&
@@ -164,6 +158,8 @@ const TabbedNavigation = (props) => {
             setSessionId={setSessionId}
             sessionId={sessionId}
             leaveSession={leaveSession}
+            setRadius={setRadius}
+            radius={radius}
           />
         )}
       </Tab.Screen>
