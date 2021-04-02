@@ -161,7 +161,7 @@ export default function App() {
       <UserContext.Provider value={user}>
         <Stack.Navigator
             screenOptions={{
-          headerShown: false
+          headerShown: true
               }}
             /*initialRouteName={user ? "Home" : "Login"}*/>
           {user ? (

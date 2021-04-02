@@ -11,6 +11,7 @@ import SessionStackCreator from '../SessionMgmt/SessionStackCreator';
 import haversine from 'haversine';
 import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';
+import Account from '../AccountScreen/Account';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -158,13 +159,14 @@ const TabbedNavigation = (props) => {
       <Tab.Screen name='Sessions'>
         {() => (
           <SessionStackCreator
-            // exitSession={exitSession}
-            // sessionInfo={props.route.params.session}
             setActiveUsers={setActiveUsers}
             activeUsers={activeUsers.list}
             setSessionId={setSessionId}
             sessionId={sessionId}
             leaveSession={leaveSession}
+            screenOptions={{
+          headerShown: false
+              }}
           />
         )}
       </Tab.Screen>
@@ -180,13 +182,12 @@ const TabbedNavigation = (props) => {
           />
         )}
       </Tab.Screen>
-      <Tab.Screen name='Options'>
+      <Tab.Screen name='Account'>
         {() => (
-          <OptionsScreen
-            setSessionId={setSessionId}
+          <Account
             sessionId={sessionId}
-            radius={radius}
-            setRadius={setRadius}
+            activeUsers={activeUsers.list}
+            {...props}
           />
         )}
       </Tab.Screen>
