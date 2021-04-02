@@ -38,7 +38,7 @@ const CreateSession = (props) => {
         <View>
           <Text style={styles.label}> Session Name </Text>
           <TextInput
-              style={styles.input}
+            style={styles.input}
             placeholder="Session Name"
             value={initialState.name}
             onChangeText={(val) => setInitialState({...initialState, name: val})}
