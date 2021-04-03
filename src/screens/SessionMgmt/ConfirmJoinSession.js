@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {View, Button, Text, ScrollView, TextInput, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { firebase } from '../../firebase/config';
-import styles from './styles'
+import styles from '../../styles/styles'
 
 const ConfirmJoinSession = (props) => {
   const navigation = useNavigation();

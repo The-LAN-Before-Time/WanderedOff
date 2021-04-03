@@ -1,17 +1,3 @@
-// import React from 'react'
-// import { useReducer } from 'react'
-// import { Text, View } from 'react-native'
-
-// export default function HomeScreen(props) {
-//     console.log('These are the props')
-//     console.log(props)
-//     return (
-//         <View>
-//             <div>Welcome {props.extraData.fullName}</div>
-//         </View>
-//     )
-// }
-
 import React, { useEffect, useState } from 'react';
 import {
   FlatList,
@@ -22,7 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import styles from './styles';
+import formStyles from '../../styles/formStyles'
+import styles from '../../styles/styles';
 import { firebase } from '../../firebase/config';
 
 export default function HomeScreen(props) {
@@ -109,9 +96,9 @@ export default function HomeScreen(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.formContainer}>
+      <View style={formStyles.formContainer}>
         <TextInput
-          style={styles.input}
+          style={formStyles.input}
           placeholder='Add new entity'
           placeholderTextColor='#aaaaaa'
           onChangeText={(text) => setEntityText(text)}
@@ -119,15 +106,15 @@ export default function HomeScreen(props) {
           underlineColorAndroid='transparent'
           autoCapitalize='none'
         />
-        <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
-          <Text style={styles.buttonText}>Add</Text>
+        <TouchableOpacity style={formStyles.button} onPress={onAddButtonPress}>
+          <Text style={formStyles.buttonText}>Add</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onLogoutButtonPress}>
-          <Text style={styles.buttonText}>Logout</Text>
+        <TouchableOpacity style={formStyles.button} onPress={onLogoutButtonPress}>
+          <Text style={formStyles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </View>
       {entities && (
-        <View style={styles.listContainer}>
+        <View style={formStyles.listContainer}>
           <FlatList
             data={entities}
             renderItem={renderEntity}

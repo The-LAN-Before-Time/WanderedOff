@@ -1,5 +1,8 @@
 # App Styles Colors
 
+ Main Styles: styles.js
+ Form Styles: formStyles.js
+
 - red:  #d9202b
 - darkBlue: #101c3d
 - blue: #0061b2

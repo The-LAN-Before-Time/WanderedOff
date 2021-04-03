@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, View, Text } from 'react-native';
-import styles from '../src/screens/SessionMgmt/styles';
+import styles from '../src/styles/styles';
 
 const LoadingScreen = (props) => {
   let name = props.name || 'next screen';

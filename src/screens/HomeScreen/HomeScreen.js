@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import styles from './styles';
+import fromStyles from '../../styles/formStyles';
+import styles from '../../styles/styles'
 import { firebase } from '../../firebase/config';
 
 export default function HomeScreen(props) {
@@ -79,9 +80,9 @@ export default function HomeScreen(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.formContainer}>
+      <View style={fromStyles.formContainer}>
         <TextInput
-          style={styles.input}
+          style={fromStyles.input}
           placeholder='Add new entity'
           placeholderTextColor='#aaaaaa'
           onChangeText={(text) => setEntityText(text)}
@@ -89,11 +90,11 @@ export default function HomeScreen(props) {
           underlineColorAndroid='transparent'
           autoCapitalize='none'
         />
-        <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
-          <Text style={styles.buttonText}>Add</Text>
+        <TouchableOpacity style={fromStyles.button} onPress={onAddButtonPress}>
+          <Text style={fromStyles.buttonText}>Add</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onLogoutButtonPress}>
-          <Text style={styles.buttonText}>Logout</Text>
+        <TouchableOpacity style={fromStyles.button} onPress={onLogoutButtonPress}>
+          <Text style={fromStyles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </View>
       {entities && (

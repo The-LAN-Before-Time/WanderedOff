@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Share } from 'react-native';
-import styles from '../../screens/SessionMgmt/styles';
+import styles from '../../styles/styles';
 import formStyles from '../../styles/formStyles';
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../../shared/UserContext';

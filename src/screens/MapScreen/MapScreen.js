@@ -4,7 +4,7 @@ import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { UserContext } from '../../../shared/UserContext';
 import { useNavigation } from '@react-navigation/native';
-import styles from '../SessionMgmt/styles';
+import styles from '../../styles/styles';
 import { Avatar } from 'react-native-elements';
 
 export default function MapScreen({
