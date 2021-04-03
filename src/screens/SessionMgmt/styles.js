@@ -35,7 +35,6 @@ export default StyleSheet.create({
   paddingLeft: {
     paddingLeft: 20,
   },
-
   listContainer: {
     marginTop: 20,
     padding: 20,
@@ -85,6 +84,23 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  mapButton: {
+    position: 'absolute',
+    margin: 'auto',
+    borderRadius: 5,
+    backgroundColor: '#0061b2',
+    width: '50%',
+    top: '50%',
+    left: '25%',
+    height: 47,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mapButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   circleGreen: {
     marginRight: 10,
     width: 15,
@@ -107,5 +123,28 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     borderBottomColor: '#cccccc',
     borderBottomWidth: 1,
+  },
+  header: {
+    width: '100%',
+    height: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0,
+    padding: 0,
+  },
+  headerText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#333',
+    letterSpacing: 1,
+  },
+  headerTitle: {
+    flexDirection: 'row',
+  },
+  headerImage: {
+    height: 50,
+    width: '100%',
+    resizeMode: 'center',
   },
 });

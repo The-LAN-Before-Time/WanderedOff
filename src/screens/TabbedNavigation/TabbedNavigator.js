@@ -11,7 +11,8 @@ import SessionStackCreator from '../SessionMgmt/SessionStackCreator';
 import haversine from 'haversine';
 import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';
-import Account from '../AccountScreen/Account';
+import AccountStackCreator from '../AccountScreen/AccountStackCreator';
+import { Ionicons } from '@expo/vector-icons';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -81,7 +82,7 @@ const TabbedNavigation = (props) => {
 
   /** Updates location on session */
   useEffect(() => {
-    console.log('USERNAME:', userData.fullName)
+    console.log('USERNAME:', userData.fullName);
     interval = setInterval(() => updateLocation(sessionId, userData), 3000);
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
@@ -150,8 +151,34 @@ const TabbedNavigation = (props) => {
 
   // if (activeUsers.loaded) {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name='Sessions'>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Sessions') {
+            iconName = focused ? 'people-circle-outline' : 'people-outline';
+          } else if (route.name === 'Account') {
+            iconName = focused ? 'person-circle-outline' : 'person-outline';
+          } else {
+            iconName = focused ? 'navigate-circle-outline' : 'navigate-outline';
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: 'blue',
+        inactiveTintColor: 'gray',
+      }}
+    >
+      <Tab.Screen
+        name='Sessions'
+
+        // options={{
+        //   tabBarIcon: () => <Ionicons name='people-outline' size={30} />,
+        // }}
+      >
         {() => (
           <SessionStackCreator
             setActiveUsers={setActiveUsers}
@@ -176,9 +203,17 @@ const TabbedNavigation = (props) => {
           />
         )}
       </Tab.Screen>
-      <Tab.Screen name='Account'>
+      <Tab.Screen
+        name='Account'
+        options={{
+          headerTitle: (props) => <Header {...props} title='Wandered Off' />,
+        }}
+        // options={{
+        //   tabBarIcon: () => <Ionicons name='person-outline' size={30} />,
+        // }}
+      >
         {() => (
-          <Account
+          <AccountStackCreator
             setUser={props.setUser}
             sessionId={sessionId}
             activeUsers={activeUsers.list}

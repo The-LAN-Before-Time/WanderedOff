@@ -9,7 +9,7 @@ import {
 } from './src/screens';
 import { Text, Platform, LogBox, SafeAreaView } from 'react-native';
 LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
-
+import Header from './src/screens/SharedComponents/HeaderComponent';
 import { decode, encode } from 'base-64';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
@@ -19,7 +19,6 @@ import SessionStackCreator from './src/screens/SessionMgmt/SessionStackCreator';
 import { firebase } from './src/firebase/config';
 import { UserContext } from './shared/UserContext';
 // import {navigationRef} from './shared/RootNavigation';
-
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -39,7 +38,6 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
-
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -76,11 +74,6 @@ export default function App() {
       .then((token) => setExpoPushToken(token))
       .then(() => {
         console.log('token established');
-        sendPushNotification({
-          title: 'test',
-          body: 'heres the body',
-          data: '',
-        });
       });
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener(
@@ -136,16 +129,6 @@ export default function App() {
     });
   }
 
-  // useEffect(() => {
-  //   if (expoPushToken) {
-  //     console.log('attempting to send notification from effect');
-  //     sendPushNotification({
-  //       title: 'here is the title',
-  //       body: 'here is the body',
-  //     });
-  //   }
-  // }, [expoPushToken]);
-
   if (loading || !locationPermission) {
     return (
       <>
@@ -163,36 +146,37 @@ export default function App() {
     <NavigationContainer test='test'>
       <UserContext.Provider value={user}>
         <Stack.Navigator
-            screenOptions={{
-          headerShown: true
-              }}
-            initialRouteName={user ? "Tabbed Nav" : "Login"}>
-              <Stack.Screen name='Tabbed Nav'
-              options={{
-                title: 'Wandered Off',
-                headerLeft: () => {
-                  return null;
-              }}}>
-                {(props) => (
-                  <TabbedNavigator {...props} notify={sendPushNotification} setUser={setUser} />
-                )}
-              </Stack.Screen>
-              <Stack.Screen name='Login'>
-                {(props) => (
-                  <LoginScreen
-                    {...props}
-                    setUser={setUser}
-                  />
-                )}
-              </Stack.Screen>
-              <Stack.Screen name='Registration'>
-                {(props) => (
-                  <RegistrationScreen
-                    {...props}
-                    setUser={setUser}
-                  />
-                )}
-              </Stack.Screen>
+          screenOptions={({ route }) => {
+            console.log('stack screen props: ', route.name);
+            return {
+              headerShown: false,
+            };
+          }}
+          initialRouteName={user ? 'Tabbed Nav' : 'Login'}
+        >
+          <Stack.Screen
+            name='Tabbed Nav'
+            options={{
+              title: 'Wandered Off',
+              headerLeft: () => {
+                return null;
+              },
+            }}
+          >
+            {(props) => (
+              <TabbedNavigator
+                {...props}
+                notify={sendPushNotification}
+                setUser={setUser}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name='Login'>
+            {(props) => <LoginScreen {...props} setUser={setUser} />}
+          </Stack.Screen>
+          <Stack.Screen name='Registration'>
+            {(props) => <RegistrationScreen {...props} setUser={setUser} />}
+          </Stack.Screen>
         </Stack.Navigator>
       </UserContext.Provider>
     </NavigationContainer>
