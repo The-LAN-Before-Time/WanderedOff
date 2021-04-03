@@ -142,7 +142,7 @@ export default function MapScreen({
         <Ionicons name='locate-outline' size={30} onPress={goToInitialRegion} />
       </View>
       <Image
-        source={require('../../../assets/headerlogo.png')}
+        source={require('../../../assets/logoHeader.png')}
         style={styles.mapHeader}
       />
       {loaded ? (

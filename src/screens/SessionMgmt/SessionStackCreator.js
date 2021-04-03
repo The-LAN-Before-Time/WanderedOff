@@ -9,6 +9,7 @@ import JoinSession from './JoinSession';
 import ConfirmLeaveSession from './ConfirmLeaveSession';
 import SessionOptions from './SessionOptions';
 import StatusUpdate from './SessionStatus';
+import { Ionicons } from '@expo/vector-icons';
 
 const SessionStackCreator = (props) => {
   const {
@@ -30,6 +31,8 @@ const SessionStackCreator = (props) => {
       screenOptions={{
         headerShown: true,
         headerTitle: <Header />,
+        headerBackTitleVisible: false,
+        headerBackImage: () => <Ionicons name="arrow-back-outline" size={30} style={{ marginLeft: 10, marginBottom: 6 }}/>
       }}
     >
       <Stack.Screen name='Get Started' component={SessionCreateJoin} />
@@ -62,7 +65,11 @@ const SessionStackCreator = (props) => {
           <ConfirmLeaveSession {...props} leaveSession={leaveSession} />
         )}
       </Stack.Screen>
-      <Stack.Screen name='Session Options'>
+      <Stack.Screen name='Session Options' options={{
+              headerBackImage: () => {
+                return null;
+              },
+            }}>
         {(props) => (
           <SessionOptions {...props} setRadius={setRadius} radius={radius} />
         )}

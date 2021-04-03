@@ -6,15 +6,27 @@ import { firebase } from '../../firebase/config';
 import { PinDropSharp } from '@material-ui/icons';
 import formStyles from '../../styles/formStyles';
 import styles from "../../styles/formStyles";
+import { Formik } from 'formik';
+import * as yup from 'yup';
 
 const JoinSession = () => {
   const userData = useContext(UserContext)
   const navigation = useNavigation();
-  const [newCode, setNewCode] = useState('');
+  //const [newCode, setNewCode] = useState('');
 
-  const handleSubmit = () => {
+  const reviewSchema = yup.object({
+    newCode: yup.string()
+    .required()
+    .min(3),
+    //.test('is user's phone number', 'Invalid Phone Number', (val) => {
+    //   return val === userData.phoneNumber;
+    // })
+  })
+
+  const joinSession = (values) => {
+    console.log("JOIN SESSION VALS", values.newCode)
     let session = {};
-    const sessionRef = firebase.firestore().collection('sessions').where('code', '==', newCode).orderBy('expirationDate', 'desc').limit(1);
+    const sessionRef = firebase.firestore().collection('sessions').where('code', '==', values.newCode).orderBy('expirationDate', 'desc').limit(1);
     sessionRef.get().then((doc) => {
       doc.forEach((individualDoc) => {
         // console.log('This is the individualDoc, mangos', individualDoc)
@@ -34,25 +46,37 @@ const JoinSession = () => {
 
   return (
     <ScrollView>
-      <View>
+    <Formik
+        initialValues={{ newCode: '' }}
+        validationSchema={reviewSchema}
+        onSubmit={(values) => {
+          joinSession(values);
+        }}
+      >
+      {(props) => (
         <View>
-          <Text style={styles.label}>Enter Code</Text>
-          <TextInput
+          <View>
+            <Text style={styles.label}>Enter Code</Text>
+            <TextInput
               style={formStyles.input}
-            placeholder="Enter code"
-            value={newCode}
-            onChangeText={(val) => setNewCode(val)}
-            keyboardType='number-pad'
-          />
+              placeholder="Enter code"
+              value={props.values.newCode}
+              onChangeText={props.handleChange('newCode')}
+              onBlur={props.handleBlur("newCode")}
+              keyboardType='number-pad'
+            />
+            <Text style={styles.errorText}>{props.touched.newCode && props.errors.newCode}</Text>
+          </View>
+          <View>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={props.handleSubmit}>
+              <Text style={styles.buttonText}>Join Session</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View>
-          <TouchableOpacity
-              style={styles.button}
-              onPress={handleSubmit}>
-            <Text style={styles.buttonText}>Join Session</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        )}
+      </Formik>
     </ScrollView>
   )
 }

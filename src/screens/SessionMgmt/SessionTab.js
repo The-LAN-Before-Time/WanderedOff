@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../../shared/UserContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar, ListItem } from 'react-native-elements';
+
 const SessionTab = (props) => {
   const userData = useContext(UserContext);
   const navigation = useNavigation();
