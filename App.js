@@ -14,10 +14,9 @@ import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import SessionStackCreator from './src/screens/SessionMgmt/SessionStackCreator';
 import { firebase } from './src/firebase/config';
 import { UserContext } from './shared/UserContext';
-import Header from './shared/Header';
+import LoadingScreen from './shared/LoadingScreen';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -129,11 +128,7 @@ export default function App() {
   }
 
   if (loading || !locationPermission) {
-    return (
-      <>
-        <Text>Loading</Text>
-      </>
-    );
+    return <LoadingScreen name='app' />;
   }
 
   return (
