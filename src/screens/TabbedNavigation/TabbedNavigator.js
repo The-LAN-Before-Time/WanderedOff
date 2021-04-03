@@ -111,6 +111,10 @@ const TabbedNavigation = (props) => {
         longs += user.location.longitude;
 
         if (!activeUsers.list[id]) {
+          props.notify({
+            title: `${newUsers[id].fullName} has joined!`,
+            title: `Your friend, ${newUsers[id].fullName}, has joined your session`,
+          });
           Object.values(activeUsers.list).forEach((userData) => {
             if (userData.index > max) {
               max = userData.index;
@@ -142,7 +146,6 @@ const TabbedNavigation = (props) => {
           });
         }
       });
-
       setActiveUsers({ list: newUsers, loaded: true, center });
     }
   }, [newUsers]);

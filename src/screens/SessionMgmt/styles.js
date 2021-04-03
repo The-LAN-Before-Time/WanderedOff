@@ -130,4 +130,11 @@ export default StyleSheet.create({
     bottom: 10,
     backgroundColor: 'rgba(255,255,255,0.5)',
   },
+  mapHeader: {
+    position: 'absolute',
+    width: '30%',
+    top: 0,
+    right: 15,
+    resizeMode: 'contain',
+  },
 });

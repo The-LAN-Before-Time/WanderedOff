@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, Image } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { UserContext } from '../../../shared/UserContext';
@@ -90,8 +90,8 @@ export default function MapScreen({
                     latitude: user.location.latitude,
                     longitude: user.location.longitude,
                   }}
-                  title={`${user.fullName}, ${user.status} `}
-                  pinColor={colors[user.index % colors.length]}
+                  title={`${user.fullName}: ${user.status} `}
+                  // pinColor={colors[user.index % colors.length]}
                 >
                   <View
                     style={{
@@ -101,21 +101,27 @@ export default function MapScreen({
                       border: 'black',
                     }}
                   >
-                    <Text
-                      style={{
-                        color: colors[user.index % colors.length],
-                        textAlign: 'center',
-                      }}
-                    >
-                      {user.fullName
+                    {/* <Text
+                                        style={{
+                                            color: colors[user.index % colors.length],
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        {user.fullName
+                                            .split(' ')
+                                            .map((name) => name[0])
+                                            .join('')}
+                                    </Text> */}
+                    {/* <Ionicons name='person-circle' size={24} color={colors[user.index % colors.length]}/> */}
+                    <Avatar
+                      rounded
+                      title={user.fullName
                         .split(' ')
                         .map((name) => name[0])
                         .join('')}
-                    </Text>
-                    <Ionicons
-                      name='person-circle'
-                      size={24}
-                      color={colors[user.index % colors.length]}
+                      overlayContainerStyle={{
+                        backgroundColor: colors[user.index % colors.length],
+                      }}
                     />
                   </View>
                 </Marker>
@@ -135,6 +141,10 @@ export default function MapScreen({
       <View style={styles.mapRecenterIcon}>
         <Ionicons name='locate-outline' size={30} onPress={goToInitialRegion} />
       </View>
+      <Image
+        source={require('../../../assets/headerLogo.png')}
+        style={styles.mapHeader}
+      />
       {loaded ? (
         <></>
       ) : (
