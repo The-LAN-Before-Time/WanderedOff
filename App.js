@@ -149,14 +149,11 @@ export default function App() {
     <NavigationContainer test='test'>
       <UserContext.Provider value={user}>
         <Stack.Navigator
-            screenOptions={{
-          headerShown: true
-              }}
             initialRouteName={user ? "Tabbed Nav" : "Login"}>
 
               <Stack.Screen name='Tabbed Nav'
               options={{
-                title: 'Wandered Off',
+                title: <Header />,
                 headerLeft: () => {
                   return null;
               }}}>

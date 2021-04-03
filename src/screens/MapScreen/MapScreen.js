@@ -15,7 +15,7 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
     const userData = useContext(UserContext);
     const [mapReady, setMapReady] = useState(false);
     // const colors = ['red', 'green', 'purple', 'orange'];
-    const colors =['#d9202b', '#101c3d', '#0061b2', '#59b3ff', ]
+    const colors =['#d9202b', '#101c3d', '#0061b2', '#59b3ff']
     const defaultPadding = {top: 20, right: 20, bottom: 20, left: 20};
     const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index)
     const goToInitialRegion = () => {
