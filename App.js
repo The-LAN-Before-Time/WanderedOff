@@ -7,7 +7,7 @@ import {
   RegistrationScreen,
   TabbedNavigator,
 } from './src/screens';
-import { Text, Platform, LogBox, SafeAreaView } from 'react-native';
+import { Text, Platform, LogBox } from 'react-native';
 LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
 
 import { decode, encode } from 'base-64';
@@ -18,7 +18,8 @@ import * as Permissions from 'expo-permissions';
 import SessionStackCreator from './src/screens/SessionMgmt/SessionStackCreator';
 import { firebase } from './src/firebase/config';
 import { UserContext } from './shared/UserContext';
-// import {navigationRef} from './shared/RootNavigation';
+import Header from './shared/Header';
+
 
 
 if (!global.btoa) {
@@ -136,16 +137,6 @@ export default function App() {
     });
   }
 
-  // useEffect(() => {
-  //   if (expoPushToken) {
-  //     console.log('attempting to send notification from effect');
-  //     sendPushNotification({
-  //       title: 'here is the title',
-  //       body: 'here is the body',
-  //     });
-  //   }
-  // }, [expoPushToken]);
-
   if (loading || !locationPermission) {
     return (
       <>
@@ -154,11 +145,6 @@ export default function App() {
     );
   }
 
-  // if (!loading) {
-  //   console.log('This is the user');
-  //   console.log(user);
-  // }
-  //const userData = user;
   return (
     <NavigationContainer test='test'>
       <UserContext.Provider value={user}>
@@ -167,6 +153,7 @@ export default function App() {
           headerShown: true
               }}
             initialRouteName={user ? "Tabbed Nav" : "Login"}>
+
               <Stack.Screen name='Tabbed Nav'
               options={{
                 title: 'Wandered Off',
@@ -193,6 +180,7 @@ export default function App() {
                   />
                 )}
               </Stack.Screen>
+
         </Stack.Navigator>
       </UserContext.Provider>
     </NavigationContainer>

@@ -5,6 +5,7 @@ import {firebase} from '../../firebase/config';
 import {Ionicons} from '@expo/vector-icons';
 import haversine from 'haversine';
 import {UserContext} from '../../../shared/UserContext';
+import { Avatar } from 'react-native-elements';
 
 export default function MapScreen({center, activeUsers, region, radius, loaded}) {
     if (!loaded) {
@@ -13,7 +14,8 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
     let mapRef = useRef(null);
     const userData = useContext(UserContext);
     const [mapReady, setMapReady] = useState(false);
-    const colors = ['red', 'green', 'purple', 'orange'];
+    // const colors = ['red', 'green', 'purple', 'orange'];
+    const colors =['#d9202b', '#101c3d', '#0061b2', '#59b3ff', ]
     const defaultPadding = {top: 20, right: 20, bottom: 20, left: 20};
     const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index)
     const goToInitialRegion = () => {
@@ -77,8 +79,8 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
                                     latitude: user.location.latitude,
                                     longitude: user.location.longitude,
                                 }}
-                                title={`${user.fullName} \n Status: ${user.status} `}
-                                pinColor={colors[user.index % colors.length]}
+                                title={`${user.fullName}: ${user.status} `}
+                                // pinColor={colors[user.index % colors.length]}
                             >
                                 <View
                                     style={{
@@ -88,7 +90,7 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
                                         border: 'black',
                                     }}
                                 >
-                                    <Text
+                                    {/* <Text
                                         style={{
                                             color: colors[user.index % colors.length],
                                             textAlign: 'center',
@@ -98,8 +100,13 @@ export default function MapScreen({center, activeUsers, region, radius, loaded})
                                             .split(' ')
                                             .map((name) => name[0])
                                             .join('')}
-                                    </Text>
-                                    <Ionicons name='person-circle' size={24} color={colors[user.index % colors.length]}/>
+                                    </Text> */}
+                                    {/* <Ionicons name='person-circle' size={24} color={colors[user.index % colors.length]}/> */}
+                                    <Avatar
+                                    rounded
+                                    title={user.fullName.split(' ').map((name) => name[0]).join('')}
+                                    overlayContainerStyle={{ backgroundColor: colors[user.index % colors.length] }}
+                                    />
                                 </View>
                             </Marker>
 
