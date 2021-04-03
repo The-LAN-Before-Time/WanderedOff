@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text } from 'react-native';
 import updateLocation from '../../../shared/UpdateLocation';
 import queryLocations from '../../../shared/QueryLocations';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapScreen from '../MapScreen/MapScreen';
-import OptionsScreen from '../Options/OptionsScreen';
 import { UserContext } from '../../../shared/UserContext';
 // import LeaveSession from '../../../shared/LeaveSession';
 import SessionStackCreator from '../SessionMgmt/SessionStackCreator';
@@ -200,9 +198,6 @@ const TabbedNavigation = (props) => {
         options={{
           headerTitle: (props) => <Header {...props} title='Wandered Off' />,
         }}
-        // options={{
-        //   tabBarIcon: () => <Ionicons name='person-outline' size={30} />,
-        // }}
       >
         {() => (
           <AccountStackCreator
@@ -215,15 +210,6 @@ const TabbedNavigation = (props) => {
       </Tab.Screen>
     </Tab.Navigator>
   );
-  //   } else {
-  //     return (
-  //       <View>
-  //         <Text>Loading</Text>
-  //       </View>
-  //     );
-  //  }
 };
 
 export default TabbedNavigation;
-
-//stop running?

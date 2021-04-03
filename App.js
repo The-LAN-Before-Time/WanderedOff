@@ -9,7 +9,6 @@ import {
 } from './src/screens';
 import { Text, Platform, LogBox } from 'react-native';
 LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
-import Header from './src/screens/SharedComponents/HeaderComponent';
 import { decode, encode } from 'base-64';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
@@ -140,11 +139,15 @@ export default function App() {
   return (
     <NavigationContainer test='test'>
       <UserContext.Provider value={user}>
-        <Stack.Navigator initialRouteName={user ? 'Tabbed Nav' : 'Login'}>
+        <Stack.Navigator
+          initialRouteName={user ? 'Tabbed Nav' : 'Login'}
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
           <Stack.Screen
             name='Tabbed Nav'
             options={{
-              title: <Header />,
               headerLeft: () => {
                 return null;
               },

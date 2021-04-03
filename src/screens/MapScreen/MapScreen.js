@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
-import { firebase } from '../../firebase/config';
 import { Ionicons } from '@expo/vector-icons';
-import haversine from 'haversine';
-<<<<<<< HEAD
 import { UserContext } from '../../../shared/UserContext';
-import { Navigation } from '@material-ui/icons';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import styles from '../SessionMgmt/styles';
-=======
-import {UserContext} from '../../../shared/UserContext';
 import { Avatar } from 'react-native-elements';
->>>>>>> 718233abde79692de90b906ab730a4d54c48fb4d
 
 export default function MapScreen({
   center,
@@ -84,6 +77,7 @@ export default function MapScreen({
         onMapReady={() => setMapReady(true)}
         initialRegion={region}
         screenOptions={{ headerShown: false }}
+        showsMyLocationButton={false}
       >
         {userList
           .filter((user) => user.userId !== userData.id)
@@ -138,6 +132,9 @@ export default function MapScreen({
           <></>
         )}
       </MapView>
+      <View style={styles.mapRecenterIcon}>
+        <Ionicons name='locate-outline' size={30} onPress={goToInitialRegion} />
+      </View>
       {loaded ? (
         <></>
       ) : (

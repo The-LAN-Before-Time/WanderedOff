@@ -124,27 +124,10 @@ export default StyleSheet.create({
     borderBottomColor: '#cccccc',
     borderBottomWidth: 1,
   },
-  header: {
-    width: '100%',
-    height: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 0,
-    padding: 0,
-  },
-  headerText: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: '#333',
-    letterSpacing: 1,
-  },
-  headerTitle: {
-    flexDirection: 'row',
-  },
-  headerImage: {
-    height: 50,
-    width: '100%',
-    resizeMode: 'center',
+  mapRecenterIcon: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
+    backgroundColor: 'rgba(255,255,255,0.5)',
   },
 });
