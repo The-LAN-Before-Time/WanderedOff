@@ -162,8 +162,6 @@ const TabbedNavigation = (props) => {
           } else {
             iconName = focused ? 'navigate-circle-outline' : 'navigate-outline';
           }
-
-          // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
@@ -172,13 +170,7 @@ const TabbedNavigation = (props) => {
         inactiveTintColor: 'gray',
       }}
     >
-      <Tab.Screen
-        name='Sessions'
-
-        // options={{
-        //   tabBarIcon: () => <Ionicons name='people-outline' size={30} />,
-        // }}
-      >
+      <Tab.Screen name='Sessions'>
         {() => (
           <SessionStackCreator
             setActiveUsers={setActiveUsers}

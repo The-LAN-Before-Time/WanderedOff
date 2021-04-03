@@ -4,10 +4,15 @@ import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import { firebase } from '../../firebase/config';
 import { Ionicons } from '@expo/vector-icons';
 import haversine from 'haversine';
+<<<<<<< HEAD
 import { UserContext } from '../../../shared/UserContext';
 import { Navigation } from '@material-ui/icons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import styles from '../SessionMgmt/styles';
+=======
+import {UserContext} from '../../../shared/UserContext';
+import { Avatar } from 'react-native-elements';
+>>>>>>> 718233abde79692de90b906ab730a4d54c48fb4d
 
 export default function MapScreen({
   center,

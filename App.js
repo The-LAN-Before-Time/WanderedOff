@@ -7,7 +7,7 @@ import {
   RegistrationScreen,
   TabbedNavigator,
 } from './src/screens';
-import { Text, Platform, LogBox, SafeAreaView } from 'react-native';
+import { Text, Platform, LogBox } from 'react-native';
 LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
 import Header from './src/screens/SharedComponents/HeaderComponent';
 import { decode, encode } from 'base-64';
@@ -18,7 +18,7 @@ import * as Permissions from 'expo-permissions';
 import SessionStackCreator from './src/screens/SessionMgmt/SessionStackCreator';
 import { firebase } from './src/firebase/config';
 import { UserContext } from './shared/UserContext';
-// import {navigationRef} from './shared/RootNavigation';
+import Header from './shared/Header';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -137,27 +137,14 @@ export default function App() {
     );
   }
 
-  // if (!loading) {
-  //   console.log('This is the user');
-  //   console.log(user);
-  // }
-  //const userData = user;
   return (
     <NavigationContainer test='test'>
       <UserContext.Provider value={user}>
-        <Stack.Navigator
-          screenOptions={({ route }) => {
-            console.log('stack screen props: ', route.name);
-            return {
-              headerShown: false,
-            };
-          }}
-          initialRouteName={user ? 'Tabbed Nav' : 'Login'}
-        >
+        <Stack.Navigator initialRouteName={user ? 'Tabbed Nav' : 'Login'}>
           <Stack.Screen
             name='Tabbed Nav'
             options={{
-              title: 'Wandered Off',
+              title: <Header />,
               headerLeft: () => {
                 return null;
               },
