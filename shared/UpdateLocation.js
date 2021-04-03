@@ -2,7 +2,8 @@ import { firebase } from '../src/firebase/config';
 // import {useContext} from 'react';
 // import { UserContext } from './UserContext';
 
-export default function (sessionId, user) {
+export default function (sessionId, user, status) {
+  console.log('updating with this status: ', status);
   if (!user.id || !sessionId) return;
   const userLocationRef = firebase
     .firestore()
@@ -22,8 +23,9 @@ export default function (sessionId, user) {
             lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
             location,
             fullName: user.fullName,
-            status: user.status || 'active',
+            status: status.status || 'active',
             userId: user.id,
+            notify: status.notify,
           },
         });
         console.log('sent');
