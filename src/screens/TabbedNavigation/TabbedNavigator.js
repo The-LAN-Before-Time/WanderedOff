@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text } from 'react-native';
 import updateLocation from '../../../shared/UpdateLocation';
 import queryLocations from '../../../shared/QueryLocations';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapScreen from '../MapScreen/MapScreen';
-import OptionsScreen from '../Options/OptionsScreen';
 import { UserContext } from '../../../shared/UserContext';
 // import LeaveSession from '../../../shared/LeaveSession';
 import SessionStackCreator from '../SessionMgmt/SessionStackCreator';
 import haversine from 'haversine';
 import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';
-import Account from '../AccountScreen/Account';
+import AccountStackCreator from '../AccountScreen/AccountStackCreator';
+import { Ionicons } from '@expo/vector-icons';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -81,7 +80,7 @@ const TabbedNavigation = (props) => {
 
   /** Updates location on session */
   useEffect(() => {
-    console.log('USERNAME:', userData.fullName)
+    console.log('USERNAME:', userData.fullName);
     interval = setInterval(() => updateLocation(sessionId, userData), 3000);
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
@@ -112,6 +111,10 @@ const TabbedNavigation = (props) => {
         longs += user.location.longitude;
 
         if (!activeUsers.list[id]) {
+          props.notify({
+            title: `${newUsers[id].fullName} has joined!`,
+            title: `Your friend, ${newUsers[id].fullName}, has joined your session`,
+          });
           Object.values(activeUsers.list).forEach((userData) => {
             if (userData.index > max) {
               max = userData.index;
@@ -143,14 +146,31 @@ const TabbedNavigation = (props) => {
           });
         }
       });
-
       setActiveUsers({ list: newUsers, loaded: true, center });
     }
   }, [newUsers]);
 
   // if (activeUsers.loaded) {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Sessions') {
+            iconName = focused ? 'people-circle-outline' : 'people-outline';
+          } else if (route.name === 'Account') {
+            iconName = focused ? 'person-circle-outline' : 'person-outline';
+          } else {
+            iconName = focused ? 'navigate-circle-outline' : 'navigate-outline';
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: 'blue',
+        inactiveTintColor: 'gray',
+      }}
+    >
       <Tab.Screen name='Sessions'>
         {() => (
           <SessionStackCreator
@@ -176,9 +196,14 @@ const TabbedNavigation = (props) => {
           />
         )}
       </Tab.Screen>
-      <Tab.Screen name='Account'>
+      <Tab.Screen
+        name='Account'
+        options={{
+          headerTitle: (props) => <Header {...props} title='Wandered Off' />,
+        }}
+      >
         {() => (
-          <Account
+          <AccountStackCreator
             setUser={props.setUser}
             sessionId={sessionId}
             activeUsers={activeUsers.list}
@@ -188,15 +213,6 @@ const TabbedNavigation = (props) => {
       </Tab.Screen>
     </Tab.Navigator>
   );
-  //   } else {
-  //     return (
-  //       <View>
-  //         <Text>Loading</Text>
-  //       </View>
-  //     );
-  //  }
 };
 
 export default TabbedNavigation;
-
-//stop running?

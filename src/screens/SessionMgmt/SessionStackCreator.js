@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import Header from '../../../shared/Header';
 import SessionCreateJoin from './SessionCreate-Join';
 import CreateSession from './CreateSession';
 import SessionTab from './SessionTab';
@@ -9,20 +9,26 @@ import JoinSession from './JoinSession';
 import ConfirmLeaveSession from './ConfirmLeaveSession';
 import SessionOptions from './SessionOptions';
 
-const SessionStackCreator = ({
-  setActiveUsers,
-  activeUsers,
-  setSessionId,
-  leaveSession,
-  setRadius,
-  radius,
-}) => {
+const SessionStackCreator = (props) => {
+  const {
+    setActiveUsers,
+    activeUsers,
+    setSessionId,
+    leaveSession,
+    setRadius,
+    radius,
+    sessionId,
+  } = props;
   const Stack = createStackNavigator();
 
   return (
-    <Stack.Navigator screenOptions={{
-          headerShown: false
-              }}>
+    <Stack.Navigator
+      initialRouteName={sessionId ? 'Sessions' : 'Get Started'}
+      screenOptions={{
+        headerShown: true,
+        headerTitle: <Header />,
+      }}
+    >
       <Stack.Screen name='Get Started' component={SessionCreateJoin} />
 
       <Stack.Screen name='Create Session'>
