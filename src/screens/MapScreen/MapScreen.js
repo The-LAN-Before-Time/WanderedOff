@@ -90,7 +90,7 @@ export default function MapScreen({
                     latitude: user.location.latitude,
                     longitude: user.location.longitude,
                   }}
-                  title={`${user.fullName}: ${user.status} `}
+                  title={`${user.fullName} (${user.status})`}
                   // pinColor={colors[user.index % colors.length]}
                 >
                   <View

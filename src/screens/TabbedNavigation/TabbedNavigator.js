@@ -32,6 +32,7 @@ const TabbedNavigation = (props) => {
   const [radius, setRadius] = useState(4000);
   const navigation = useNavigation();
   let interval;
+  const [status, setStatus] = useState({ status: 'Active', notify: false });
 
   /** Set the initial region on user */
   const setInitialRegion = () => {
@@ -81,7 +82,10 @@ const TabbedNavigation = (props) => {
   /** Updates location on session */
   useEffect(() => {
     console.log('USERNAME:', userData.fullName);
-    interval = setInterval(() => updateLocation(sessionId, userData), 3000);
+    interval = setInterval(
+      () => updateLocation(sessionId, userData, status),
+      3000
+    );
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
       console.log('ATTEMPTING TO UNOUNT');
@@ -89,7 +93,7 @@ const TabbedNavigation = (props) => {
       unsubscribeToQuery();
       console.log('UNMOUNT COMPLETED');
     };
-  }, [sessionId, userData]);
+  }, [sessionId, userData, status]);
 
   /** Set initial region */
   useEffect(() => setInitialRegion(), []);
@@ -111,10 +115,13 @@ const TabbedNavigation = (props) => {
         longs += user.location.longitude;
 
         if (!activeUsers.list[id]) {
-          props.notify({
-            title: `${newUsers[id].fullName} has joined!`,
-            title: `Your friend, ${newUsers[id].fullName}, has joined your session`,
-          });
+          if (activeUsers.loaded && id !== userData.id) {
+            props.notify({
+              title: `${newUsers[id].fullName} has joined!`,
+              title: `Your friend, ${newUsers[id].fullName}, has joined your session`,
+            });
+          }
+
           Object.values(activeUsers.list).forEach((userData) => {
             if (userData.index > max) {
               max = userData.index;
@@ -143,6 +150,16 @@ const TabbedNavigation = (props) => {
           props.notify({
             title: `${newUsers[id].fullName} has fallen out of range`,
             title: `Your friend, ${newUsers[id].fullName}, has fallen out of range. Please check to make sure they are not lost`,
+          });
+        }
+        if (
+          newUsers[id].notify &&
+          activeUsers.list[id] &&
+          activeUsers.list[id].status !== newUsers[id].status
+        ) {
+          props.notify({
+            title: `${newUsers[id].fullName} is ${activeUsers.list[id].status}`,
+            title: `Your friend, ${newUsers[id].fullName}, would like you to know their status has changed and they are currently ${activeUsers.list[id].status}`,
           });
         }
       });
@@ -181,6 +198,8 @@ const TabbedNavigation = (props) => {
             leaveSession={leaveSession}
             setRadius={setRadius}
             radius={radius}
+            setStatus={setStatus}
+            status={status}
           />
         )}
       </Tab.Screen>

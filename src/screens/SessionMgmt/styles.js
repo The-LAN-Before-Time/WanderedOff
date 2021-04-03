@@ -5,6 +5,10 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  containerFull: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
   containerCenter: {
     flex: 1,
     justifyContent: 'center',
@@ -136,5 +140,11 @@ export default StyleSheet.create({
     top: 0,
     right: 15,
     resizeMode: 'contain',
+  },
+  flatlist: {
+    alignSelf: 'stretch',
+  },
+  bottomButtons: {
+    paddingBottom: 10,
   },
 });
