@@ -147,9 +147,11 @@ const TabbedNavigation = (props) => {
           activeUsers.list[id] &&
           activeUsers.list[id].inbounds
         ) {
+          // let title = userData.id === id ? `You have fallen out of range` : `${newUsers[id].fullName} has fallen out of range`;
+          // let body = userData.id === id ? `Please move back into range` : `Please check to make sure they are not lost`;
           props.notify({
-            title: `${newUsers[id].fullName} has fallen out of range`,
-            title: `Your friend, ${newUsers[id].fullName}, has fallen out of range. Please check to make sure they are not lost`,
+            title: userData.id === id ? `You have fallen out of range` : `${newUsers[id].fullName} has fallen out of range`,
+            body: userData.id === id ? `Please move back into range` : `Please check to make sure they are not lost`,
           });
         }
         if (
