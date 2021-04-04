@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styles from './styles';
+
 import { firebase } from '../../firebase/config'
+import styles from "../../styles/styles";
 
 export default function RegistrationScreen({navigation, setUser}) {
     const [fullName, setFullName] = useState('')
@@ -58,6 +59,7 @@ export default function RegistrationScreen({navigation, setUser}) {
                     style={styles.logo}
                     source={require('../../../assets/icon.png')}
                 />
+                <Text style={styles.label}>Full Name</Text>
                 <TextInput
                     style={styles.input}
                     placeholder='Full Name'
@@ -67,6 +69,7 @@ export default function RegistrationScreen({navigation, setUser}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.label}>E-mail</Text>
                 <TextInput
                     style={styles.input}
                     placeholder='E-mail'
@@ -76,6 +79,7 @@ export default function RegistrationScreen({navigation, setUser}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.label}>Password</Text>
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"
@@ -86,6 +90,7 @@ export default function RegistrationScreen({navigation, setUser}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+                <Text style={styles.label}>Confirm Password</Text>
                 <TextInput
                     style={styles.input}
                     placeholderTextColor="#aaaaaa"

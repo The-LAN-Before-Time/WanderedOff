@@ -8,7 +8,7 @@ import {
   Switch,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import styles from '../../styles/formStyles';
+import styles from '../../styles/styles';
 import { RadioButton } from 'react-native-paper';
 
 const UpdateStatus = (props) => {

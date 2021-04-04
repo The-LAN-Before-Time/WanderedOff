@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import styles from './styles';
+import styles from '../../styles/styles'
 import { firebase } from '../../firebase/config';
 
 export default function HomeScreen(props) {

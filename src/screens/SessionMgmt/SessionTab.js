@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Share } from 'react-native';
-import styles from '../../screens/SessionMgmt/styles';
-import formStyles from '../../styles/formStyles';
+import styles from '../../styles/styles';
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../../shared/UserContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -99,23 +98,23 @@ const SessionTab = (props) => {
       <View style={styles.bottomButtons}>
         <View>
           <TouchableOpacity
-            style={formStyles.button}
+            style={styles.button}
             onPress={() => navigation.navigate('Update Status')}
           >
-            <Text style={formStyles.buttonText}>Update Status</Text>
+            <Text style={styles.buttonText}>Update Status</Text>
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={formStyles.button} onPress={onShare}>
-            <Text style={formStyles.buttonText}>Invite</Text>
+          <TouchableOpacity style={styles.button} onPress={onShare}>
+            <Text style={styles.buttonText}>Invite</Text>
           </TouchableOpacity>
         </View>
         <View>
           <TouchableOpacity
-            style={formStyles.buttonDanger}
+            style={styles.buttonDanger}
             onPress={() => navigation.navigate('Confirm Leave Session')}
           >
-            <Text style={formStyles.buttonText}>Exit Session</Text>
+            <Text style={styles.buttonText}>Exit Session</Text>
           </TouchableOpacity>
         </View>
       </View>
