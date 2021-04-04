@@ -25,9 +25,9 @@ const OptionsScreen = ({ setSessionId, sessionId, radius, setRadius }) => {
   }
 
   return (
-    <ScrollView >
-      <View style={{marginTop: 50}}><Text>Option</Text></View>
-      <View style={formStyles.container}>
+    <ScrollView>
+      <View>
+        <Text style={formStyles.label}>Radius</Text>
         <View>
           <TextInput
             style={formStyles.input}

@@ -38,7 +38,7 @@ const SessionStackCreator = (props) => {
       <Stack.Screen name='Get Started' component={SessionCreateJoin} />
 
       <Stack.Screen name='Create Session'>
-        {(props) => <CreateSession {...props} setSessionId={setSessionId} />}
+        {(props) => <CreateSession {...props} setRadius={setRadius} setSessionId={setSessionId} />}
       </Stack.Screen>
 
       <Stack.Screen name='Join Session' component={JoinSession} />

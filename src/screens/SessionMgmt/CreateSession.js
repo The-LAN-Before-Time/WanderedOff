@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import {View, Button, Text, ScrollView, TextInput, TouchableOpacity, Switch} from 'react-native';
+import { View, Button, Text, ScrollView, TextInput, TouchableOpacity, Switch, Slider, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { firebase } from '../../firebase/config';
 import { UserContext } from '../../../shared/UserContext'
@@ -8,14 +8,15 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 
 const CreateSession = (props) => {
-  const {setSessionId} = props;
+  const { setSessionId, setRadius } = props;
   const userData = useContext(UserContext)
   const navigation = useNavigation();
+  const [radiusTest, setRadiusTest] = useState(20)
   //const [toggle, setToggle] = useState(true);
   const [initialState, setInitialState] = useState({
     name: '',
     code: '',
-    radius: '4000',
+    radius: radiusTest,
     centerMovable: false,
     owner: userData.id,
     active: true,
@@ -30,14 +31,24 @@ const CreateSession = (props) => {
     .required()
     .min(3),
     //.test('is user's phone number', 'Invalid Phone Number', (val) => {
-    //   return val === userData.phoneNumber;
+    //   val === userData.phoneNumber;
     // })
+    radius: yup.string()
+    .required()
+    .test(
+      "valid radius",
+      "Radius must be greater than 20 meters",
+      (val) =>
+        val > "20"
+    ),
   })
 
   const updateState = (values) => {
-    setInitialState(values);
+    //setInitialState(values);
+    setRadius(Number(values.radius))
+    console.log("VALUES", values)
     const sessionRef = firebase.firestore().collection('sessions')
-    sessionRef.add(initialState).then(response => {
+    sessionRef.add(values).then(response => {
       firebase.firestore().collection('sessionUsers').doc(response.id).set({});
       const session = Object.assign({}, values);
       session.id = response.id;
@@ -80,16 +91,39 @@ const CreateSession = (props) => {
               keyboardType='number-pad'
             />
             <Text style={styles.errorText}>{props.touched.code && props.errors.code}</Text>
-            <Text style={styles.label}>Enter radius</Text>
+            <Text style={styles.label}>Enter radius (in meters)</Text>
+            {/* <View style={testStyles.container}>
+              <Slider
+                style={{width: 300, height: 30, borderRadius: 50, marginLeft: 50}}
+                placeholder="Enter radius"
+                value={radiusTest}
+                onValueChange={(val) => setRadiusTest(val)}
+                minimumValue={20}
+                maximumValue={1000}
+                step={100}
+                // value={String(initialState.radius)}
+                // onChangeText={(val) => setInitialState({...initialState, radius: val})}
+              />
+                <View style={testStyles.textCon}>
+                  <Text>20m</Text>
+                  <Text>
+                      {radiusTest + 'm'}
+                  </Text>
+                  <Text >1000m</Text>
+                </View>
+            </View> */}
+
             <TextInput
-                style={styles.input}
+              style={styles.input}
               placeholder="Enter radius"
               value={props.values.radius}
               onChangeText={props.handleChange('radius')}
+              onBlur={props.handleBlur("radius")}
+              keyboardType='number-pad'
               // value={String(initialState.radius)}
               // onChangeText={(val) => setInitialState({...initialState, radius: val})}
-              keyboardType='number-pad'
             />
+            <Text style={styles.errorText}>{props.touched.radius && props.errors.radius}</Text>
             <Text style={styles.label}>Center movable?</Text>
               <Switch
                   style={styles.switch}
@@ -115,5 +149,19 @@ const CreateSession = (props) => {
     </ScrollView>
   )
 }
+
+const testStyles = StyleSheet.create({
+  container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+  textCon: {
+      width: 320,
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+  },
+});
+
 
 export default CreateSession;

@@ -30,6 +30,7 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
+  console.log('RADIUS', radius)
   const navigation = useNavigation();
   let interval;
   const [status, setStatus] = useState({ status: 'Active', notify: false });

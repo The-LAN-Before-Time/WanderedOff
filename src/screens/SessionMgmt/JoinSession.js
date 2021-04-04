@@ -19,7 +19,7 @@ const JoinSession = () => {
     .required()
     .min(3),
     //.test('is user's phone number', 'Invalid Phone Number', (val) => {
-    //   return val === userData.phoneNumber;
+    //   val === userData.phoneNumber;
     // })
   })
 
@@ -29,10 +29,8 @@ const JoinSession = () => {
     const sessionRef = firebase.firestore().collection('sessions').where('code', '==', values.newCode).orderBy('expirationDate', 'desc').limit(1);
     sessionRef.get().then((doc) => {
       doc.forEach((individualDoc) => {
-        // console.log('This is the individualDoc, mangos', individualDoc)
           session = individualDoc.data();
           session.id = individualDoc.id;
-          // console.log('This is the doc.id, cherries', individualDoc.id)
           console.log('This is our session, apples', session)
       })
       if (!session.id) {
