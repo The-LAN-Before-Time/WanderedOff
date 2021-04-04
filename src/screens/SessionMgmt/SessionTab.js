@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../../shared/UserContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar, ListItem } from 'react-native-elements';
+import LoadingScreen from "../../../shared/LoadingScreen";
 
 const SessionTab = (props) => {
   const userData = useContext(UserContext);
@@ -67,59 +68,64 @@ const SessionTab = (props) => {
     );
   };
 
-  return (
-    <View style={styles.containerFull}>
-      <View>
-        <View>
-          <View style={styles.horizontalContainer}>
-            <Text style={styles.heading}>Current Session</Text>
-            <Ionicons
-              name='settings-outline'
-              size={30}
-              style={styles.cog}
-              onPress={() => navigation.navigate('Session Options')}
-            />
-          </View>
-          <View style={styles.paddingLeft}>
-            <Text style={styles.text}>Name: {sessionInfo.name}</Text>
-            <Text style={styles.text}>Code: {sessionInfo.code}</Text>
-          </View>
-        </View>
+  if(!userList.length) {
+    return ( <LoadingScreen name="Session Management" />)
+  }
 
-        {/* <Text style={styles.label_underline}>Active Users:</Text> */}
-        <View style={styles.flatlist}>
-          <FlatList
-            data={userList}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.userId}
-          />
+    return (
+        <View style={styles.containerFull}>
+          <View>
+            <View>
+              <View style={styles.horizontalContainer}>
+                <Text style={styles.heading}>Current Session</Text>
+                <Ionicons
+                    name='settings-outline'
+                    size={30}
+                    style={styles.cog}
+                    onPress={() => navigation.navigate('Session Options')}
+                />
+              </View>
+              <View style={styles.paddingLeft}>
+                <Text style={styles.text}>Name: {sessionInfo.name}</Text>
+                <Text style={styles.text}>Code: {sessionInfo.code}</Text>
+              </View>
+            </View>
+
+            {/* <Text style={styles.label_underline}>Active Users:</Text> */}
+            <View style={styles.flatlist}>
+              <FlatList
+                  data={userList}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.userId}
+              />
+            </View>
+          </View>
+          <View style={styles.bottomButtons}>
+            <View>
+              <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => navigation.navigate('Update Status')}
+              >
+                <Text style={styles.buttonText}>Update Status</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity style={styles.button} onPress={onShare}>
+                <Text style={styles.buttonText}>Invite</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity
+                  style={styles.buttonDanger}
+                  onPress={() => navigation.navigate('Confirm Leave Session')}
+              >
+                <Text style={styles.buttonText}>Exit Session</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
-      <View style={styles.bottomButtons}>
-        <View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Update Status')}
-          >
-            <Text style={styles.buttonText}>Update Status</Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <TouchableOpacity style={styles.button} onPress={onShare}>
-            <Text style={styles.buttonText}>Invite</Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <TouchableOpacity
-            style={styles.buttonDanger}
-            onPress={() => navigation.navigate('Confirm Leave Session')}
-          >
-            <Text style={styles.buttonText}>Exit Session</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-  );
+    );
+
 };
 
 export default SessionTab;

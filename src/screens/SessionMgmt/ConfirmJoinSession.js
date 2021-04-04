@@ -16,7 +16,7 @@ const ConfirmJoinSession = (props) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.containerCenter}>
       <View style={styles.listContainer}>
         <Text style={styles.entityText}>You are about to join </Text>
         <View style={styles.center}>
