@@ -6,7 +6,7 @@ import {
   Text,
   ScrollView,
 } from 'react-native';
-import styles from '../../styles/formStyles';
+import styles from '../../styles/styles';
 import { UserContext } from '../../../shared/UserContext';
 import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';

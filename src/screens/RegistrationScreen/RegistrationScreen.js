@@ -3,7 +3,6 @@ import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { firebase } from '../../firebase/config'
-import formStyles from "../../styles/formStyles";
 import styles from "../../styles/styles";
 
 export default function RegistrationScreen({navigation, setUser}) {
@@ -57,9 +56,9 @@ export default function RegistrationScreen({navigation, setUser}) {
                     style={styles.logo}
                     source={require('../../../assets/icon.png')}
                 />
-                <Text style={formStyles.label}>Full Name</Text>
+                <Text style={styles.label}>Full Name</Text>
                 <TextInput
-                    style={formStyles.input}
+                    style={styles.input}
                     placeholder='Full Name'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setFullName(text)}
@@ -67,9 +66,9 @@ export default function RegistrationScreen({navigation, setUser}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <Text style={formStyles.label}>E-mail</Text>
+                <Text style={styles.label}>E-mail</Text>
                 <TextInput
-                    style={formStyles.input}
+                    style={styles.input}
                     placeholder='E-mail'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setEmail(text)}
@@ -77,9 +76,9 @@ export default function RegistrationScreen({navigation, setUser}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <Text style={formStyles.label}>Password</Text>
+                <Text style={styles.label}>Password</Text>
                 <TextInput
-                    style={formStyles.input}
+                    style={styles.input}
                     placeholderTextColor="#aaaaaa"
                     secureTextEntry
                     placeholder='Password'
@@ -88,9 +87,9 @@ export default function RegistrationScreen({navigation, setUser}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <Text style={formStyles.label}>Confirm Password</Text>
+                <Text style={styles.label}>Confirm Password</Text>
                 <TextInput
-                    style={formStyles.input}
+                    style={styles.input}
                     placeholderTextColor="#aaaaaa"
                     secureTextEntry
                     placeholder='Confirm Password'
@@ -100,9 +99,9 @@ export default function RegistrationScreen({navigation, setUser}) {
                     autoCapitalize="none"
                 />
                 <TouchableOpacity
-                    style={formStyles.button}
+                    style={styles.button}
                     onPress={() => onRegisterPress()}>
-                    <Text style={formStyles.buttonTitle}>Create account</Text>
+                    <Text style={styles.buttonTitle}>Create account</Text>
                 </TouchableOpacity>
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Already got an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>

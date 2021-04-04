@@ -7,7 +7,7 @@ const LoadingScreen = (props) => {
   return (
     <View style={styles.containerCenter}>
       <Text>Please wait...</Text>
-      <Image source={require('../assets/WanderedOff_Loading.gif')} />
+      <Image style={styles.loadingScreen} source={require('../assets/WanderedOff_Loading.gif')} />
       <Text>Loading {name}</Text>
     </View>
   );

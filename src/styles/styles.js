@@ -1,5 +1,16 @@
 import { StyleSheet } from 'react-native';
 
+const red = "#d9202b"
+const darkBlue = "#101c3d"
+const blue = "#0061b2"
+const lightBlue = "#59b3ff"
+const orange = "#dd9900"
+
+const lightGray = '#cccccc'
+const darkGray = "#2e2e2d"
+
+const green = "#198754"
+
 export default StyleSheet.create({
 
 /** Containers */
@@ -17,9 +28,9 @@ export default StyleSheet.create({
         padding: 20,
     },
     userContainer: {
-        borderBottomColor: '#cccccc',
+        borderBottomColor: lightGray,
         borderBottomWidth: 1,
-        borderTopColor: '#cccccc',
+        borderTopColor: lightGray,
         borderTopWidth: 1,
         paddingTop: 15,
         paddingBottom: 15,
@@ -27,7 +38,7 @@ export default StyleSheet.create({
     },
     entityContainer: {
         marginTop: 16,
-        borderBottomColor: '#cccccc',
+        borderBottomColor: lightGray,
         borderBottomWidth: 1,
         paddingBottom: 16
     },
@@ -48,12 +59,12 @@ export default StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        color: '#2e2e2d',
+        color: darkGray,
     },
     userName: {
         marginLeft: 30,
         fontSize: 20,
-        color: '#2e2e2d',
+        color: darkGray,
     },
     sessionName: {
         fontWeight: 'bold',
@@ -79,7 +90,7 @@ export default StyleSheet.create({
     mapButton: {
         position: 'absolute',
         borderRadius: 5,
-        backgroundColor: '#0061b2',
+        backgroundColor: blue,
         width: '60%',
         top: '50%',
         left: '20%',
@@ -96,7 +107,7 @@ export default StyleSheet.create({
 /** Mics */
     entityText: {
         fontSize: 20,
-        color: '#333333'
+        color: darkGray
     },
     logo: {
         flex: 1,
@@ -104,6 +115,9 @@ export default StyleSheet.create({
         width: 150,
         alignSelf: "center",
         margin: 30
+    },
+    switch:{
+        marginLeft: 15
     },
 
 /** Utility */
@@ -118,7 +132,7 @@ export default StyleSheet.create({
         paddingBottom: 5,
         paddingLeft: 15,
         fontWeight: 'bold',
-        borderBottomColor: '#cccccc',
+        borderBottomColor: lightGray,
         borderBottomWidth: 1,
     },
     circleGreen: {
@@ -126,19 +140,18 @@ export default StyleSheet.create({
         width: 15,
         height: 15,
         borderRadius: 150 / 2,
-        backgroundColor: '#198754',
+        backgroundColor: green,
     },
     circleRed: {
         marginRight: 10,
         width: 15,
         height: 15,
         borderRadius: 150 / 2,
-        backgroundColor: '#d9202b',
+        backgroundColor: red,
     },
     paddingLeft: {
         paddingLeft: 20,
     },
-
 
 /** Buttons */
     button: {
@@ -146,7 +159,7 @@ export default StyleSheet.create({
         height: 47,
         padding: 13,
         borderRadius: 5,
-        backgroundColor: '#0061b2',
+        backgroundColor: blue,
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 20,
@@ -158,9 +171,50 @@ export default StyleSheet.create({
         fontWeight: 'bold',
     },
 
+    buttonTitle: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: "bold"
+    },
+
+    buttonDanger: {
+        marginTop: 20,
+        height: 47,
+        padding: 13,
+        borderRadius: 5,
+        backgroundColor: red,
+        alignItems: "center",
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight:20,
+    },
+    buttonConfirm: {
+        marginTop: 20,
+        height: 47,
+        padding: 13,
+        borderRadius: 5,
+        backgroundColor: green,
+        alignItems: "center",
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight:20,
+    },
 
 
 /** Footer */
+    formContainer: {
+        flexDirection: 'row',
+        height: 80,
+        marginTop: 40,
+        marginBottom: 20,
+        flex: 1,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 30,
+        paddingRight: 30,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     footerView: {
         flex: 1,
         alignItems: "center",
@@ -168,12 +222,30 @@ export default StyleSheet.create({
     },
     footerText: {
         fontSize: 16,
-        color: '#2e2e2d'
+        color: darkGray
     },
     footerLink: {
-        color: "#0061b2",
+        color: blue,
         fontWeight: "bold",
         fontSize: 16
     },
+    label: {
+        fontSize: 18,
+        paddingTop: 15,
+        paddingBottom: 5,
+        paddingLeft: 15,
+        fontWeight: "bold"
+    },
+    input: {
+        height: 48,
+        borderRadius: 5,
+        overflow: 'hidden',
+        backgroundColor: 'white',
+        paddingLeft: 16,
+        flex: 1,
+        marginLeft: 15,
+        marginRight: 15
+    },
+
 
 })

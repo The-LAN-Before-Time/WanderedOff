@@ -3,7 +3,6 @@ import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import styles from '../../styles/styles';
-import formStyles from '../../styles/formStyles';
 
 import { firebase } from '../../firebase/config'
 
@@ -84,18 +83,18 @@ export default function LoginScreen({navigation, setUser }) {
     }
 
     return (
-        <View style={formStyles.container}>
+        <View style={styles.container}>
 
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always">
                 <Image
-                    style={formStyles.logo}
+                    style={styles.logo}
                     source={require('../../../assets/icon.png')}
                 />
-                <Text style={formStyles.label}>E-mail</Text>
+                <Text style={styles.label}>E-mail</Text>
                 <TextInput
-                    style={formStyles.input}
+                    style={styles.input}
                     placeholder='E-mail'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setEmail(text)}
@@ -103,9 +102,9 @@ export default function LoginScreen({navigation, setUser }) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <Text style={formStyles.label}>Password</Text>
+                <Text style={styles.label}>Password</Text>
                 <TextInput
-                    style={formStyles.input}
+                    style={styles.input}
                     placeholderTextColor="#aaaaaa"
                     secureTextEntry
                     placeholder='Password'
@@ -115,9 +114,9 @@ export default function LoginScreen({navigation, setUser }) {
                     autoCapitalize="none"
                 />
                 <TouchableOpacity
-                    style={formStyles.button}
+                    style={styles.button}
                     onPress={() => onLoginPress()}>
-                    <Text style={formStyles.buttonTitle}>Log in</Text>
+                    <Text style={styles.buttonTitle}>Log in</Text>
                 </TouchableOpacity>
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Don't have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text></Text>

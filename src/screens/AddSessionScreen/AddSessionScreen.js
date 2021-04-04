@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import formStyles from '../../styles/formStyles'
+
 import styles from '../../styles/styles';
 import { firebase } from '../../firebase/config';
 
@@ -96,9 +96,9 @@ export default function HomeScreen(props) {
 
   return (
     <View style={styles.container}>
-      <View style={formStyles.formContainer}>
+      <View style={styles.formContainer}>
         <TextInput
-          style={formStyles.input}
+          style={styles.input}
           placeholder='Add new entity'
           placeholderTextColor='#aaaaaa'
           onChangeText={(text) => setEntityText(text)}
@@ -106,15 +106,15 @@ export default function HomeScreen(props) {
           underlineColorAndroid='transparent'
           autoCapitalize='none'
         />
-        <TouchableOpacity style={formStyles.button} onPress={onAddButtonPress}>
-          <Text style={formStyles.buttonText}>Add</Text>
+        <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
+          <Text style={styles.buttonText}>Add</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={formStyles.button} onPress={onLogoutButtonPress}>
-          <Text style={formStyles.buttonText}>Logout</Text>
+        <TouchableOpacity style={styles.button} onPress={onLogoutButtonPress}>
+          <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </View>
       {entities && (
-        <View style={formStyles.listContainer}>
+        <View style={styles.listContainer}>
           <FlatList
             data={entities}
             renderItem={renderEntity}
