@@ -36,7 +36,10 @@ export default function RegistrationScreen({navigation, setUser}) {
                     .set(data)
                     .then(() => {
                         setUser(data)
-                        navigation.navigate('Tabbed Nav')
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'Tabbed Nav' }],
+                        });
                     })
                     .catch((error) => {
                         alert(error)
@@ -104,7 +107,7 @@ export default function RegistrationScreen({navigation, setUser}) {
                     <Text style={styles.buttonTitle}>Create account</Text>
                 </TouchableOpacity>
                 <View style={styles.footerView}>
-                    <Text style={styles.footerText}>Already got an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>
+                    <Text style={styles.footerText}>Already have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>
                 </View>
             </KeyboardAwareScrollView>
         </View>

@@ -71,7 +71,10 @@ export default function LoginScreen({navigation, setUser }) {
                         }
                         const user = firestoreDocument.data()
                         setUser(user);
-                        navigation.navigate('Tabbed Nav')
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'Tabbed Nav' }],
+                        });
                     })
                     .catch(error => {
                         alert(error)

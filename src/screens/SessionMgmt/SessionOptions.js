@@ -25,7 +25,7 @@ const OptionsScreen = ({ radius, setRadius }) => {
   return (
     <ScrollView>
       <View style={{ marginTop: 50 }}>
-        <Text>Options</Text>
+        <Text style={formStyles.label}>Radius (in meters)</Text>
       </View>
       <View style={styles.container}>
         <View>

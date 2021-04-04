@@ -30,6 +30,7 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
+  console.log('RADIUS', radius)
   const navigation = useNavigation();
   let interval;
   const [status, setStatus] = useState({ status: 'Active', notify: false });
@@ -75,7 +76,11 @@ const TabbedNavigation = (props) => {
       });
       console.log('USER LOCATION DELETED');
     }, 15000);
-    navigation.navigate('Get Started');
+    // navigation.navigate('Get Started');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Get Started'}],
+    });
     console.log('TIMEOUT SET');
   };
 
@@ -148,8 +153,8 @@ const TabbedNavigation = (props) => {
           activeUsers.list[id].inbounds
         ) {
           props.notify({
-            title: `${newUsers[id].fullName} has fallen out of range`,
-            title: `Your friend, ${newUsers[id].fullName}, has fallen out of range. Please check to make sure they are not lost`,
+            title: userData.id === id ? `You have fallen out of range` : `${newUsers[id].fullName} has fallen out of range`,
+            body: userData.id === id ? `Please move back into range` : `Please check to make sure they are not lost`,
           });
         }
         if (
@@ -184,7 +189,7 @@ const TabbedNavigation = (props) => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: 'blue',
+        activeTintColor: '#0061b2',
         inactiveTintColor: 'gray',
       }}
     >
