@@ -53,7 +53,10 @@ const CreateSession = (props) => {
       const session = Object.assign({}, values);
       session.id = response.id;
       setSessionId(session.id);
-      navigation.navigate("Sessions", {session});
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Sessions', params: {session} }],
+      });
     })
   }
 

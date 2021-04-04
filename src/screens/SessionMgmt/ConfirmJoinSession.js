@@ -9,7 +9,10 @@ const ConfirmJoinSession = (props) => {
 
   const handleSubmit = () => {
     props.setSessionId(props.route.params.session.id)
-    navigation.navigate("Sessions", props.route.params);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Sessions', params: props.route.params }],
+    });
   }
 
   return (

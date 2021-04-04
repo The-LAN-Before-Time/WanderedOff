@@ -76,7 +76,11 @@ const TabbedNavigation = (props) => {
       });
       console.log('USER LOCATION DELETED');
     }, 15000);
-    navigation.navigate('Get Started');
+    // navigation.navigate('Get Started');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Get Started'}],
+    });
     console.log('TIMEOUT SET');
   };
 
