@@ -50,6 +50,12 @@ export default StyleSheet.create({
         paddingTop: 6,
     },
 
+/** Loading */
+    loadingScreen: {
+        height: 900,
+        width: 500
+    },
+
 /** Sessions Mgmt */
     heading: {
         fontSize: 30,
