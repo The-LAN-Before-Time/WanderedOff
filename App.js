@@ -8,7 +8,7 @@ import {
   TabbedNavigator,
 } from './src/screens';
 import { Text, Platform, LogBox } from 'react-native';
-// LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
+LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
 import { decode, encode } from 'base-64';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
