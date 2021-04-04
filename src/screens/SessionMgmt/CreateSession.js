@@ -16,7 +16,7 @@ const CreateSession = (props) => {
   const [initialState, setInitialState] = useState({
     name: '',
     code: '',
-    radius: radiusTest,
+    radius: '20',
     centerMovable: false,
     owner: userData.id,
     active: true,
@@ -33,14 +33,14 @@ const CreateSession = (props) => {
     //.test('is user's phone number', 'Invalid Phone Number', (val) => {
     //   val === userData.phoneNumber;
     // })
-    radius: yup.string()
-    .required()
-    .test(
-      "valid radius",
-      "Radius must be greater than 20 meters",
-      (val) =>
-        val > "20"
-    ),
+    // radius: yup.string()
+    // .required()
+    // .test(
+    //   "valid radius",
+    //   "Radius must be greater than 20 meters",
+    //   (val) =>
+    //     val > "20"
+    // ),
   })
 
   const updateState = (values) => {
@@ -95,28 +95,25 @@ const CreateSession = (props) => {
             />
             <Text style={styles.errorText}>{props.touched.code && props.errors.code}</Text>
             <Text style={styles.label}>Enter radius (in meters)</Text>
-            {/* <View style={testStyles.container}>
+            <View style={testStyles.container}>
+            <Text>{props.values.radius + 'm'}</Text>
               <Slider
-                style={{width: 300, height: 30, borderRadius: 50, marginLeft: 50}}
-                placeholder="Enter radius"
-                value={radiusTest}
-                onValueChange={(val) => setRadiusTest(val)}
+                style={{width: 330, height: 30, borderRadius: 50}}
+                value={props.values.radius}
+                onValueChange={(value) => props.setFieldValue('radius', value)}
                 minimumValue={20}
-                maximumValue={1000}
+                maximumValue={1020}
                 step={100}
                 // value={String(initialState.radius)}
                 // onChangeText={(val) => setInitialState({...initialState, radius: val})}
               />
                 <View style={testStyles.textCon}>
                   <Text>20m</Text>
-                  <Text>
-                      {radiusTest + 'm'}
-                  </Text>
-                  <Text >1000m</Text>
+                  <Text >1020m</Text>
                 </View>
-            </View> */}
+            </View>
 
-            <TextInput
+            {/* <TextInput
               style={styles.input}
               placeholder="Enter radius"
               value={props.values.radius}
@@ -125,7 +122,7 @@ const CreateSession = (props) => {
               keyboardType='number-pad'
               // value={String(initialState.radius)}
               // onChangeText={(val) => setInitialState({...initialState, radius: val})}
-            />
+            /> */}
             <Text style={styles.errorText}>{props.touched.radius && props.errors.radius}</Text>
             <Text style={styles.label}>Center movable?</Text>
               <Switch

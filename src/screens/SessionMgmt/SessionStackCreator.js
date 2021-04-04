@@ -65,11 +65,7 @@ const SessionStackCreator = (props) => {
           <ConfirmLeaveSession {...props} leaveSession={leaveSession} />
         )}
       </Stack.Screen>
-      <Stack.Screen name='Session Options' options={{
-              headerBackImage: () => {
-                return null;
-              },
-            }}>
+      <Stack.Screen name='Session Options' >
         {(props) => (
           <SessionOptions {...props} setRadius={setRadius} radius={radius} />
         )}
