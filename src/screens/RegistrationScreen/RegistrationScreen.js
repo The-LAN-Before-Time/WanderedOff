@@ -60,7 +60,7 @@ export default function RegistrationScreen(props) {
                 keyboardShouldPersistTaps="always">
                 <Image
                     style={styles.logo}
-                    source={require('../../../assets/icon.png')}
+                    source={require('../../../assets/verticalLogo.png')}
                 />
                 <Text style={styles.label}>Full Name</Text>
                 <TextInput

@@ -31,51 +31,55 @@ export default function PhoneScreen( {navigation} ) {
             : undefined
     );
     const attemptInvisibleVerification = true;
-    let showPhoneNumberInput = true;
+
+    const [showPhoneNumberInput, setShowPhoneNumberInput] = useState(true);
 
     const phoneVerificationInput = () => {
-        return (
-            <ScrollView >
-                <Text style={styles.label}>Enter phone number</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="+1 999 999 9999"
-                    autoFocus
-                    autoCompleteType="tel"
-                    keyboardType="phone-pad"
-                    textContentType="telephoneNumber"
-                    onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
-                />
-                <TouchableOpacity
-                    style={styles.button}
-                    disabled={!phoneNumber}
-                    onPress={async () => {
-                      /** The FirebaseRecaptchaVerifierModal ref implements the
-                       *  FirebaseAuthApplicationVerifier interface and can be
-                       *  passed directly to `verifyPhoneNumber`. */
+        if(showPhoneNumberInput) {
+            return (
+                <ScrollView>
+                    <Text style={styles.label}>Enter phone number</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="+1 999 999 9999"
+                        autoFocus
+                        autoCompleteType="tel"
+                        keyboardType="phone-pad"
+                        textContentType="telephoneNumber"
+                        onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+                    />
+                    <TouchableOpacity
+                        style={styles.button}
+                        disabled={!phoneNumber}
+                        onPress={async () => {
+                            /** The FirebaseRecaptchaVerifierModal ref implements the
+                             *  FirebaseAuthApplicationVerifier interface and can be
+                             *  passed directly to `verifyPhoneNumber`. */
 
-                      try {
-                          const phoneProvider = new firebase.auth.PhoneAuthProvider();
-                          const cleanPhoneNumber =  phoneNumber.replace(/[^\d]/g, '')
-                          const verificationId = await phoneProvider.verifyPhoneNumber(
-                              `+${cleanPhoneNumber}`,
-                              recaptchaVerifier.current
-                          );
-                          setVerificationId(verificationId);
-                          showMessage({
-                              text: 'Verification code has been sent to your phone.',
-                          });
-                      } catch (err) {
-                          showMessage({ text: `Error: ${err.message} ${phoneNumber}`, color: 'red' });
-                      }
-                  }}
-                >
-                    <Text style={styles.buttonText}>Send Verification Code</Text>
-                </TouchableOpacity>
-            </ScrollView>
+                            try {
+                                const phoneProvider = new firebase.auth.PhoneAuthProvider();
+                                const cleanPhoneNumber = phoneNumber.replace(/[^\d]/g, '')
+                                const verificationId = await phoneProvider.verifyPhoneNumber(
+                                    `+${cleanPhoneNumber}`,
+                                    recaptchaVerifier.current
+                                );
+                                setVerificationId(verificationId);
+                                showMessage({
+                                    text: 'Verification code has been sent to your phone.',
+                                });
+                            } catch (err) {
+                                showMessage({text: `Error: ${err.message} ${phoneNumber}`, color: 'red'});
+                            }
+                        }}
+                    >
+                        <Text style={styles.buttonText}>Send Verification Code</Text>
+                    </TouchableOpacity>
+                </ScrollView>
             )
+        }
     }
     const verificationCodeInput = () => {
+        if(!showPhoneNumberInput){
         return (
             <ScrollView>
                 <Text style={styles.label}>Enter Verification code</Text>
@@ -83,6 +87,8 @@ export default function PhoneScreen( {navigation} ) {
                     style={styles.input}
                     editable={!!verificationId}
                     placeholder="123456"
+                    keyboardType="phone-pad"
+                    textContentType="oneTimeCode"
                     onChangeText={setVerificationCode}
                 />
                 <TouchableOpacity
@@ -109,6 +115,7 @@ export default function PhoneScreen( {navigation} ) {
                 ><Text style={styles.buttonText}>Confirm Verification Code</Text></TouchableOpacity>
             </ScrollView>
         )
+        }
     }
 
     return(
@@ -121,10 +128,10 @@ export default function PhoneScreen( {navigation} ) {
                 attemptInvisibleVerification={attemptInvisibleVerification}
             />
 
-            <Image style={styles.logo} source={require('../../../assets/icon.png')}  />
+            <Image style={styles.logo} source={require('../../../assets/verticalLogo.png')}  />
 
-            { showPhoneNumberInput ? phoneVerificationInput() : verificationCodeInput()  }
-
+            {  phoneVerificationInput() }
+            { verificationCodeInput()  }
 
             {message ? (
                 <TouchableOpacity
@@ -132,7 +139,7 @@ export default function PhoneScreen( {navigation} ) {
                         StyleSheet.absoluteFill,
                         { backgroundColor: 0xffffffee, justifyContent: 'center' },
                     ]}
-                    onPress={() => showMessage(undefined)}>
+                    onPress={() => { showMessage(undefined);  setShowPhoneNumberInput(false);}}>
                     <View >
                         <Text
                             style={{
@@ -143,11 +150,8 @@ export default function PhoneScreen( {navigation} ) {
                             }}>
                             {message.text}
                             <View>
-                                <View style={styles.button}>
+                                <View style={styles.button} >
                                     <Text style={styles.buttonText}
-                                          onPress={()=>{
-                                              showPhoneNumberInput = false
-                                          }}
                                     >Ok</Text>
                                 </View>
                             </View>
@@ -158,7 +162,9 @@ export default function PhoneScreen( {navigation} ) {
             ) : (
                 undefined
             )}
+            <View style={{marginTop: 20, padding: 20}}>
             {attemptInvisibleVerification && <FirebaseRecaptchaBanner />}
+            </View>
         </View>
         </ScrollView>
     )
