@@ -3,7 +3,7 @@ import { View, Button, Text, ScrollView, TextInput, TouchableOpacity, Switch, Sl
 import { useNavigation } from '@react-navigation/native';
 import { firebase } from '../../firebase/config';
 import { UserContext } from '../../../shared/UserContext'
-import styles from '../../styles/formStyles';
+import styles from '../../styles/styles';
 
 const CreateSession = (props) => {
   const { setSessionId, setRadius } = props;
