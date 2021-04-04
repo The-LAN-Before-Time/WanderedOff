@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
   LoginScreen,
+  PhoneScreen,
   RegistrationScreen,
   TabbedNavigator,
 } from './src/screens';
@@ -160,6 +161,10 @@ export default function App() {
           <Stack.Screen name='Login'>
             {(props) => <LoginScreen {...props} setUser={setUser} />}
           </Stack.Screen>
+          {/*<Stack.Screen name='Phone'>*/}
+          {/*  {(props) => <PhoneScreen {...props} />}*/}
+          {/*</Stack.Screen>*/}
+          {/*<Stack.Screen name='Verify Phone' component={PhoneScreen} />*/}
           <Stack.Screen name='Registration'>
             {(props) => <RegistrationScreen {...props} setUser={setUser} />}
           </Stack.Screen>
