@@ -40,7 +40,7 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-screens": "~2.15.2",
     "react-native-web": "~0.13.12",
-    "react-native-webview": "^11.3.2",
+    "react-native-webview": "^11.0.0",
     "rxjs": "^6.6.6",
     "yup": "^0.32.9"
   },

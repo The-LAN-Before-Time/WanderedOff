@@ -161,10 +161,9 @@ export default function App() {
           <Stack.Screen name='Login'>
             {(props) => <LoginScreen {...props} setUser={setUser} />}
           </Stack.Screen>
-          {/*<Stack.Screen name='Phone'>*/}
-          {/*  {(props) => <PhoneScreen {...props} />}*/}
-          {/*</Stack.Screen>*/}
-          {/*<Stack.Screen name='Verify Phone' component={PhoneScreen} />*/}
+          <Stack.Screen name='Verify Phone'>
+            {(props) => <PhoneScreen {...props} setUser={setUser} />}
+          </Stack.Screen>
           <Stack.Screen name='Registration'>
             {(props) => <RegistrationScreen {...props} setUser={setUser} />}
           </Stack.Screen>
