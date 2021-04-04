@@ -5,14 +5,14 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  containerFull: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
   containerCenter: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  containerFull: {
+    flex: 1,
+    justifyContent: 'space-between',
   },
   horizontalContainer: {
     flexDirection: 'row',

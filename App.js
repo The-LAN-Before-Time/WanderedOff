@@ -127,6 +127,7 @@ export default function App() {
     });
   }
 
+
   if (loading || !locationPermission) {
     return <LoadingScreen name='app' />;
   }

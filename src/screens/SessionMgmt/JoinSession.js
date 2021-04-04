@@ -4,8 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../../shared/UserContext'
 import { firebase } from '../../firebase/config';
 import { PinDropSharp } from '@material-ui/icons';
-import formStyles from '../../styles/formStyles';
-import styles from "../../styles/formStyles";
+
+import styles from "../../styles/styles";
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
@@ -56,7 +56,7 @@ const JoinSession = () => {
           <View>
             <Text style={styles.label}>Enter Code</Text>
             <TextInput
-              style={formStyles.input}
+              style={styles.input}
               placeholder="Enter code"
               value={props.values.newCode}
               onChangeText={props.handleChange('newCode')}

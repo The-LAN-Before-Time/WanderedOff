@@ -86,24 +86,5 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  switch: {
-    marginLeft: 15,
-  },
-  radioView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  switchView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-    paddingRight: 10,
-  },
-  errorText: {
-    color: '#d9202b',
-    marginBottom: 10,
-    marginTop: 6,
-    textAlign: 'center',
-  }
+
 });

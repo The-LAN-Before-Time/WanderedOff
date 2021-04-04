@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Image, SafeAreaView } from 'react-native';
 import Account from './Account';
-import styles from '../SessionMgmt/styles';
+import styles from '../../styles/styles';
 import Header from '../../../shared/Header';
 
 const AccountStackCreator = ({ setUser }) => {
