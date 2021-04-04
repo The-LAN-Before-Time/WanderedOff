@@ -1,6 +1,4 @@
 async function sendPushNotification(content, token) {
-  console.log('in notification function');
-  console.log('sending to ', token);
   if (Array.isArray(token)) {
     token.forEach((token) => sendPushNotification(content, token));
   } else {

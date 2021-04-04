@@ -91,13 +91,14 @@ const TabbedNavigation = (props) => {
   /** Updates location on session */
   useEffect(() => {
     console.log('USERNAME:', userData.fullName);
-    interval = setInterval(() =>
-      updateLocation(
-        sessionId,
-        userData,
-        Object.values(activeUsers.userList).map((user) => user.token),
-        3000
-      )
+    interval = setInterval(
+      () =>
+        updateLocation(
+          sessionId,
+          userData,
+          Object.values(activeUsers.userList).map((user) => user.token)
+        ),
+      10000
     );
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
