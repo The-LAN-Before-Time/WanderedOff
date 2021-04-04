@@ -8,6 +8,7 @@ import ConfirmJoinSession from './ConfirmJoinSession';
 import JoinSession from './JoinSession';
 import ConfirmLeaveSession from './ConfirmLeaveSession';
 import SessionOptions from './SessionOptions';
+import StatusUpdate from './SessionStatus';
 
 const SessionStackCreator = (props) => {
   const {
@@ -18,6 +19,8 @@ const SessionStackCreator = (props) => {
     setRadius,
     radius,
     sessionId,
+    setStatus,
+    status,
   } = props;
   const Stack = createStackNavigator();
 
@@ -62,6 +65,11 @@ const SessionStackCreator = (props) => {
       <Stack.Screen name='Session Options'>
         {(props) => (
           <SessionOptions {...props} setRadius={setRadius} radius={radius} />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name='Update Status'>
+        {(props) => (
+          <StatusUpdate {...props} setStatus={setStatus} status={status} />
         )}
       </Stack.Screen>
     </Stack.Navigator>
