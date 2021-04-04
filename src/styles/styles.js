@@ -16,7 +16,7 @@ export default StyleSheet.create({
 /** Containers */
     container: {
         flex: 1,
-        alignItems: 'center'
+    justifyContent: 'center',
     },
     containerCenter: {
         flex: 1,
@@ -252,6 +252,21 @@ export default StyleSheet.create({
         marginLeft: 15,
         marginRight: 15
     },
-
-
+    radioView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    switchView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+        paddingRight: 10,
+    },
+    errorText: {
+        color: '#d9202b',
+        marginBottom: 10,
+        marginTop: 6,
+        textAlign: 'center',
+    }
 })
