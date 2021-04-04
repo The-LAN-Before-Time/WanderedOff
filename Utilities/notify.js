@@ -4,7 +4,7 @@ async function sendPushNotification(content, token) {
   if (Array.isArray(token)) {
     token.forEach((token) => sendPushNotification(content, token));
   } else {
-    console.log('recieved content: ', content);
+    // console.log('recieved content: ', content);
     const message = {
       to: token,
       sound: 'default',

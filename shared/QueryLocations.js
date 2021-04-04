@@ -1,9 +1,8 @@
 import { firebase } from '../src/firebase/config';
 
 export default function (sessionId, setNewUsers) {
-  console.log('attempting query');
+  // console.log('attempting query');
   if (sessionId) {
-    console.log('WHAT IS THIS SESSIONID', sessionId);
     const query = firebase
       .firestore()
       .collection('sessionUsers')

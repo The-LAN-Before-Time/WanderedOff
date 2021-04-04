@@ -84,8 +84,8 @@ export default function App() {
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener(
       (notification) => {
-        console.log('what is notification?: ', notification);
         const { data } = notification.request.content;
+        console.log('notification action: ', data.action);
         switch (data.action) {
           case 'UPDATE_LOCATION':
             const newUserLocations = {

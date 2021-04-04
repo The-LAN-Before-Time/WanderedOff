@@ -14,7 +14,11 @@ import { Ionicons } from '@expo/vector-icons';
 import notify from '../../../Utilities/notify';
 
 const TabbedNavigation = (props) => {
-  console.log('here is the current locations ', props.userLocations);
+  console.log(
+    'You have locations for ',
+    Object.keys(props.userLocations.list),
+    ' users.'
+  );
   const userData = useContext(UserContext);
   // const [sessionId, setSessionId] = useState(props.route.params.session.id);
   const [sessionId, setSessionId] = useState(null);
@@ -31,7 +35,7 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
-  console.log('RADIUS', radius);
+  // console.log('RADIUS', radius);
   const navigation = useNavigation();
   let interval;
   const [status, setStatus] = useState({ status: 'Active', notify: false });
