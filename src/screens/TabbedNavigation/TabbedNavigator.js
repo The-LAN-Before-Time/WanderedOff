@@ -217,6 +217,7 @@ const TabbedNavigation = (props) => {
             region={region}
             radius={radius}
             loaded={activeUsers.loaded}
+            sessionId={sessionId}
           />
         )}
       </Tab.Screen>

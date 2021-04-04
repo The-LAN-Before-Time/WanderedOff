@@ -7,12 +7,14 @@ import { useNavigation } from '@react-navigation/native';
 import styles from '../../styles/styles';
 import { Avatar } from 'react-native-elements';
 
+
 export default function MapScreen({
   center,
   activeUsers,
   region,
   radius,
   loaded,
+  sessionId,
 }) {
   const navigation = useNavigation();
   let mapRef = useRef(null);
@@ -52,6 +54,8 @@ export default function MapScreen({
         edgePadding: defaultPadding,
         animated: true,
       });
+    } else {
+      console.log('There is no center')
     }
   };
 
@@ -145,16 +149,18 @@ export default function MapScreen({
         source={require('../../../assets/logoHeader.png')}
         style={styles.mapHeader}
       />
-      {loaded ? (
-        <></>
-      ) : (
-        <TouchableOpacity
+
+      {(loaded && userList.length && sessionId.length ? (<></>) : !userList.length && sessionId ? ( <TouchableOpacity
+          // onPress={() => navigation.navigate('Get Started')}
+          style={styles.mapButton}
+        >
+          <Text style={styles.buttonText}>Starting your session...</Text>
+        </TouchableOpacity>) : (<TouchableOpacity
           onPress={() => navigation.navigate('Get Started')}
           style={styles.mapButton}
         >
-          <Text style={styles.buttonText}>Push To Start Session</Text>
-        </TouchableOpacity>
-      )}
+          <Text style={styles.buttonText}>Tap to start session</Text>
+        </TouchableOpacity>))}
     </>
   );
 }
