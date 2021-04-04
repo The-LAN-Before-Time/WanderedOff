@@ -11,15 +11,16 @@ import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';
 import AccountStackCreator from '../AccountScreen/AccountStackCreator';
 import { Ionicons } from '@expo/vector-icons';
+import notify from '../../../Utilities/notify';
 
 const TabbedNavigation = (props) => {
+  console.log('here is the current locations ', props.userLocations);
   const userData = useContext(UserContext);
   // const [sessionId, setSessionId] = useState(props.route.params.session.id);
   const [sessionId, setSessionId] = useState(null);
   const [activeUsers, setActiveUsers] = useState({
-    list: {},
+    userList: {},
     loaded: false,
-    center: {},
   });
   const [newUsers, setNewUsers] = useState({});
   const Tab = createBottomTabNavigator();
@@ -30,7 +31,7 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
-  console.log('RADIUS', radius)
+  console.log('RADIUS', radius);
   const navigation = useNavigation();
   let interval;
   const [status, setStatus] = useState({ status: 'Active', notify: false });
@@ -59,9 +60,8 @@ const TabbedNavigation = (props) => {
     const oldSessionId = sessionId;
     setSessionId('');
     setActiveUsers({
-      list: {},
+      userList: {},
       loaded: false,
-      center: {},
     });
     console.log('ATTEMPTING TO REMOVE ID', oldSessionId);
     const userLocationRef = firebase
@@ -79,7 +79,7 @@ const TabbedNavigation = (props) => {
     // navigation.navigate('Get Started');
     navigation.reset({
       index: 0,
-      routes: [{ name: 'Get Started'}],
+      routes: [{ name: 'Get Started' }],
     });
     console.log('TIMEOUT SET');
   };
@@ -87,9 +87,13 @@ const TabbedNavigation = (props) => {
   /** Updates location on session */
   useEffect(() => {
     console.log('USERNAME:', userData.fullName);
-    interval = setInterval(
-      () => updateLocation(sessionId, userData, status),
-      3000
+    interval = setInterval(() =>
+      updateLocation(
+        sessionId,
+        userData,
+        Object.values(activeUsers.userList).map((user) => user.token),
+        3000
+      )
     );
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
@@ -98,7 +102,7 @@ const TabbedNavigation = (props) => {
       unsubscribeToQuery();
       console.log('UNMOUNT COMPLETED');
     };
-  }, [sessionId, userData, status]);
+  }, [sessionId, userData, activeUsers]);
 
   /** Set initial region */
   useEffect(() => setInitialRegion(), []);
@@ -107,27 +111,20 @@ const TabbedNavigation = (props) => {
   useEffect(() => {
     if (Object.keys(newUsers).length) {
       let max = 0;
-      let lats = 0;
-      let longs = 0;
-      let center = {};
-
       /**
        *  Checks Active Users List and sets new users with the next index id
        *  and adds & sets inbound property
        *  */
       Object.entries(newUsers).forEach(([id, user]) => {
-        lats += user.location.latitude;
-        longs += user.location.longitude;
-
-        if (!activeUsers.list[id]) {
+        if (!activeUsers.userList[id]) {
           if (activeUsers.loaded && id !== userData.id) {
-            props.notify({
+            notify({
               title: `${newUsers[id].fullName} has joined!`,
-              title: `Your friend, ${newUsers[id].fullName}, has joined your session`,
+              body: `Your friend, ${newUsers[id].fullName}, has joined your session`,
+              data: { notify: newUsers[id] !== userData.id },
             });
           }
-
-          Object.values(activeUsers.list).forEach((userData) => {
+          Object.values(activeUsers.userList).forEach((userData) => {
             if (userData.index > max) {
               max = userData.index;
             }
@@ -135,40 +132,44 @@ const TabbedNavigation = (props) => {
           max++;
           newUsers[id].index = max;
         } else {
-          newUsers[id].index = activeUsers.list[id].index;
+          newUsers[id].index = activeUsers.userList[id].index;
         }
       });
 
-      /** Set Center Radius */
-      center.latitude = lats / Object.keys(newUsers).length;
-      center.longitude = longs / Object.keys(newUsers).length;
-      Object.entries(newUsers).forEach(([id, user]) => {
-        newUsers[id].inbounds = haversine(center, newUsers[id].location, {
-          unit: 'meter',
-          threshold: radius,
-        });
-        if (
-          !newUsers[id].inbounds &&
-          activeUsers.list[id] &&
-          activeUsers.list[id].inbounds
-        ) {
-          props.notify({
-            title: userData.id === id ? `You have fallen out of range` : `${newUsers[id].fullName} has fallen out of range`,
-            body: userData.id === id ? `Please move back into range` : `Please check to make sure they are not lost`,
-          });
-        }
-        if (
-          newUsers[id].notify &&
-          activeUsers.list[id] &&
-          activeUsers.list[id].status !== newUsers[id].status
-        ) {
-          props.notify({
-            title: `${newUsers[id].fullName} is ${activeUsers.list[id].status}`,
-            title: `Your friend, ${newUsers[id].fullName}, would like you to know their status has changed and they are currently ${activeUsers.list[id].status}`,
-          });
-        }
-      });
-      setActiveUsers({ list: newUsers, loaded: true, center });
+      // Object.entries(newUsers).forEach(([id, user]) => {
+      //   newUsers[id].inbounds = haversine(center, newUsers[id].location, {
+      //     unit: 'meter',
+      //     threshold: radius,
+      //   });
+      //   if (
+      //     !newUsers[id].inbounds &&
+      //     activeUsers.list[id] &&
+      //     activeUsers.list[id].inbounds
+      //   ) {
+      //     notify({
+      //       title:
+      //         userData.id === id
+      //           ? `You have fallen out of range`
+      //           : `${newUsers[id].fullName} has fallen out of range`,
+      //       body:
+      //         userData.id === id
+      //           ? `Please move back into range`
+      //           : `Please check to make sure they are not lost`,
+      //     });
+      //   }
+      //   if (
+      //     newUsers[id].notify &&
+      //     activeUsers.list[id] &&
+      //     activeUsers.list[id].status !== newUsers[id].status
+      //   ) {
+      //     notify({
+      //       title: `${newUsers[id].fullName} is ${activeUsers.list[id].status}`,
+      //       body: `Your friend, ${newUsers[id].fullName}, would like you to know their status has changed and they are currently ${activeUsers.list[id].status}`,
+      //     });
+      //   }
+      // });
+
+      setActiveUsers({ userList: newUsers, loaded: true });
     }
   }, [newUsers]);
 
@@ -197,7 +198,7 @@ const TabbedNavigation = (props) => {
         {() => (
           <SessionStackCreator
             setActiveUsers={setActiveUsers}
-            activeUsers={activeUsers.list}
+            activeUsers={activeUsers.userList}
             setSessionId={setSessionId}
             sessionId={sessionId}
             leaveSession={leaveSession}
@@ -205,6 +206,8 @@ const TabbedNavigation = (props) => {
             radius={radius}
             setStatus={setStatus}
             status={status}
+            notify={notify}
+            token={props.token}
           />
         )}
       </Tab.Screen>
@@ -212,11 +215,12 @@ const TabbedNavigation = (props) => {
         {() => (
           <MapScreen
             {...props}
-            activeUsers={activeUsers.list}
-            center={activeUsers.center}
+            activeUsers={activeUsers.userList}
+            userLocations={props.userLocations.list}
+            center={props.userLocations.center}
             region={region}
             radius={radius}
-            loaded={activeUsers.loaded}
+            loaded={activeUsers.loaded && props.userLocations.loaded}
           />
         )}
       </Tab.Screen>
@@ -230,7 +234,7 @@ const TabbedNavigation = (props) => {
           <AccountStackCreator
             setUser={props.setUser}
             sessionId={sessionId}
-            activeUsers={activeUsers.list}
+            activeUsers={activeUsers.userList}
             {...props}
           />
         )}

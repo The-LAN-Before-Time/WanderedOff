@@ -1,14 +1,13 @@
-import { firebase } from '../src/firebase/config';
+import notify from '../Utilities/notify';
 // import {useContext} from 'react';
 // import { UserContext } from './UserContext';
 
-export default function (sessionId, user, status) {
-  console.log('updating with this status: ', status);
+export default function (sessionId, user, tokens) {
   if (!user.id || !sessionId) return;
-  const userLocationRef = firebase
-    .firestore()
-    .collection('sessionUsers')
-    .doc(sessionId);
+  // const userLocationRef = firebase
+  //   .firestore()
+  //   .collection('sessionUsers')
+  //   .doc(sessionId);
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const location = {
@@ -18,16 +17,24 @@ export default function (sessionId, user, status) {
       console.log('position set, attempting send');
       if (location) {
         console.log('sending');
-        userLocationRef.update({
-          [user.id]: {
-            lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
-            location,
-            fullName: user.fullName,
-            status: status.status || 'active',
-            userId: user.id,
-            notify: status.notify,
+        notify(
+          {
+            data: {
+              location,
+              action: 'UPDATE_LOCATION',
+              userId: user.id,
+              notify: false,
+              lastUpdated: new Date(),
+            },
           },
-        });
+          tokens
+        );
+        // userLocationRef.update({
+        //   [user.id]: {
+        //     lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
+        //     location,
+        //   },
+        // });
         console.log('sent');
       }
     },

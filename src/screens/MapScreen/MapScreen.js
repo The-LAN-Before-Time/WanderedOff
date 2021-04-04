@@ -8,11 +8,12 @@ import styles from '../../styles/styles';
 import { Avatar } from 'react-native-elements';
 
 export default function MapScreen({
-  center,
   activeUsers,
   region,
   radius,
   loaded,
+  userLocations,
+  center,
 }) {
   const navigation = useNavigation();
   let mapRef = useRef(null);
@@ -20,14 +21,12 @@ export default function MapScreen({
   const [mapReady, setMapReady] = useState(false);
   const colors = ['red', 'green', 'purple', 'orange'];
   const defaultPadding = { top: 20, right: 20, bottom: 20, left: 20 };
-  const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index);
+  const userList = Object.values(activeUsers);
+
   const goToInitialRegion = () => {
     if (mapReady && loaded) {
       /* adds outer points of radius circle to fit to map */
-      let coords = userList.map((user) => ({
-        latitude: user.location.latitude,
-        longitude: user.location.longitude,
-      }));
+      let coords = Object.values(userLocations);
       coords.push({
         latitude: center.latitude + radius * 0.0000089,
         longitude: center.longitude,
@@ -80,18 +79,19 @@ export default function MapScreen({
         showsMyLocationButton={false}
       >
         {userList
-          .filter((user) => user.userId !== userData.id)
+          .filter(
+            (user) => user.userId !== userData.id && !userLocations[user.id]
+          )
           .map((user) => {
             if (user.userId) {
               return (
                 <Marker
                   key={user.userId}
                   coordinate={{
-                    latitude: user.location.latitude,
-                    longitude: user.location.longitude,
+                    latitude: userLocations[user.id].location.latitude,
+                    longitude: userLocations[user.id].location.longitude,
                   }}
                   title={`${user.fullName} (${user.status})`}
-                  // pinColor={colors[user.index % colors.length]}
                 >
                   <View
                     style={{
@@ -101,18 +101,6 @@ export default function MapScreen({
                       border: 'black',
                     }}
                   >
-                    {/* <Text
-                                        style={{
-                                            color: colors[user.index % colors.length],
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        {user.fullName
-                                            .split(' ')
-                                            .map((name) => name[0])
-                                            .join('')}
-                                    </Text> */}
-                    {/* <Ionicons name='person-circle' size={24} color={colors[user.index % colors.length]}/> */}
                     <Avatar
                       rounded
                       title={user.fullName

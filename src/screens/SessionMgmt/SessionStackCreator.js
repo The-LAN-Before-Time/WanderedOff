@@ -22,6 +22,8 @@ const SessionStackCreator = (props) => {
     sessionId,
     setStatus,
     status,
+    notify,
+    token,
   } = props;
   const Stack = createStackNavigator();
 
@@ -32,20 +34,39 @@ const SessionStackCreator = (props) => {
         headerShown: true,
         headerTitle: <Header />,
         headerBackTitleVisible: false,
-        headerBackImage: () => <Ionicons name="arrow-back-outline" size={30} style={{ marginLeft: 10, marginBottom: 6 }}/>
+        headerBackImage: () => (
+          <Ionicons
+            name='arrow-back-outline'
+            size={30}
+            style={{ marginLeft: 10, marginBottom: 6 }}
+          />
+        ),
       }}
     >
-      <Stack.Screen name='Get Started' component={SessionCreateJoin} />
+      <Stack.Screen name='Get Started'>
+        {(props) => <SessionCreateJoin {...props} notify={notify} />}
+      </Stack.Screen>
 
       <Stack.Screen name='Create Session'>
-        {(props) => <CreateSession {...props} setRadius={setRadius} setSessionId={setSessionId} />}
+        {(props) => (
+          <CreateSession
+            {...props}
+            setRadius={setRadius}
+            setSessionId={setSessionId}
+            token={token}
+          />
+        )}
       </Stack.Screen>
 
       <Stack.Screen name='Join Session' component={JoinSession} />
 
       <Stack.Screen name='Confirm'>
         {(props) => (
-          <ConfirmJoinSession {...props} setSessionId={setSessionId} />
+          <ConfirmJoinSession
+            {...props}
+            setSessionId={setSessionId}
+            token={token}
+          />
         )}
       </Stack.Screen>
 
@@ -65,11 +86,14 @@ const SessionStackCreator = (props) => {
           <ConfirmLeaveSession {...props} leaveSession={leaveSession} />
         )}
       </Stack.Screen>
-      <Stack.Screen name='Session Options' options={{
-              headerBackImage: () => {
-                return null;
-              },
-            }}>
+      <Stack.Screen
+        name='Session Options'
+        options={{
+          headerBackImage: () => {
+            return null;
+          },
+        }}
+      >
         {(props) => (
           <SessionOptions {...props} setRadius={setRadius} radius={radius} />
         )}
