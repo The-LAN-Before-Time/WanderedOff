@@ -100,4 +100,10 @@ export default StyleSheet.create({
     marginBottom: 20,
     paddingRight: 10,
   },
+  errorText: {
+    color: '#d9202b',
+    marginBottom: 10,
+    marginTop: 6,
+    textAlign: 'center',
+  }
 });

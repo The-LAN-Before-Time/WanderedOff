@@ -10,19 +10,24 @@ import styles from '../../styles/formStyles';
 import { UserContext } from '../../../shared/UserContext';
 import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 
 const Account = ({ setUser }) => {
   const navigation = useNavigation();
   const userData = useContext(UserContext);
-  const [newDisplayName, setNewDisplayName] = useState(userData.fullName);
+  // const [newDisplayName, setNewDisplayName] = useState(userData.fullName);
 
-  const handleSubmit = () => {
-    // const userSessionRef = firebase.firestore().collection('sessionUsers').doc(sessionId);
-    // userSessionRef.update({
-    //   [userData.id]: { fullName: newDisplayName },
+  const reviewSchema = yup.object({
+    newDisplayName: yup.string(),
+    //.test('is user's phone number', 'Invalid Phone Number', (val) => {
+    //   val === userData.phoneNumber;
     // })
+  })
+
+  const updateName = (values) => {
     const userRef = firebase.firestore().collection('users').doc(userData.id);
-    userRef.update({ fullName: newDisplayName });
+    userRef.update({ fullName: values.newDisplayName });
   };
 
   const onLogoutButtonPress = () => {
@@ -54,25 +59,36 @@ const Account = ({ setUser }) => {
 
   return (
     <ScrollView>
-      <View>
-        <Text style={styles.label}>Display Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder='display name'
-          value={newDisplayName}
-          onChangeText={(val) => setNewDisplayName(val)}
-        />
-        <View>
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.buttonText}>Update</Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <TouchableOpacity style={styles.button} onPress={onLogoutButtonPress}>
-            <Text style={styles.buttonText}>Logout</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Formik
+        initialValues={{ newDisplayName: userData.fullName }}
+        validationSchema={reviewSchema}
+        onSubmit={(values) => {
+          updateName(values);
+        }}
+      >
+        {(props) => (
+          <View>
+            <Text style={styles.label}>Display Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder='display name'
+              value={props.values.newDisplayName}
+              onChangeText={props.handleChange('newDisplayName')}
+            />
+            <Text style={styles.errorText}>{props.touched.newDisplayName && props.errors.newDisplayName}</Text>
+            <View>
+              <TouchableOpacity style={styles.button} onPress={props.handleSubmit}>
+                <Text style={styles.buttonText}>Update</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity style={styles.button} onPress={onLogoutButtonPress}>
+                <Text style={styles.buttonText}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </Formik>
     </ScrollView>
   );
 };
