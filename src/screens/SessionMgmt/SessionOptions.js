@@ -11,7 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import formStyles from '../../styles/formStyles';
+import styles from '../../styles/styles';
 
 const OptionsScreen = ({ radius, setRadius }) => {
   const [newRadius, setNewRadius] = useState(radius);
@@ -24,23 +24,25 @@ const OptionsScreen = ({ radius, setRadius }) => {
 
   return (
     <ScrollView>
-      <View style={{ marginTop: 50 }}>
-        <Text>Options</Text>
-      </View>
-      <View style={formStyles.container}>
+      <View style={styles.container}>
         <View>
-          <TextInput
-            style={formStyles.input}
-            placeholder='Enter radius'
-            value={String(newRadius)}
-            onChangeText={(val) => setNewRadius(val)}
-            keyboardType='number-pad'
-          />
+          <Text style={styles.label}>Radius (in meters)</Text>
         </View>
         <View>
-          <TouchableOpacity style={formStyles.button} onPress={handleSubmit}>
-            <Text style={formStyles.buttonTitle}>Update Session</Text>
-          </TouchableOpacity>
+          <View>
+            <TextInput
+              style={styles.input}
+              placeholder='Enter radius'
+              value={String(newRadius)}
+              onChangeText={(val) => setNewRadius(val)}
+              keyboardType='number-pad'
+            />
+          </View>
+          <View>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonTitle}>Update Session</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ScrollView>

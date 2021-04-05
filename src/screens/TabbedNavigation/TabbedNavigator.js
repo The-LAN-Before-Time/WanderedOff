@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text } from 'react-native';
 import updateLocation from '../../../shared/UpdateLocation';
 import queryLocations from '../../../shared/QueryLocations';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapScreen from '../MapScreen/MapScreen';
-import OptionsScreen from '../Options/OptionsScreen';
 import { UserContext } from '../../../shared/UserContext';
 // import LeaveSession from '../../../shared/LeaveSession';
 import SessionStackCreator from '../SessionMgmt/SessionStackCreator';
 import haversine from 'haversine';
 import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';
-import Account from '../AccountScreen/Account';
+import AccountStackCreator from '../AccountScreen/AccountStackCreator';
+import { Ionicons } from '@expo/vector-icons';
+import notify from '../../../shared/notify';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -33,6 +33,7 @@ const TabbedNavigation = (props) => {
   const [radius, setRadius] = useState(4000);
   const navigation = useNavigation();
   let interval;
+  const [status, setStatus] = useState({ status: 'Active', notify: false });
 
   /** Set the initial region on user */
   const setInitialRegion = () => {
@@ -75,22 +76,28 @@ const TabbedNavigation = (props) => {
       });
       console.log('USER LOCATION DELETED');
     }, 15000);
-    navigation.navigate('Get Started');
+    // navigation.navigate('Get Started');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Get Started' }],
+    });
     console.log('TIMEOUT SET');
   };
 
   /** Updates location on session */
   useEffect(() => {
-    console.log('USERNAME:', userData.fullName)
-    interval = setInterval(() => updateLocation(sessionId, userData), 3000);
+    console.log('USERNAME:', userData.fullName);
+    interval = setInterval(
+      () => updateLocation(sessionId, userData, status),
+      3000
+    );
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
       console.log('ATTEMPTING TO UNOUNT');
       clearInterval(interval);
       unsubscribeToQuery();
-      console.log('UNMOUNT COMPLETED');
     };
-  }, [sessionId, userData]);
+  }, [sessionId, userData, status]);
 
   /** Set initial region */
   useEffect(() => setInitialRegion(), []);
@@ -112,6 +119,16 @@ const TabbedNavigation = (props) => {
         longs += user.location.longitude;
 
         if (!activeUsers.list[id]) {
+          if (activeUsers.loaded && id !== userData.id) {
+            notify(
+              {
+                title: `${newUsers[id].fullName} has joined!`,
+                body: `Your friend, ${newUsers[id].fullName}, has joined your session`,
+              },
+              props.token
+            );
+          }
+
           Object.values(activeUsers.list).forEach((userData) => {
             if (userData.index > max) {
               max = userData.index;
@@ -137,20 +154,60 @@ const TabbedNavigation = (props) => {
           activeUsers.list[id] &&
           activeUsers.list[id].inbounds
         ) {
-          props.notify({
-            title: `${newUsers[id].fullName} has fallen out of range`,
-            title: `Your friend, ${newUsers[id].fullName}, has fallen out of range. Please check to make sure they are not lost`,
-          });
+          notify(
+            {
+              title:
+                userData.id === id
+                  ? `You have fallen out of range`
+                  : `${newUsers[id].fullName} has fallen out of range`,
+              body:
+                userData.id === id
+                  ? `Please move back into range`
+                  : `Please check to make sure they are not lost`,
+            },
+            props.token
+          );
+        }
+        if (
+          newUsers[id].notify &&
+          activeUsers.list[id] &&
+          activeUsers.list[id].status !== newUsers[id].status &&
+          id !== userData.id
+        ) {
+          notify(
+            {
+              title: `${newUsers[id].fullName} is ${activeUsers.list[id].status}`,
+              body: `Your friend, ${newUsers[id].fullName}, would like you to know their status has changed and they are currently ${newUsers[id].status}`,
+            },
+            props.token
+          );
         }
       });
-
       setActiveUsers({ list: newUsers, loaded: true, center });
     }
   }, [newUsers]);
 
   // if (activeUsers.loaded) {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Sessions') {
+            iconName = focused ? 'people-circle-outline' : 'people-outline';
+          } else if (route.name === 'Account') {
+            iconName = focused ? 'person-circle-outline' : 'person-outline';
+          } else {
+            iconName = focused ? 'navigate-circle-outline' : 'navigate-outline';
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: '#0061b2',
+        inactiveTintColor: 'gray',
+      }}
+    >
       <Tab.Screen name='Sessions'>
         {() => (
           <SessionStackCreator
@@ -161,6 +218,8 @@ const TabbedNavigation = (props) => {
             leaveSession={leaveSession}
             setRadius={setRadius}
             radius={radius}
+            setStatus={setStatus}
+            status={status}
           />
         )}
       </Tab.Screen>
@@ -173,12 +232,18 @@ const TabbedNavigation = (props) => {
             region={region}
             radius={radius}
             loaded={activeUsers.loaded}
+            sessionId={sessionId}
           />
         )}
       </Tab.Screen>
-      <Tab.Screen name='Account'>
+      <Tab.Screen
+        name='Account'
+        options={{
+          headerTitle: (props) => <Header {...props} title='Wandered Off' />,
+        }}
+      >
         {() => (
-          <Account
+          <AccountStackCreator
             setUser={props.setUser}
             sessionId={sessionId}
             activeUsers={activeUsers.list}
@@ -188,15 +253,6 @@ const TabbedNavigation = (props) => {
       </Tab.Screen>
     </Tab.Navigator>
   );
-  //   } else {
-  //     return (
-  //       <View>
-  //         <Text>Loading</Text>
-  //       </View>
-  //     );
-  //  }
 };
 
 export default TabbedNavigation;
-
-//stop running?

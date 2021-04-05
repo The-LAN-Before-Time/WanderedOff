@@ -1,8 +1,6 @@
 import { firebase } from '../src/firebase/config';
-// import {useContext} from 'react';
-// import { UserContext } from './UserContext';
 
-export default function (sessionId, user) {
+export default function (sessionId, user, status) {
   if (!user.id || !sessionId) return;
   const userLocationRef = firebase
     .firestore()
@@ -14,19 +12,17 @@ export default function (sessionId, user) {
         latitude: parseFloat(position.coords.latitude),
         longitude: parseFloat(position.coords.longitude),
       };
-      console.log('position set, attempting send');
       if (location) {
-        console.log('sending');
         userLocationRef.update({
           [user.id]: {
             lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
             location,
             fullName: user.fullName,
-            status: user.status || 'active',
+            status: status.status || 'active',
             userId: user.id,
+            notify: status.notify,
           },
         });
-        console.log('sent');
       }
     },
     (error) => console.log(error.message),

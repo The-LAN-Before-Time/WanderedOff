@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import {View, Button, Text, ScrollView, FlatList, Modal, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import styles from "../../styles/formStyles";
+import styles from "../../styles/styles";
 
 const ConfirmLeaveSession = ({ leaveSession }) => {
   const navigation = useNavigation();
