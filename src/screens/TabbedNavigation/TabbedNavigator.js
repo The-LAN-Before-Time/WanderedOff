@@ -11,6 +11,7 @@ import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';
 import AccountStackCreator from '../AccountScreen/AccountStackCreator';
 import { Ionicons } from '@expo/vector-icons';
+import notify from '../../../shared/notify';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -30,7 +31,6 @@ const TabbedNavigation = (props) => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(4000);
-  console.log('RADIUS', radius)
   const navigation = useNavigation();
   let interval;
   const [status, setStatus] = useState({ status: 'Active', notify: false });
@@ -79,7 +79,7 @@ const TabbedNavigation = (props) => {
     // navigation.navigate('Get Started');
     navigation.reset({
       index: 0,
-      routes: [{ name: 'Get Started'}],
+      routes: [{ name: 'Get Started' }],
     });
     console.log('TIMEOUT SET');
   };
@@ -96,7 +96,6 @@ const TabbedNavigation = (props) => {
       console.log('ATTEMPTING TO UNOUNT');
       clearInterval(interval);
       unsubscribeToQuery();
-      console.log('UNMOUNT COMPLETED');
     };
   }, [sessionId, userData, status]);
 
@@ -121,10 +120,13 @@ const TabbedNavigation = (props) => {
 
         if (!activeUsers.list[id]) {
           if (activeUsers.loaded && id !== userData.id) {
-            props.notify({
-              title: `${newUsers[id].fullName} has joined!`,
-              title: `Your friend, ${newUsers[id].fullName}, has joined your session`,
-            });
+            notify(
+              {
+                title: `${newUsers[id].fullName} has joined!`,
+                body: `Your friend, ${newUsers[id].fullName}, has joined your session`,
+              },
+              props.token
+            );
           }
 
           Object.values(activeUsers.list).forEach((userData) => {
@@ -152,20 +154,33 @@ const TabbedNavigation = (props) => {
           activeUsers.list[id] &&
           activeUsers.list[id].inbounds
         ) {
-          props.notify({
-            title: userData.id === id ? `You have fallen out of range` : `${newUsers[id].fullName} has fallen out of range`,
-            body: userData.id === id ? `Please move back into range` : `Please check to make sure they are not lost`,
-          });
+          notify(
+            {
+              title:
+                userData.id === id
+                  ? `You have fallen out of range`
+                  : `${newUsers[id].fullName} has fallen out of range`,
+              body:
+                userData.id === id
+                  ? `Please move back into range`
+                  : `Please check to make sure they are not lost`,
+            },
+            props.token
+          );
         }
         if (
           newUsers[id].notify &&
           activeUsers.list[id] &&
-          activeUsers.list[id].status !== newUsers[id].status
+          activeUsers.list[id].status !== newUsers[id].status &&
+          id !== userData.id
         ) {
-          props.notify({
-            title: `${newUsers[id].fullName} is ${activeUsers.list[id].status}`,
-            title: `Your friend, ${newUsers[id].fullName}, would like you to know their status has changed and they are currently ${activeUsers.list[id].status}`,
-          });
+          notify(
+            {
+              title: `${newUsers[id].fullName} is ${activeUsers.list[id].status}`,
+              body: `Your friend, ${newUsers[id].fullName}, would like you to know their status has changed and they are currently ${newUsers[id].status}`,
+            },
+            props.token
+          );
         }
       });
       setActiveUsers({ list: newUsers, loaded: true, center });

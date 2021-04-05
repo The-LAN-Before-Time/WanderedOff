@@ -29,25 +29,42 @@ const UpdateStatus = (props) => {
           <RadioButton
             value='Active'
             status={newStatus === 'Active' ? 'checked' : 'unchecked'}
+            color='#0061b2'
             onPress={() => setNewStatus('Active')}
           />
-          <Text>Active</Text>
+          <Text
+            onPress={() => setNewStatus('Active')}
+            style={styles.radioLabel}
+          >
+            Active
+          </Text>
         </View>
         <View style={styles.radioView}>
           <RadioButton
             value='On Break'
             status={newStatus === 'On Break' ? 'checked' : 'unchecked'}
-            onPress={() => setNewStatus('On Break')}
+            color='#0061b2'
           />
-          <Text>On Break</Text>
+          <Text
+            style={styles.radioLabel}
+            onPress={() => setNewStatus('On Break')}
+          >
+            On Break
+          </Text>
         </View>
         <View style={styles.radioView}>
           <RadioButton
             value='Need Assistance'
             status={newStatus === 'Need Assistance' ? 'checked' : 'unchecked'}
             onPress={() => setNewStatus('Need Assistance')}
+            color='#0061b2'
           />
-          <Text>Need Assistance</Text>
+          <Text
+            onPress={() => setNewStatus('Need Assistance')}
+            style={styles.radioLabel}
+          >
+            Need Assistance
+          </Text>
         </View>
       </View>
       <View>
@@ -55,7 +72,7 @@ const UpdateStatus = (props) => {
           <Text style={styles.label}>Alert friends of status change?</Text>
           <Switch
             style={styles.switch}
-            trackColor={{ false: 'gray', true: '#59b3ff' }}
+            trackColor={{ false: 'gray', true: '#0061b2' }}
             thumbColor='white'
             ios_backgroundColor='gray'
             onValueChange={(value) => setNotify(value)}

@@ -4,9 +4,8 @@ import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { UserContext } from '../../../shared/UserContext';
 import { useNavigation } from '@react-navigation/native';
-import styles from '../../styles/styles';
+import styles, { colorArray } from '../../styles/styles';
 import { Avatar } from 'react-native-elements';
-
 
 export default function MapScreen({
   center,
@@ -20,7 +19,6 @@ export default function MapScreen({
   let mapRef = useRef(null);
   const userData = useContext(UserContext);
   const [mapReady, setMapReady] = useState(false);
-  const colors = ['red', 'green', 'purple', 'orange'];
   const defaultPadding = { top: 20, right: 20, bottom: 20, left: 20 };
   const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index);
   const goToInitialRegion = () => {
@@ -55,7 +53,6 @@ export default function MapScreen({
         animated: true,
       });
     } else {
-      console.log('There is no center')
     }
   };
 
@@ -85,7 +82,7 @@ export default function MapScreen({
       >
         {userList
           .filter((user) => user.userId !== userData.id)
-          .map((user) => {
+          .map((user, idx) => {
             if (user.userId) {
               return (
                 <Marker
@@ -95,7 +92,6 @@ export default function MapScreen({
                     longitude: user.location.longitude,
                   }}
                   title={`${user.fullName} (${user.status})`}
-                  // pinColor={colors[user.index % colors.length]}
                 >
                   <View
                     style={{
@@ -124,7 +120,8 @@ export default function MapScreen({
                         .map((name) => name[0])
                         .join('')}
                       overlayContainerStyle={{
-                        backgroundColor: colors[user.index % colors.length],
+                        backgroundColor:
+                          colorArray[user.index % colorArray.length],
                       }}
                     />
                   </View>
@@ -150,17 +147,23 @@ export default function MapScreen({
         style={styles.mapHeader}
       />
 
-      {(loaded && userList.length && sessionId.length ? (<></>) : !userList.length && sessionId ? ( <TouchableOpacity
+      {loaded && userList.length && sessionId.length ? (
+        <></>
+      ) : !userList.length && sessionId ? (
+        <TouchableOpacity
           // onPress={() => navigation.navigate('Get Started')}
           style={styles.mapButton}
         >
           <Text style={styles.buttonText}>Starting your session...</Text>
-        </TouchableOpacity>) : (<TouchableOpacity
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
           onPress={() => navigation.navigate('Get Started')}
           style={styles.mapButton}
         >
           <Text style={styles.buttonText}>Tap to start session</Text>
-        </TouchableOpacity>))}
+        </TouchableOpacity>
+      )}
     </>
   );
 }

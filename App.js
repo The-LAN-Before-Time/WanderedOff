@@ -7,16 +7,15 @@ import {
   RegistrationScreen,
   TabbedNavigator,
 } from './src/screens';
-import { Text, Platform, LogBox } from 'react-native';
+import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
 import { decode, encode } from 'base-64';
-import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 import { firebase } from './src/firebase/config';
 import { UserContext } from './shared/UserContext';
 import LoadingScreen from './shared/LoadingScreen';
+import registerForPushNotificationsAsync from './shared/registerForPushNotifications';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -68,11 +67,9 @@ export default function App() {
 
   //sets push notifcations permissions
   useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then((token) => setExpoPushToken(token))
-      .then(() => {
-        console.log('token established');
-      });
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener(
       (notification) => {
@@ -107,27 +104,6 @@ export default function App() {
     })();
   }, []);
 
-  async function sendPushNotification(content) {
-    const message = {
-      to: expoPushToken,
-      sound: 'default',
-      title: content.title,
-      body: content.body,
-      data: { data: 'goes here' },
-    };
-
-    await fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(message),
-    });
-  }
-
-
   if (loading || !locationPermission) {
     return <LoadingScreen name='app' />;
   }
@@ -152,7 +128,7 @@ export default function App() {
             {(props) => (
               <TabbedNavigator
                 {...props}
-                notify={sendPushNotification}
+                token={expoPushToken}
                 setUser={setUser}
               />
             )}
@@ -167,66 +143,4 @@ export default function App() {
       </UserContext.Provider>
     </NavigationContainer>
   );
-}
-
-async function sendPushNotification(expoPushToken) {
-  console.log('in outside scope notification function');
-  console.log('ZZ token: ', expoPushToken);
-  const message = {
-    to: expoPushToken,
-    sound: 'default',
-    title: "You've got mail! 📬",
-    body: 'Here is the notification body',
-    data: { data: 'goes here' },
-  };
-
-  await fetch('https://exp.host/--/api/v2/push/send', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Accept-encoding': 'gzip, deflate',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  });
-}
-async function registerForPushNotificationsAsync() {
-  console.log('registering');
-  let token;
-  if (Constants.isDevice) {
-    console.log('its a device');
-    const {
-      status: existingStatus,
-    } = await Notifications.getPermissionsAsync();
-    console.log('got permissions');
-    console.log('existing status: ', existingStatus);
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-      console.log('permissions ungranted');
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
-    }
-    console.log('attempting to retreve token');
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log('token recieved: ', token);
-  } else {
-    alert('Must use physical device for Push Notifications');
-  }
-
-  if (Platform.OS === 'android') {
-    console.log('its an android');
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
-  console.log('XXX token:', token);
-  // sendPushNotification(token);
-  return token;
 }

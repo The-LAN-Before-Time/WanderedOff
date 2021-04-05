@@ -24,23 +24,25 @@ const OptionsScreen = ({ radius, setRadius }) => {
 
   return (
     <ScrollView>
-      <View style={{ marginTop: 50 }}>
-        <Text style={styles.label}>Radius (in meters)</Text>
-      </View>
       <View style={styles.container}>
         <View>
-          <TextInput
-            style={styles.input}
-            placeholder='Enter radius'
-            value={String(newRadius)}
-            onChangeText={(val) => setNewRadius(val)}
-            keyboardType='number-pad'
-          />
+          <Text style={styles.label}>Radius (in meters)</Text>
         </View>
         <View>
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.buttonTitle}>Update Session</Text>
-          </TouchableOpacity>
+          <View>
+            <TextInput
+              style={styles.input}
+              placeholder='Enter radius'
+              value={String(newRadius)}
+              onChangeText={(val) => setNewRadius(val)}
+              keyboardType='number-pad'
+            />
+          </View>
+          <View>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonTitle}>Update Session</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ScrollView>
