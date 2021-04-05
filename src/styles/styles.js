@@ -11,7 +11,7 @@ const darkGray = '#2e2e2d';
 
 const green = '#198754';
 
-export const colorArray = [red, darkBlue, green, orange, lightBlue, darkGray];
+export const colorArray = [red, blue, green, orange, darkGray];
 
 export default StyleSheet.create({
   /** Containers */
@@ -220,7 +220,7 @@ export default StyleSheet.create({
     height: 47,
     padding: 13,
     borderRadius: 5,
-    backgroundColor: lightBlue,
+    backgroundColor: blue,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 20,

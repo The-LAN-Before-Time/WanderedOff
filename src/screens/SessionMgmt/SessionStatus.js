@@ -44,6 +44,7 @@ const UpdateStatus = (props) => {
             value='On Break'
             status={newStatus === 'On Break' ? 'checked' : 'unchecked'}
             color='#0061b2'
+            onPress={() => setNewStatus('On Break')}
           />
           <Text
             style={styles.radioLabel}

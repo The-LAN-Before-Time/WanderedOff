@@ -82,7 +82,7 @@ const Account = ({ setUser }) => {
               </TouchableOpacity>
             </View>
             <View>
-              <TouchableOpacity style={styles.button} onPress={onLogoutButtonPress}>
+              <TouchableOpacity style={styles.buttonDanger} onPress={onLogoutButtonPress}>
                 <Text style={styles.buttonText}>Logout</Text>
               </TouchableOpacity>
             </View>
