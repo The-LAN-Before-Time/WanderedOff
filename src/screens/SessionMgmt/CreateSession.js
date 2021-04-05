@@ -54,6 +54,8 @@ const CreateSession = (props) => {
       const session = Object.assign({}, values);
       session.id = response.id;
       setSessionId(session.id);
+      console.log('This is the userData:', userData)
+      console.log('THIS IS SESSION:', session)
       navigation.reset({
         index: 0,
         routes: [{ name: 'Sessions', params: {session} }],
