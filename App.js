@@ -16,6 +16,9 @@ import * as Location from 'expo-location';
 import { firebase } from './src/firebase/config';
 import { UserContext } from './shared/UserContext';
 import LoadingScreen from './shared/LoadingScreen';
+import { Provider } from 'react-redux';
+import store from './src/store/index';
+import { updateLocation } from './src/store/userLocations';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -30,8 +33,9 @@ Notifications.setNotificationHandler({
   handleNotification: async (notification) => {
     // console.log('NOTIFYING:', notification);
     // console.log('alert:', notification.request.content.data.notify);
+    console.log('received notification: ', notification.data);
     return {
-      shouldShowAlert: notification.request.content.data.notify,
+      shouldShowAlert: true,
       shouldPlaySound: false,
       shouldSetBadge: false,
     };
@@ -46,11 +50,6 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
   const [locationPermission, setLocationPermission] = useState(false);
-  const [userLocations, setUserLocations] = useState({
-    list: {},
-    center: {},
-    loaded: false,
-  });
 
   //keeps user signed
   useEffect(() => {
@@ -86,41 +85,15 @@ export default function App() {
       (notification) => {
         const { data } = notification.request.content;
         console.log('notification action: ', data.action);
-        switch (data.action) {
-          case 'UPDATE_LOCATION':
-            const newUserLocations = {
-              ...userLocations.list,
-              [data.userId]: data.location,
-            };
-            let center = { latitude: 0, longitude: 0 };
-            if (Object.keys(newUserLocations).length) {
-              center = Object.values(newUserLocations).reduce(
-                (centerSum, user) => ({
-                  latitude: user.latitude + centerSum.latitude,
-                  longitude: user.longitude + centerSum.longitude,
-                }),
-                { latitude: 0, longitude: 0 }
-              );
-              center.longitude =
-                center.longitude / Object.keys(newUserLocations).length;
-              center.latitude =
-                center.latitude / Object.keys(newUserLocations).length;
-            }
-            setUserLocations({
-              list: newUserLocations,
-              center: center,
-              loaded: true,
-            });
-            break;
-          default:
-            break;
+        if (data.action === 'UPDATE_LOCATION') {
+          store.dispatch(updateLocation(data));
         }
         if (!notification.request.content.data.notify) {
           console.log('skipping notification');
         } else {
           console.log('notifying');
-          setNotification(notification);
         }
+        setNotification(notification);
       }
     );
 
@@ -156,39 +129,40 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer test='test'>
-      <UserContext.Provider value={user}>
-        <Stack.Navigator
-          initialRouteName={user ? 'Tabbed Nav' : 'Login'}
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen
-            name='Tabbed Nav'
-            options={{
-              headerLeft: () => {
-                return null;
-              },
+    <Provider store={store}>
+      <NavigationContainer test='test'>
+        <UserContext.Provider value={user}>
+          <Stack.Navigator
+            initialRouteName={user ? 'Tabbed Nav' : 'Login'}
+            screenOptions={{
+              headerShown: false,
             }}
           >
-            {(props) => (
-              <TabbedNavigator
-                {...props}
-                setUser={setUser}
-                userLocations={userLocations}
-                token={expoPushToken}
-              />
-            )}
-          </Stack.Screen>
-          <Stack.Screen name='Login'>
-            {(props) => <LoginScreen {...props} setUser={setUser} />}
-          </Stack.Screen>
-          <Stack.Screen name='Registration'>
-            {(props) => <RegistrationScreen {...props} setUser={setUser} />}
-          </Stack.Screen>
-        </Stack.Navigator>
-      </UserContext.Provider>
-    </NavigationContainer>
+            <Stack.Screen
+              name='Tabbed Nav'
+              options={{
+                headerLeft: () => {
+                  return null;
+                },
+              }}
+            >
+              {(props) => (
+                <TabbedNavigator
+                  {...props}
+                  setUser={setUser}
+                  token={expoPushToken}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name='Login'>
+              {(props) => <LoginScreen {...props} setUser={setUser} />}
+            </Stack.Screen>
+            <Stack.Screen name='Registration'>
+              {(props) => <RegistrationScreen {...props} setUser={setUser} />}
+            </Stack.Screen>
+          </Stack.Navigator>
+        </UserContext.Provider>
+      </NavigationContainer>
+    </Provider>
   );
 }

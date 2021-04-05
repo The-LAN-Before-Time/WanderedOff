@@ -1,8 +1,9 @@
 import notify from '../Utilities/notify';
+import store from '../src/store/index';
 // import {useContext} from 'react';
 // import { UserContext } from './UserContext';
 
-export default function (sessionId, user, tokens) {
+export default function (sessionId, user) {
   if (!user.id || !sessionId) return;
   // const userLocationRef = firebase
   //   .firestore()
@@ -16,19 +17,27 @@ export default function (sessionId, user, tokens) {
       };
       console.log('position set, attempting send');
       if (location) {
-        console.log('sending');
-        notify(
-          {
-            data: {
-              location,
-              action: 'UPDATE_LOCATION',
-              userId: user.id,
-              notify: false,
-              lastUpdated: new Date(),
-            },
-          },
-          tokens
+        console.log(
+          'sending to ',
+          Object.values(store.getState().activeUsers.userList).map(
+            (user) => user.token
+          )
         );
+        const message = {
+          data: {
+            location,
+            action: 'UPDATE_LOCATION',
+            userId: user.id,
+            notify: false,
+            lastUpdated: new Date(),
+          },
+        };
+        console.log('sending message: ', message);
+        notify(
+          message,
+          Object.values(store.getState().activeUsers).map((user) => user.token)
+        );
+
         // userLocationRef.update({
         //   [user.id]: {
         //     lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),

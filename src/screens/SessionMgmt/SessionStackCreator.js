@@ -13,8 +13,6 @@ import { Ionicons } from '@expo/vector-icons';
 
 const SessionStackCreator = (props) => {
   const {
-    setActiveUsers,
-    activeUsers,
     setSessionId,
     leaveSession,
     setRadius,
@@ -71,14 +69,7 @@ const SessionStackCreator = (props) => {
       </Stack.Screen>
 
       <Stack.Screen name='Sessions'>
-        {(props) => (
-          <SessionTab
-            {...props}
-            setActiveUsers={setActiveUsers}
-            activeUsers={activeUsers}
-            setSessionId={setSessionId}
-          />
-        )}
+        {(props) => <SessionTab {...props} setSessionId={setSessionId} />}
       </Stack.Screen>
 
       <Stack.Screen name='Confirm Leave Session'>

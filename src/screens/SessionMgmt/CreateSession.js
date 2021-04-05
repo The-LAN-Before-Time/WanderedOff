@@ -21,12 +21,12 @@ const CreateSession = (props) => {
   const { setSessionId, setRadius } = props;
   const userData = useContext(UserContext);
   const navigation = useNavigation();
-  const [radiusTest, setRadiusTest] = useState(20);
+  // const [radiusTest, setRadiusTest] = useState('20');
   //const [toggle, setToggle] = useState(true);
   const [initialState, setInitialState] = useState({
     name: '',
     code: '',
-    radius: radiusTest,
+    radius: '20',
     centerMovable: false,
     owner: userData.id,
     active: true,

@@ -1,6 +1,8 @@
 import { firebase } from '../src/firebase/config';
+import store from '../src/store/index';
+import { setActiveUsers } from '../src/store/activeUsers';
 
-export default function (sessionId, setNewUsers) {
+export default function (sessionId) {
   // console.log('attempting query');
   if (sessionId) {
     const query = firebase
@@ -10,7 +12,7 @@ export default function (sessionId, setNewUsers) {
       .onSnapshot(
         (doc) => {
           if (doc.data() && Object.keys(doc.data()).length) {
-            setNewUsers(doc.data());
+            store.dispatch(setActiveUsers(doc.data()));
           }
         },
         (error) => {

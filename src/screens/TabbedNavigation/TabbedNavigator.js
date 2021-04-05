@@ -12,20 +12,14 @@ import { useNavigation } from '@react-navigation/native';
 import AccountStackCreator from '../AccountScreen/AccountStackCreator';
 import { Ionicons } from '@expo/vector-icons';
 import notify from '../../../Utilities/notify';
+import { connect } from 'react-redux';
+import { resetUsers } from '../../store/activeUsers';
 
 const TabbedNavigation = (props) => {
-  console.log(
-    'You have locations for ',
-    Object.keys(props.userLocations.list),
-    ' users.'
-  );
+  const { activeUsers, loaded } = props;
   const userData = useContext(UserContext);
   // const [sessionId, setSessionId] = useState(props.route.params.session.id);
   const [sessionId, setSessionId] = useState(null);
-  const [activeUsers, setActiveUsers] = useState({
-    userList: {},
-    loaded: false,
-  });
   const [newUsers, setNewUsers] = useState({});
   const Tab = createBottomTabNavigator();
   const [region, setRegion] = useState({
@@ -63,10 +57,7 @@ const TabbedNavigation = (props) => {
   const leaveSession = () => {
     const oldSessionId = sessionId;
     setSessionId('');
-    setActiveUsers({
-      userList: {},
-      loaded: false,
-    });
+    resetActiveUsers();
     console.log('ATTEMPTING TO REMOVE ID', oldSessionId);
     const userLocationRef = firebase
       .firestore()
@@ -91,15 +82,7 @@ const TabbedNavigation = (props) => {
   /** Updates location on session */
   useEffect(() => {
     console.log('USERNAME:', userData.fullName);
-    interval = setInterval(
-      () =>
-        updateLocation(
-          sessionId,
-          userData,
-          Object.values(activeUsers.userList).map((user) => user.token)
-        ),
-      10000
-    );
+    interval = setInterval(() => updateLocation(sessionId, userData), 10000);
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
       console.log('ATTEMPTING TO UNOUNT');
@@ -107,76 +90,10 @@ const TabbedNavigation = (props) => {
       unsubscribeToQuery();
       console.log('UNMOUNT COMPLETED');
     };
-  }, [sessionId, userData, activeUsers]);
+  }, [sessionId, userData]);
 
   /** Set initial region */
   useEffect(() => setInitialRegion(), []);
-
-  /** Add new users */
-  useEffect(() => {
-    if (Object.keys(newUsers).length) {
-      let max = 0;
-      /**
-       *  Checks Active Users List and sets new users with the next index id
-       *  and adds & sets inbound property
-       *  */
-      Object.entries(newUsers).forEach(([id, user]) => {
-        if (!activeUsers.userList[id]) {
-          if (activeUsers.loaded && id !== userData.id) {
-            notify({
-              title: `${newUsers[id].fullName} has joined!`,
-              body: `Your friend, ${newUsers[id].fullName}, has joined your session`,
-              data: { notify: newUsers[id] !== userData.id },
-            });
-          }
-          Object.values(activeUsers.userList).forEach((userData) => {
-            if (userData.index > max) {
-              max = userData.index;
-            }
-          });
-          max++;
-          newUsers[id].index = max;
-        } else {
-          newUsers[id].index = activeUsers.userList[id].index;
-        }
-      });
-
-      // Object.entries(newUsers).forEach(([id, user]) => {
-      //   newUsers[id].inbounds = haversine(center, newUsers[id].location, {
-      //     unit: 'meter',
-      //     threshold: radius,
-      //   });
-      //   if (
-      //     !newUsers[id].inbounds &&
-      //     activeUsers.list[id] &&
-      //     activeUsers.list[id].inbounds
-      //   ) {
-      //     notify({
-      //       title:
-      //         userData.id === id
-      //           ? `You have fallen out of range`
-      //           : `${newUsers[id].fullName} has fallen out of range`,
-      //       body:
-      //         userData.id === id
-      //           ? `Please move back into range`
-      //           : `Please check to make sure they are not lost`,
-      //     });
-      //   }
-      //   if (
-      //     newUsers[id].notify &&
-      //     activeUsers.list[id] &&
-      //     activeUsers.list[id].status !== newUsers[id].status
-      //   ) {
-      //     notify({
-      //       title: `${newUsers[id].fullName} is ${activeUsers.list[id].status}`,
-      //       body: `Your friend, ${newUsers[id].fullName}, would like you to know their status has changed and they are currently ${activeUsers.list[id].status}`,
-      //     });
-      //   }
-      // });
-
-      setActiveUsers({ userList: newUsers, loaded: true });
-    }
-  }, [newUsers]);
 
   // if (activeUsers.loaded) {
   return (
@@ -202,8 +119,6 @@ const TabbedNavigation = (props) => {
       <Tab.Screen name='Sessions'>
         {() => (
           <SessionStackCreator
-            setActiveUsers={setActiveUsers}
-            activeUsers={activeUsers.userList}
             setSessionId={setSessionId}
             sessionId={sessionId}
             leaveSession={leaveSession}
@@ -217,17 +132,7 @@ const TabbedNavigation = (props) => {
         )}
       </Tab.Screen>
       <Tab.Screen name='Map'>
-        {() => (
-          <MapScreen
-            {...props}
-            activeUsers={activeUsers.userList}
-            userLocations={props.userLocations.list}
-            center={props.userLocations.center}
-            region={region}
-            radius={radius}
-            loaded={activeUsers.loaded && props.userLocations.loaded}
-          />
-        )}
+        {() => <MapScreen {...props} region={region} radius={radius} />}
       </Tab.Screen>
       <Tab.Screen
         name='Account'
@@ -239,7 +144,6 @@ const TabbedNavigation = (props) => {
           <AccountStackCreator
             setUser={props.setUser}
             sessionId={sessionId}
-            activeUsers={activeUsers.userList}
             {...props}
           />
         )}
@@ -248,4 +152,12 @@ const TabbedNavigation = (props) => {
   );
 };
 
-export default TabbedNavigation;
+const mapState = (state) => ({
+  activeUsers: state.activeUsers.userList,
+  loaded: state.activeUsers.loaded,
+});
+
+const mapDispatch = (dispatch) => ({
+  resetActiveUsers: () => dispatch(resetUsers),
+});
+export default connect(mapState)(TabbedNavigation);

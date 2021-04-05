@@ -6,15 +6,11 @@ import { UserContext } from '../../../shared/UserContext';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../../styles/styles';
 import { Avatar } from 'react-native-elements';
+import { connect } from 'react-redux';
 
-export default function MapScreen({
-  activeUsers,
-  region,
-  radius,
-  loaded,
-  userLocations,
-  center,
-}) {
+function MapScreen(props) {
+  const { activeUsers, region, radius, loaded } = props;
+  const { userLocations, center } = props;
   const navigation = useNavigation();
   let mapRef = useRef(null);
   const userData = useContext(UserContext);
@@ -80,7 +76,7 @@ export default function MapScreen({
       >
         {userList
           .filter(
-            (user) => user.userId !== userData.id && !userLocations[user.id]
+            (user) => user.userId !== userData.id && userLocations[user.id]
           )
           .map((user) => {
             if (user.userId) {
@@ -146,3 +142,12 @@ export default function MapScreen({
     </>
   );
 }
+
+const mapState = (state) => ({
+  userLocations: state.userLocations.list,
+  userList: state.activeUsers.userList,
+  center: state.userLocations.center,
+  loaded: state.userLocations.loaded && state.activeUsers.loaded,
+});
+
+export default connect(mapState)(MapScreen);

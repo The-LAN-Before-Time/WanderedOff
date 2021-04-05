@@ -3,6 +3,7 @@ async function sendPushNotification(content, token) {
     token.forEach((token) => sendPushNotification(content, token));
   } else {
     // console.log('recieved content: ', content);
+    console.log('in notify');
     const message = {
       to: token,
       sound: 'default',
@@ -10,8 +11,9 @@ async function sendPushNotification(content, token) {
       body: content.body || 'No Body',
       data: content.data,
     };
+    console.log('updated message: ', message);
     try {
-      await fetch('https://exp.host/--/api/v2/push/send', {
+      let result = await fetch('https://exp.host/--/api/v2/push/send', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -20,6 +22,7 @@ async function sendPushNotification(content, token) {
         },
         body: JSON.stringify(message),
       });
+      console.log('this is the result: ', result);
     } catch (err) {
       console.error(err);
     }
