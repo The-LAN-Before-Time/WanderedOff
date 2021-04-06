@@ -86,7 +86,6 @@ const TabbedNavigation = (props) => {
 
   /** Updates location on session */
   useEffect(() => {
-    console.log('USERNAME:', userData.fullName);
     interval = setInterval(
       () => updateLocation(sessionId, userData, status),
       3000

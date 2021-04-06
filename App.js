@@ -9,6 +9,7 @@ import {
 } from './src/screens';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
+LogBox.ignoreAllLogs();
 import { decode, encode } from 'base-64';
 import * as Notifications from 'expo-notifications';
 import * as Location from 'expo-location';
