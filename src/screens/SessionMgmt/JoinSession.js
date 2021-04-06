@@ -38,7 +38,6 @@ const JoinSession = () => {
   });
 
   const joinSession = (values) => {
-    console.log('JOIN SESSION VALS', values.newCode);
     let session = {};
     const sessionRef = firebase
       .firestore()
@@ -52,7 +51,6 @@ const JoinSession = () => {
         doc.forEach((individualDoc) => {
           session = individualDoc.data();
           session.id = individualDoc.id;
-          console.log('This is our session, apples', session);
         });
         if (!session.id) {
           setValidCode(false);
