@@ -52,15 +52,12 @@ const CreateSession = (props) => {
   const updateState = (values) => {
     //setInitialState(values);
     setRadius(Number(values.radius));
-    console.log('VALUES', values);
     const sessionRef = firebase.firestore().collection('sessions');
     sessionRef.add(values).then((response) => {
       firebase.firestore().collection('sessionUsers').doc(response.id).set({});
       const session = Object.assign({}, values);
       session.id = response.id;
       setSessionId(session.id);
-      console.log('This is the userData:', userData);
-      console.log('THIS IS SESSION:', session);
       navigation.reset({
         index: 0,
         routes: [{ name: 'Sessions', params: { session } }],
