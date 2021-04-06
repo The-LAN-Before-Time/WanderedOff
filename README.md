@@ -39,11 +39,15 @@ https://expo.io/tools
 
 #### Demo
 
-![Wandered Off Intro Screen](/assets/img/MarineGEO_logo.png 'Intro Screen')
+<img src="https://github.com/The-LAN-Before-Time/WanderedOff/blob/demoForVideo/Demo%20Screenshots/Logo%20Screen.png?raw=true" width="168" height="337" />
 
-![Wandered Off Map Tab](/assets/img/MarineGEO_logo.png 'Map Tab')
+<img src="https://github.com/The-LAN-Before-Time/WanderedOff/blob/demoForVideo/Demo%20Screenshots/Create%20Session%20Screen.png?raw=true" width="168" height="337" />
 
-![Wandered Off Sessions Tab](/assets/img/MarineGEO_logo.png 'Sessions Tab')
+<img src="https://github.com/The-LAN-Before-Time/WanderedOff/blob/demoForVideo/Demo%20Screenshots/Session%20Mgmt.png?raw=true" width="168" height="337" />
+
+<img src="https://github.com/The-LAN-Before-Time/WanderedOff/blob/demoForVideo/Demo%20Screenshots/Map%20View%20with%20Status.png?raw=true" width="168" height="337" />
+
+<img src="https://github.com/The-LAN-Before-Time/WanderedOff/blob/demoForVideo/Demo%20Screenshots/Map%20View%20with%20Out%20of%20Range%20Notification.png?raw=true" width="168" height="337" />
 
 - The app opens up showing the logo - there is a full brand book built in with our finished product. You're immediately taken to the login screen.
 
