@@ -32,20 +32,36 @@ const SessionStackCreator = (props) => {
         headerShown: true,
         headerTitle: <Header />,
         headerBackTitleVisible: false,
-        headerBackImage: () => <Ionicons name="arrow-back-outline" size={30} style={{ marginLeft: 10, marginBottom: 6 }}/>
+        headerBackImage: () => (
+          <Ionicons
+            name='arrow-back-outline'
+            size={30}
+            style={{ marginLeft: 10, marginBottom: 6 }}
+          />
+        ),
       }}
     >
       <Stack.Screen name='Get Started' component={SessionCreateJoin} />
 
       <Stack.Screen name='Create Session'>
-        {(props) => <CreateSession {...props} setRadius={setRadius} setSessionId={setSessionId} />}
+        {(props) => (
+          <CreateSession
+            {...props}
+            setRadius={setRadius}
+            setSessionId={setSessionId}
+          />
+        )}
       </Stack.Screen>
 
       <Stack.Screen name='Join Session' component={JoinSession} />
 
       <Stack.Screen name='Confirm'>
         {(props) => (
-          <ConfirmJoinSession {...props} setSessionId={setSessionId} />
+          <ConfirmJoinSession
+            {...props}
+            setSessionId={setSessionId}
+            setRadius={setRadius}
+          />
         )}
       </Stack.Screen>
 

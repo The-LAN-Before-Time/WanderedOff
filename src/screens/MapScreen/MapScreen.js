@@ -65,7 +65,9 @@ export default function MapScreen({
     });
     return unsubscribe;
   }, [navigation]);
-
+  useEffect(() => {
+    goToInitialRegion();
+  }, [activeUsers]);
   return (
     <>
       <MapView

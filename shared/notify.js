@@ -1,4 +1,5 @@
 async function sendPushNotification(content, token) {
+  console.log('in notify function');
   const message = {
     to: token,
     sound: 'default',
@@ -6,7 +7,7 @@ async function sendPushNotification(content, token) {
     body: content.body,
     data: { data: 'goes here' },
   };
-
+  console.log(message);
   const result = await fetch('https://exp.host/--/api/v2/push/send', {
     method: 'POST',
     headers: {
@@ -16,6 +17,6 @@ async function sendPushNotification(content, token) {
     },
     body: JSON.stringify(message),
   });
-  console.log('notification result: ', result);
+  // console.log('notification result: ', result);
 }
 export default sendPushNotification;

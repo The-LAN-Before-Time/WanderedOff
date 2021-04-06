@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import AccountStackCreator from '../AccountScreen/AccountStackCreator';
 import { Ionicons } from '@expo/vector-icons';
 import notify from '../../../shared/notify';
+import demoFunction from '../../../shared/demo';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -30,7 +31,7 @@ const TabbedNavigation = (props) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-  const [radius, setRadius] = useState(4000);
+  const [radius, setRadius] = useState(120);
   const navigation = useNavigation();
   let interval;
   const [status, setStatus] = useState({ status: 'Active', notify: false });
@@ -86,17 +87,29 @@ const TabbedNavigation = (props) => {
 
   /** Updates location on session */
   useEffect(() => {
-    console.log('USERNAME:', userData.fullName);
-    interval = setInterval(
-      () => updateLocation(sessionId, userData, status),
-      3000
-    );
-    const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
-    return () => {
-      console.log('ATTEMPTING TO UNOUNT');
-      clearInterval(interval);
-      unsubscribeToQuery();
-    };
+    if (userData.id === '8FitqZ9qJLShKTHsQuvGDuUyUi33' && sessionId) {
+      let demoLocations = demoFunction(1, 40);
+      console.log(demoLocations);
+      let i = 0;
+      // console.log(demoLocations);
+      interval = setInterval(
+        () =>
+          setNewUsers(demoLocations[Math.min(i++, demoLocations.length - 1)]),
+        2000
+      );
+      return () => clearInterval(interval);
+    } else {
+      interval = setInterval(
+        () => updateLocation(sessionId, userData, status),
+        3000
+      );
+      const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
+      return () => {
+        console.log('ATTEMPTING TO UNOUNT');
+        clearInterval(interval);
+        unsubscribeToQuery();
+      };
+    }
   }, [sessionId, userData, status]);
 
   /** Set initial region */
@@ -109,6 +122,7 @@ const TabbedNavigation = (props) => {
       let lats = 0;
       let longs = 0;
       let center = {};
+      console.log('old users set', activeUsers.list);
 
       /**
        *  Checks Active Users List and sets new users with the next index id
@@ -144,16 +158,17 @@ const TabbedNavigation = (props) => {
       /** Set Center Radius */
       center.latitude = lats / Object.keys(newUsers).length;
       center.longitude = longs / Object.keys(newUsers).length;
+      console.log('');
       Object.entries(newUsers).forEach(([id, user]) => {
         newUsers[id].inbounds = haversine(center, newUsers[id].location, {
           unit: 'meter',
           threshold: radius,
         });
-        if (
-          !newUsers[id].inbounds &&
-          activeUsers.list[id] &&
-          activeUsers.list[id].inbounds
-        ) {
+        console.log(
+          !newUsers[id].inbounds
+          // activeUsers.list[id].inbounds
+        );
+        if (!newUsers[id].inbounds) {
           notify(
             {
               title:
