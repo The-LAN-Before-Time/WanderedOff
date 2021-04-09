@@ -63,7 +63,6 @@ const TabbedNavigation = (props) => {
       loaded: false,
       center: {},
     });
-    console.log('ATTEMPTING TO REMOVE ID', oldSessionId);
     const userLocationRef = firebase
       .firestore()
       .collection('sessionUsers')
@@ -92,7 +91,7 @@ const TabbedNavigation = (props) => {
     );
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
-      console.log('ATTEMPTING TO UNOUNT');
+      console.log('ATTEMPTING TO UNMOUNT');
       clearInterval(interval);
       unsubscribeToQuery();
     };
