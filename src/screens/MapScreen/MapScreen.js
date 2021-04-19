@@ -142,10 +142,10 @@ export default function MapScreen({
       <View style={styles.mapRecenterIcon}>
         <Ionicons name='locate-outline' size={30} onPress={goToInitialRegion} />
       </View>
-      <Image
+      {/* <Image
         source={require('../../../assets/logoHeader.png')}
         style={styles.mapHeader}
-      />
+      /> */}
 
       {loaded && userList.length && sessionId.length ? (
         <></>

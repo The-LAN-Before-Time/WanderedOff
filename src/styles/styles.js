@@ -5,6 +5,8 @@ const darkBlue = '#101c3d';
 const blue = '#0061b2';
 const lightBlue = '#59b3ff';
 const orange = '#dd9900';
+const black = '#000000';
+const white = '#FFFFFF';
 
 const lightGray = '#cccccc';
 const darkGray = '#2e2e2d';
@@ -91,18 +93,23 @@ export default StyleSheet.create({
   },
 
   /** Map Screen */
-  mapHeader: {
-    position: 'absolute',
-    width: '30%',
-    top: 0,
-    right: 15,
-    resizeMode: 'contain',
-  },
+  // mapHeader: {
+  //   position: 'absolute',
+  //   width: '30%',
+  //   top: 0,
+  //   right: 15,
+  //   resizeMode: 'contain',
+  // },
   mapRecenterIcon: {
     position: 'absolute',
     right: 10,
     bottom: 10,
-    backgroundColor: 'rgba(255,255,255,0.5)',
+    // backgroundColor: 'rgba(255,255,255,0.45)',
+    backgroundColor: white,
+    borderRadius: 5,
+    shadowColor: darkGray,
+    shadowOpacity: 0.44,
+    shadowOffset: { width: 0.2, height: 0.2},
   },
   mapButton: {
     position: 'absolute',
