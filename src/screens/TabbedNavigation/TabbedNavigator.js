@@ -199,19 +199,28 @@ const TabbedNavigation = (props) => {
           if (route.name === 'Sessions') {
             // iconName = focused ? 'people-outline' : 'people-outline';
             iconName = 'people-outline';
+            size = 31
           } else if (route.name === 'Account') {
             // iconName = focused ? 'person-outline' : 'person-outline';
             iconName = 'person-outline';
           } else {
             // iconName = focused ? 'navigate-outline' : 'navigate-outline';
-            return focused ? <Image source={icon} style={{ height: 40, width: 40, marginTop: 3 }} /> : <Image source={iconGreyed} style={{ height: 40, width: 40, marginTop: 3, opacity: 0.54 }} />
+            return focused ? <Image source={icon} style={{ height: 41, width: 41, marginTop: 4.11 }} /> : <Image source={iconGreyed} style={{ height: 41, width: 41, marginTop: 4.11, opacity: 0.54 }} />
           }
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName} size={size} color={color} style={{ marginTop: 6 }} />;
         },
       })}
       tabBarOptions={{
         activeTintColor: '#0061b2',
         inactiveTintColor: 'gray',
+        style: {
+          height: 83,
+          borderTopWidth: 1.1,
+          borderColor: "#000000",
+          shadowColor: '#000000',
+          shadowOpacity: 0.035,
+          shadowOffset: { width: 0, height: -3},
+        },
       }}
     >
       <Tab.Screen name='Sessions'>

@@ -139,9 +139,11 @@ export default function MapScreen({
           <></>
         )}
       </MapView>
+
       <View style={styles.mapRecenterIcon}>
         <Ionicons name='locate-outline' size={30} onPress={goToInitialRegion} />
       </View>
+      
       {/* <Image
         source={require('../../../assets/logoHeader.png')}
         style={styles.mapHeader}
