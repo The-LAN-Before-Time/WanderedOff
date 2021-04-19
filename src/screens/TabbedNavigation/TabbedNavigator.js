@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import AccountStackCreator from '../AccountScreen/AccountStackCreator';
 import { Ionicons } from '@expo/vector-icons';
 import notify from '../../../shared/notify';
+// import icon from '../../../assets/icon.png';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -194,11 +195,12 @@ const TabbedNavigation = (props) => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === 'Sessions') {
-            iconName = focused ? 'people-circle-outline' : 'people-outline';
+            iconName = focused ? 'people-outline' : 'people-outline';
           } else if (route.name === 'Account') {
-            iconName = focused ? 'person-circle-outline' : 'person-outline';
+            iconName = focused ? 'person-outline' : 'person-outline';
           } else {
-            iconName = focused ? 'navigate-circle-outline' : 'navigate-outline';
+            iconName = focused ? 'navigate-outline' : 'navigate-outline';
+            // iconName = focused ? icon : icon;
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
