@@ -21,6 +21,7 @@ export default function (sessionId, user, status) {
             status: status.status || 'active',
             userId: user.id,
             notify: status.notify,
+            active: true,
           },
         });
       }

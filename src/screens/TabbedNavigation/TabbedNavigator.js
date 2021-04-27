@@ -38,6 +38,7 @@ const TabbedNavigation = (props) => {
   let interval;
   const [status, setStatus] = useState({ status: 'Active', notify: false });
   const [sessionInformation, setSessionInformation] = useState({});
+  const [isActive, setIsActive] = useState(true);
 
   /** Set the initial region on user */
   const setInitialRegion = () => {
@@ -61,6 +62,8 @@ const TabbedNavigation = (props) => {
 
   const leaveSession = () => {
     const oldSessionId = sessionId;
+    const userId = userData.id;
+    setIsActive(false);
     setSessionId('');
     setActiveUsers({
       list: {},
@@ -72,14 +75,17 @@ const TabbedNavigation = (props) => {
       .collection('sessionUsers')
       .doc(oldSessionId);
 
+
     setTimeout(() => {
       console.log('IN TIMEOUT');
       userLocationRef.update({
-        [userData.id]: firebase.firestore.FieldValue.delete(),
+        // [userData.id]: firebase.firestore.FieldValue.delete(),
+        [`${userId}.active`]: false,
+        // [`first.${nestedkey}`]: "12345"
       });
       console.log('USER LOCATION DELETED');
     }, 15000);
-    // navigation.navigate('Get Started');
+    navigation.navigate('Get Started');
     navigation.reset({
       index: 0,
       routes: [{ name: 'Get Started' }],
@@ -120,10 +126,12 @@ const TabbedNavigation = (props) => {
 
   /** Updates location on session */
   useEffect(() => {
-    interval = setInterval(
-      () => updateLocation(sessionId, userData, status),
-      3000
-    );
+    if(isActive) {
+      interval = setInterval(
+        () => updateLocation(sessionId, userData, status),
+        3000
+      );
+    }
     const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
       console.log('ATTEMPTING TO UNMOUNT');
@@ -290,6 +298,8 @@ const TabbedNavigation = (props) => {
             status={status}
             setSessionInformation={setSessionInformation}
             sessionInformation={sessionInformation}
+            isActive={isActive}
+            setIsActive={setIsActive}
           />
         )}
       </Tab.Screen>

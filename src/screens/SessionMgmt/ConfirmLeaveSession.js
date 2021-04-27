@@ -15,7 +15,7 @@ import { UserContext } from '../../../shared/UserContext';
 const ConfirmLeaveSession = ({ leaveSession, terminateSession, sessionInformation }) => {
   const navigation = useNavigation();
   const userData = useContext(UserContext);
-  console.log("HI FROM LEEEEAVE", sessionInformation)
+
   const handleExit = () => {
     leaveSession();
     console.log('ATTEMPTING TO NAVIGATE');

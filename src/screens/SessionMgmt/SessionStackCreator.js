@@ -24,7 +24,8 @@ const SessionStackCreator = (props) => {
     status,
     terminateSession,
     setSessionInformation,
-    sessionInformation
+    sessionInformation,
+    setIsActive
   } = props;
   const Stack = createStackNavigator();
 
@@ -54,11 +55,12 @@ const SessionStackCreator = (props) => {
             setRadius={setRadius}
             setSessionId={setSessionId}
             setSessionInformation={setSessionInformation}
+            setIsActive={setIsActive}
           />
         )}
       </Stack.Screen>
 
-      <Stack.Screen name='Join Session' component={JoinSession} setSessionInformation={setSessionInformation}/>
+      <Stack.Screen name='Join Session' component={JoinSession} />
 
       <Stack.Screen name='Confirm'>
         {(props) => (
@@ -67,6 +69,7 @@ const SessionStackCreator = (props) => {
             setSessionId={setSessionId}
             setRadius={setRadius}
             setSessionInformation={setSessionInformation}
+            setIsActive={setIsActive}
           />
         )}
       </Stack.Screen>
