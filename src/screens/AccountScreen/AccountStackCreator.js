@@ -13,6 +13,7 @@ const AccountStackCreator = ({ setUser }) => {
       screenOptions={{
         headerShown: true,
         headerTitle: <Header />,
+        headerStyle: { backgroundColor: 'transparent' },
       }}
     >
       <Stack.Screen name='Account'>

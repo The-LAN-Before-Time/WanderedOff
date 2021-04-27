@@ -92,7 +92,7 @@ const CreateSession = (props) => {
               <Text style={styles.label}>Room code</Text>
               <TextInput //Remove this input later
                 style={styles.input}
-                placeholder='Ex: 99999'
+                placeholder='Ex: 12345'
                 value={props.values.code}
                 onChangeText={props.handleChange('code')}
                 onBlur={props.handleBlur('code')}

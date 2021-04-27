@@ -12,6 +12,9 @@ import { useNavigation } from '@react-navigation/native';
 import AccountStackCreator from '../AccountScreen/AccountStackCreator';
 import { Ionicons } from '@expo/vector-icons';
 import notify from '../../../shared/notify';
+import icon from '../../../assets/icon.png';
+import iconGreyed from '../../../assets/icon-greyed.png';
+import { Image } from 'react-native'
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -192,18 +195,30 @@ const TabbedNavigation = (props) => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === 'Sessions') {
-            iconName = focused ? 'people-circle-outline' : 'people-outline';
+            // iconName = focused ? 'people-outline' : 'people-outline';
+            iconName = 'people-outline';
+            size = 31
           } else if (route.name === 'Account') {
-            iconName = focused ? 'person-circle-outline' : 'person-outline';
+            // iconName = focused ? 'person-outline' : 'person-outline';
+            iconName = 'person-outline';
           } else {
-            iconName = focused ? 'navigate-circle-outline' : 'navigate-outline';
+            // iconName = focused ? 'navigate-outline' : 'navigate-outline';
+            return focused ? <Image source={icon} style={{ height: 41, width: 41, marginTop: 4.11 }} /> : <Image source={iconGreyed} style={{ height: 41, width: 41, marginTop: 4.11, opacity: 0.54 }} />
           }
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName} size={size} color={color} style={{ marginTop: 6 }} />;
         },
       })}
       tabBarOptions={{
         activeTintColor: '#0061b2',
         inactiveTintColor: 'gray',
+        style: {
+          height: 83,
+          borderTopWidth: 1.1,
+          borderColor: "#000000",
+          shadowColor: '#000000',
+          shadowOpacity: 0.035,
+          shadowOffset: { width: 0, height: -3},
+        },
       }}
     >
       <Tab.Screen name='Sessions'>

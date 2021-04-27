@@ -32,6 +32,7 @@ const SessionStackCreator = (props) => {
         headerShown: true,
         headerTitle: <Header />,
         headerBackTitleVisible: false,
+        headerStyle: { backgroundColor: 'transparent' },
         headerBackImage: () => <Ionicons name="arrow-back-outline" size={30} style={{ marginLeft: 10, marginBottom: 6 }}/>
       }}
     >
