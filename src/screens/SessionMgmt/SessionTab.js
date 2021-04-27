@@ -14,6 +14,7 @@ const SessionTab = (props) => {
   const { setActiveUsers, setSessionId, exitSession, activeUsers } = props;
   const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index);
 
+
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -76,12 +77,14 @@ const SessionTab = (props) => {
         <View>
           <View style={styles.horizontalContainer}>
             <Text style={styles.heading}>Current Session</Text>
-            <Ionicons
-              name='settings-outline'
-              size={30}
-              style={styles.cog}
-              onPress={() => navigation.navigate('Session Options')}
-            />
+            {sessionInfo.owner === userData.id && (
+              <Ionicons
+                name='settings-outline'
+                size={30}
+                style={styles.cog}
+                onPress={() => navigation.navigate('Session Options')}
+              />
+            )}
           </View>
           <View style={styles.paddingLeft}>
             <Text style={styles.text}>Name: {sessionInfo.name}</Text>

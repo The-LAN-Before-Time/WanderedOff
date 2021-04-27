@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import notify from '../../../shared/notify';
 import icon from '../../../assets/icon.png';
 import iconGreyed from '../../../assets/icon-greyed.png';
-import { Image } from 'react-native'
+import { Image } from 'react-native';
 
 const TabbedNavigation = (props) => {
   const userData = useContext(UserContext);
@@ -37,6 +37,7 @@ const TabbedNavigation = (props) => {
   const navigation = useNavigation();
   let interval;
   const [status, setStatus] = useState({ status: 'Active', notify: false });
+  const [sessionInformation, setSessionInformation] = useState({});
 
   /** Set the initial region on user */
   const setInitialRegion = () => {
@@ -84,6 +85,37 @@ const TabbedNavigation = (props) => {
       routes: [{ name: 'Get Started' }],
     });
     console.log('TIMEOUT SET');
+  };
+
+  const terminateSession = () => {
+    const oldSessionId = sessionId;
+    const oldActiveUsers = activeUsers.list;
+    console.log('END IT ALL', activeUsers.list);
+    setSessionId('');
+    setActiveUsers({
+      list: {},
+      loaded: false,
+      center: {},
+    });
+
+    setTimeout(() => {
+      firebase
+        .firestore()
+        .collection('sessionUsers')
+        .doc(oldSessionId)
+        .delete()
+        .then(() => {
+          console.log('Session terminated');
+        })
+        .catch((error) => {
+          console.error('Error removing document: ', error);
+        });
+    }, 10000);
+    // navigation.navigate('Get Started');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Get Started' }],
+    });
   };
 
   /** Updates location on session */
@@ -197,15 +229,37 @@ const TabbedNavigation = (props) => {
           if (route.name === 'Sessions') {
             // iconName = focused ? 'people-outline' : 'people-outline';
             iconName = 'people-outline';
-            size = 31
+            size = 31;
           } else if (route.name === 'Account') {
             // iconName = focused ? 'person-outline' : 'person-outline';
             iconName = 'person-outline';
           } else {
             // iconName = focused ? 'navigate-outline' : 'navigate-outline';
-            return focused ? <Image source={icon} style={{ height: 41, width: 41, marginTop: 4.11 }} /> : <Image source={iconGreyed} style={{ height: 41, width: 41, marginTop: 4.11, opacity: 0.54 }} />
+            return focused ? (
+              <Image
+                source={icon}
+                style={{ height: 41, width: 41, marginTop: 4.11 }}
+              />
+            ) : (
+              <Image
+                source={iconGreyed}
+                style={{
+                  height: 41,
+                  width: 41,
+                  marginTop: 4.11,
+                  opacity: 0.54,
+                }}
+              />
+            );
           }
-          return <Ionicons name={iconName} size={size} color={color} style={{ marginTop: 6 }} />;
+          return (
+            <Ionicons
+              name={iconName}
+              size={size}
+              color={color}
+              style={{ marginTop: 6 }}
+            />
+          );
         },
       })}
       tabBarOptions={{
@@ -214,10 +268,10 @@ const TabbedNavigation = (props) => {
         style: {
           height: 83,
           borderTopWidth: 1.1,
-          borderColor: "#000000",
+          borderColor: '#000000',
           shadowColor: '#000000',
           shadowOpacity: 0.035,
-          shadowOffset: { width: 0, height: -3},
+          shadowOffset: { width: 0, height: -3 },
         },
       }}
     >
@@ -229,10 +283,13 @@ const TabbedNavigation = (props) => {
             setSessionId={setSessionId}
             sessionId={sessionId}
             leaveSession={leaveSession}
+            terminateSession={terminateSession}
             setRadius={setRadius}
             radius={radius}
             setStatus={setStatus}
             status={status}
+            setSessionInformation={setSessionInformation}
+            sessionInformation={sessionInformation}
           />
         )}
       </Tab.Screen>

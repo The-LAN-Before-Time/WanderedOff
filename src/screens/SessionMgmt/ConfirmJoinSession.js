@@ -16,6 +16,8 @@ const ConfirmJoinSession = (props) => {
 
   const handleSubmit = () => {
     props.setSessionId(props.route.params.session.id);
+    props.setRadius(Number(props.route.params.session.radius));
+    props.setSessionInformation(props.route.params.session);
     navigation.reset({
       index: 0,
       routes: [{ name: 'Sessions', params: props.route.params }],

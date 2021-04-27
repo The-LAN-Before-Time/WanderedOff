@@ -22,6 +22,9 @@ const SessionStackCreator = (props) => {
     sessionId,
     setStatus,
     status,
+    terminateSession,
+    setSessionInformation,
+    sessionInformation
   } = props;
   const Stack = createStackNavigator();
 
@@ -33,20 +36,38 @@ const SessionStackCreator = (props) => {
         headerTitle: <Header />,
         headerBackTitleVisible: false,
         headerStyle: { backgroundColor: 'transparent' },
-        headerBackImage: () => <Ionicons name="arrow-back-outline" size={30} style={{ marginLeft: 10, marginBottom: 6 }}/>
+        headerBackImage: () => (
+          <Ionicons
+            name='arrow-back-outline'
+            size={30}
+            style={{ marginLeft: 10, marginBottom: 6 }}
+          />
+        ),
       }}
     >
       <Stack.Screen name='Get Started' component={SessionCreateJoin} />
 
       <Stack.Screen name='Create Session'>
-        {(props) => <CreateSession {...props} setRadius={setRadius} setSessionId={setSessionId} />}
+        {(props) => (
+          <CreateSession
+            {...props}
+            setRadius={setRadius}
+            setSessionId={setSessionId}
+            setSessionInformation={setSessionInformation}
+          />
+        )}
       </Stack.Screen>
 
-      <Stack.Screen name='Join Session' component={JoinSession} />
+      <Stack.Screen name='Join Session' component={JoinSession} setSessionInformation={setSessionInformation}/>
 
       <Stack.Screen name='Confirm'>
         {(props) => (
-          <ConfirmJoinSession {...props} setSessionId={setSessionId} />
+          <ConfirmJoinSession
+            {...props}
+            setSessionId={setSessionId}
+            setRadius={setRadius}
+            setSessionInformation={setSessionInformation}
+          />
         )}
       </Stack.Screen>
 
@@ -63,7 +84,12 @@ const SessionStackCreator = (props) => {
 
       <Stack.Screen name='Confirm Leave Session'>
         {(props) => (
-          <ConfirmLeaveSession {...props} leaveSession={leaveSession} />
+          <ConfirmLeaveSession
+            {...props}
+            leaveSession={leaveSession}
+            terminateSession={terminateSession}
+            sessionInformation={sessionInformation}
+          />
         )}
       </Stack.Screen>
       <Stack.Screen name='Session Options'>

@@ -16,7 +16,7 @@ import styles from '../../styles/styles';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-const JoinSession = () => {
+const JoinSession = ({ setSessionInformation }) => {
   const userData = useContext(UserContext);
   const navigation = useNavigation();
   const [validCode, setValidCode] = useState(true);
@@ -51,6 +51,8 @@ const JoinSession = () => {
         doc.forEach((individualDoc) => {
           session = individualDoc.data();
           session.id = individualDoc.id;
+          console.log("BROOOKEN JOIN SESS", session);
+          //setSessionInformation(session);
         });
         if (!session.id) {
           setValidCode(false);

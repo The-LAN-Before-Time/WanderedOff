@@ -19,7 +19,7 @@ import * as yup from 'yup';
 import styles from '../../styles/styles';
 
 const CreateSession = (props) => {
-  const { setSessionId, setRadius } = props;
+  const { setSessionId, setRadius, setSessionInformation } = props;
   const userData = useContext(UserContext);
   const navigation = useNavigation();
   //const [toggle, setToggle] = useState(true);
@@ -58,6 +58,8 @@ const CreateSession = (props) => {
       const session = Object.assign({}, values);
       session.id = response.id;
       setSessionId(session.id);
+      console.log("BROOOKEN CREATE SESS", session);
+      setSessionInformation(session);
       navigation.reset({
         index: 0,
         routes: [{ name: 'Sessions', params: { session } }],
