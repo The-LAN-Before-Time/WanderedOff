@@ -9,7 +9,16 @@ export default function (sessionId, setNewUsers) {
       .onSnapshot(
         (doc) => {
           if (doc.data() && Object.keys(doc.data()).length) {
-            setNewUsers(doc.data());
+            let sessionUsers = doc.data();
+            let activeUsers = {};
+            for(let user in sessionUsers) {
+              if(sessionUsers[user].active) {
+                activeUsers[user] = sessionUsers[user];
+              }
+            }
+            console.log("OOOOOOOOOOOOOO", activeUsers)
+            // setNewUsers(doc.data());
+            setNewUsers(activeUsers);
           }
         },
         (error) => {

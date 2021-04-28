@@ -75,17 +75,15 @@ const TabbedNavigation = (props) => {
       .collection('sessionUsers')
       .doc(oldSessionId);
 
-
     setTimeout(() => {
       console.log('IN TIMEOUT');
       userLocationRef.update({
-        // [userData.id]: firebase.firestore.FieldValue.delete(),
         [`${userId}.active`]: false,
-        // [`first.${nestedkey}`]: "12345"
       });
       console.log('USER LOCATION DELETED');
     }, 15000);
-    navigation.navigate('Get Started');
+
+    //navigation.navigate('Get Started');
     navigation.reset({
       index: 0,
       routes: [{ name: 'Get Started' }],
@@ -96,7 +94,7 @@ const TabbedNavigation = (props) => {
   const terminateSession = () => {
     const oldSessionId = sessionId;
     const oldActiveUsers = activeUsers.list;
-    console.log('END IT ALL', activeUsers.list);
+
     setSessionId('');
     setActiveUsers({
       list: {},
@@ -104,20 +102,32 @@ const TabbedNavigation = (props) => {
       center: {},
     });
 
+    const sessionUsersRef = firebase
+      .firestore()
+      .collection('sessionUsers')
+      .doc(oldSessionId);
+
     setTimeout(() => {
-      firebase
-        .firestore()
-        .collection('sessionUsers')
-        .doc(oldSessionId)
-        .delete()
-        .then(() => {
-          console.log('Session terminated');
-        })
-        .catch((error) => {
-          console.error('Error removing document: ', error);
+      Object.entries(oldActiveUsers).forEach(([id, user]) => {
+        sessionUsersRef.update({
+          [`${id}.active`]: false,
         });
+      })
+
+      //Deletes all users in sessionUsers doc
+      // firebase
+      //   .firestore()
+      //   .collection('sessionUsers')
+      //   .doc(oldSessionId)
+      //   .delete()
+      //   .then(() => {
+      //     console.log('Session terminated');
+      //   })
+      //   .catch((error) => {
+      //     console.error('Error removing document: ', error);
+      //   });
     }, 10000);
-    // navigation.navigate('Get Started');
+
     navigation.reset({
       index: 0,
       routes: [{ name: 'Get Started' }],
@@ -150,7 +160,8 @@ const TabbedNavigation = (props) => {
       let lats = 0;
       let longs = 0;
       let center = {};
-
+      // let test = Object.entries(newUsers).filter(([id, user]) => user.active === true);
+      // console.log("TTTTEEEESSST", newUsers);
       /**
        *  Checks Active Users List and sets new users with the next index id
        *  and adds & sets inbound property
