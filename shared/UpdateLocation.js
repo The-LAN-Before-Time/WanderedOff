@@ -1,6 +1,6 @@
 import { firebase } from '../src/firebase/config';
 
-export default function (sessionId, user, status) {
+export default function (sessionId, user, status, isActive) {
   if (!user.id || !sessionId) return;
   const userLocationRef = firebase
     .firestore()
@@ -21,7 +21,7 @@ export default function (sessionId, user, status) {
             status: status.status || 'active',
             userId: user.id,
             notify: status.notify,
-            active: true,
+            active: isActive,
           },
         });
       }

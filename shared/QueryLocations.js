@@ -1,5 +1,6 @@
 import { firebase } from '../src/firebase/config';
 
+
 export default function (sessionId, setNewUsers) {
   if (sessionId) {
     const query = firebase
@@ -9,16 +10,7 @@ export default function (sessionId, setNewUsers) {
       .onSnapshot(
         (doc) => {
           if (doc.data() && Object.keys(doc.data()).length) {
-            let sessionUsers = doc.data();
-            let activeUsers = {};
-            for(let user in sessionUsers) {
-              if(sessionUsers[user].active) {
-                activeUsers[user] = sessionUsers[user];
-              }
-            }
-            console.log("OOOOOOOOOOOOOO", activeUsers)
-            // setNewUsers(doc.data());
-            setNewUsers(activeUsers);
+            setNewUsers(doc.data());
           }
         },
         (error) => {

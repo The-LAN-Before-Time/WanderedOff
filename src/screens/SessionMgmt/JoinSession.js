@@ -45,6 +45,7 @@ const JoinSession = () => {
       .where('code', '==', values.newCode)
       .orderBy('expirationDate', 'desc')
       .limit(1);
+
     sessionRef
       .get()
       .then((doc) => {

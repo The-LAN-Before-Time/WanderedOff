@@ -83,7 +83,6 @@ const TabbedNavigation = (props) => {
       console.log('USER LOCATION DELETED');
     }, 15000);
 
-    //navigation.navigate('Get Started');
     navigation.reset({
       index: 0,
       routes: [{ name: 'Get Started' }],
@@ -94,7 +93,7 @@ const TabbedNavigation = (props) => {
   const terminateSession = () => {
     const oldSessionId = sessionId;
     const oldActiveUsers = activeUsers.list;
-
+    setIsActive(false);
     setSessionId('');
     setActiveUsers({
       list: {},
@@ -112,7 +111,7 @@ const TabbedNavigation = (props) => {
         sessionUsersRef.update({
           [`${id}.active`]: false,
         });
-      })
+      });
 
       //Deletes all users in sessionUsers doc
       // firebase
@@ -136,13 +135,16 @@ const TabbedNavigation = (props) => {
 
   /** Updates location on session */
   useEffect(() => {
-    if(isActive) {
+    if (isActive) {
       interval = setInterval(
-        () => updateLocation(sessionId, userData, status),
+        () => updateLocation(sessionId, userData, status, isActive),
         3000
       );
     }
-    const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
+    const unsubscribeToQuery = queryLocations(
+      sessionId,
+      setNewUsers
+    );
     return () => {
       console.log('ATTEMPTING TO UNMOUNT');
       clearInterval(interval);
@@ -156,17 +158,29 @@ const TabbedNavigation = (props) => {
   /** Add new users */
   useEffect(() => {
     if (Object.keys(newUsers).length) {
+
+      //checks if user is inactive due to an owner terminating session - if inactive then immediately leaves sesion
+      if(activeUsers.list[userData.id] && activeUsers.list[userData.id].active && !newUsers[userData.id].active) {
+        leaveSession();
+      }
+
+      //filters out inactive users in sessionUsers
+      let filteredNewUsers = {};
+      for (let user in newUsers) {
+        if (newUsers[user].active) {
+          filteredNewUsers[user] = newUsers[user];
+        }
+      }
+
       let max = 0;
       let lats = 0;
       let longs = 0;
       let center = {};
-      // let test = Object.entries(newUsers).filter(([id, user]) => user.active === true);
-      // console.log("TTTTEEEESSST", newUsers);
       /**
        *  Checks Active Users List and sets new users with the next index id
        *  and adds & sets inbound property
        *  */
-      Object.entries(newUsers).forEach(([id, user]) => {
+      Object.entries(filteredNewUsers).forEach(([id, user]) => {
         lats += user.location.latitude;
         longs += user.location.longitude;
 
@@ -174,8 +188,8 @@ const TabbedNavigation = (props) => {
           if (activeUsers.loaded && id !== userData.id) {
             notify(
               {
-                title: `${newUsers[id].fullName} has joined!`,
-                body: `Your friend, ${newUsers[id].fullName}, has joined your session`,
+                title: `${filteredNewUsers[id].fullName} has joined!`,
+                body: `Your friend, ${filteredNewUsers[id].fullName}, has joined your session`,
               },
               props.token
             );
@@ -194,15 +208,15 @@ const TabbedNavigation = (props) => {
       });
 
       /** Set Center Radius */
-      center.latitude = lats / Object.keys(newUsers).length;
-      center.longitude = longs / Object.keys(newUsers).length;
-      Object.entries(newUsers).forEach(([id, user]) => {
-        newUsers[id].inbounds = haversine(center, newUsers[id].location, {
+      center.latitude = lats / Object.keys(filteredNewUsers).length;
+      center.longitude = longs / Object.keys(filteredNewUsers).length;
+      Object.entries(filteredNewUsers).forEach(([id, user]) => {
+        filteredNewUsers[id].inbounds = haversine(center, filteredNewUsers[id].location, {
           unit: 'meter',
           threshold: radius,
         });
         if (
-          !newUsers[id].inbounds &&
+          !filteredNewUsers[id].inbounds &&
           activeUsers.list[id] &&
           activeUsers.list[id].inbounds
         ) {
@@ -211,7 +225,7 @@ const TabbedNavigation = (props) => {
               title:
                 userData.id === id
                   ? `You have fallen out of range`
-                  : `${newUsers[id].fullName} has fallen out of range`,
+                  : `${filteredNewUsers[id].fullName} has fallen out of range`,
               body:
                 userData.id === id
                   ? `Please move back into range`
@@ -221,21 +235,21 @@ const TabbedNavigation = (props) => {
           );
         }
         if (
-          newUsers[id].notify &&
+          filteredNewUsers[id].notify &&
           activeUsers.list[id] &&
-          activeUsers.list[id].status !== newUsers[id].status &&
+          activeUsers.list[id].status !== filteredNewUsers[id].status &&
           id !== userData.id
         ) {
           notify(
             {
-              title: `${newUsers[id].fullName} is ${activeUsers.list[id].status}`,
-              body: `Your friend, ${newUsers[id].fullName}, would like you to know their status has changed and they are currently ${newUsers[id].status}`,
+              title: `${filteredNewUsers[id].fullName} is ${activeUsers.list[id].status}`,
+              body: `Your friend, ${filteredNewUsers[id].fullName}, would like you to know their status has changed and they are currently ${filteredNewUsers[id].status}`,
             },
             props.token
           );
         }
       });
-      setActiveUsers({ list: newUsers, loaded: true, center });
+      setActiveUsers({ list: filteredNewUsers, loaded: true, center });
     }
   }, [newUsers]);
 
