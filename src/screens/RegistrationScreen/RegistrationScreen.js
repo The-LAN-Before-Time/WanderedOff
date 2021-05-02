@@ -106,6 +106,13 @@ export default function RegistrationScreen({navigation, setUser}) {
                     onPress={() => onRegisterPress()}>
                     <Text style={styles.buttonTitle}>Create account</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => onFacebookButtonPress().then(() => console.log('Signed in with Facebook!'))}>
+                    <Text style={styles.buttonTitle}>Sign up with Facebook</Text>
+                </TouchableOpacity>
+
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Already have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>
                 </View>
