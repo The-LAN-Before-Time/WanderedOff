@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { firebase } from '../../firebase/config'
 import styles from "../../styles/styles";
 
-export default function RegistrationScreen({navigation, setUser}) {
+export default function RegistrationScreen(props) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -29,14 +29,17 @@ export default function RegistrationScreen({navigation, setUser}) {
                     id: uid,
                     email,
                     fullName,
+                    phoneNumber: props.route.params.cleanPhoneNumber,
+                    sessionId: props.route.params.cleanPhoneNumber.slice(-10),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
                 const usersRef = firebase.firestore().collection('users')
                 usersRef
                     .doc(uid)
                     .set(data)
                     .then(() => {
-                        setUser(data)
-                        navigation.reset({
+                        props.setUser(data)
+                        props.navigation.reset({
                             index: 0,
                             routes: [{ name: 'Tabbed Nav' }],
                         });
@@ -57,7 +60,7 @@ export default function RegistrationScreen({navigation, setUser}) {
                 keyboardShouldPersistTaps="always">
                 <Image
                     style={styles.logo}
-                    source={require('../../../assets/icon.png')}
+                    source={require('../../../assets/verticalLogo.png')}
                 />
                 <Text style={styles.label}>Full Name</Text>
                 <TextInput
@@ -106,9 +109,9 @@ export default function RegistrationScreen({navigation, setUser}) {
                     onPress={() => onRegisterPress()}>
                     <Text style={styles.buttonTitle}>Create account</Text>
                 </TouchableOpacity>
-                <View style={styles.footerView}>
-                    <Text style={styles.footerText}>Already have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>
-                </View>
+                {/*<View style={styles.footerView}>*/}
+                {/*    <Text style={styles.footerText}>Already have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>*/}
+                {/*</View>*/}
             </KeyboardAwareScrollView>
         </View>
     )

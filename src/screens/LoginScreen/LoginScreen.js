@@ -11,7 +11,7 @@ export default function LoginScreen({navigation, setUser }) {
     const [password, setPassword] = useState('')
 
     const onFooterLinkPress = () => {
-        navigation.navigate('Registration')
+        navigation.navigate('Verify Phone')
     }
 
     // const onLoginPress = () => {
@@ -93,7 +93,7 @@ export default function LoginScreen({navigation, setUser }) {
                 keyboardShouldPersistTaps="always">
                 <Image
                     style={styles.logo}
-                    source={require('../../../assets/icon.png')}
+                    source={require('../../../assets/verticalLogo.png')}
                 />
                 <Text style={styles.label}>E-mail</Text>
                 <TextInput
