@@ -34,6 +34,24 @@ const SessionTab = (props) => {
   };
 
   const renderItem = ({ item }) => {
+
+    const renderName = () => {
+      let output = '';
+      let recentChar = false;
+      let space = false;
+      for (const char of item.fullName) {
+        if (char != ' ' && recentChar === false) {
+          output += char;
+          recentChar = true;
+          if (space === true) return output + '..';
+        } else if (char == ' ') {
+          recentChar = false;
+          space = true;
+        }
+      }
+      return output;
+    }         
+
     return (
       // <View style={styles.userContainer}>
       //   <Text style={styles.userName}>
@@ -50,10 +68,7 @@ const SessionTab = (props) => {
       <ListItem bottomDivider>
         <Avatar
           rounded
-          title={item.fullName
-            .split(' ')
-            .map((name) => name[0])
-            .join('')}
+          title={renderName()}
           overlayContainerStyle={{
             backgroundColor: colorArray[item.index % colorArray.length],
           }}

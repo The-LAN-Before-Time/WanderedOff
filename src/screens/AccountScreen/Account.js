@@ -19,7 +19,11 @@ const Account = ({ setUser }) => {
   // const [newDisplayName, setNewDisplayName] = useState(userData.fullName);
 
   const reviewSchema = yup.object({
-    newDisplayName: yup.string(),
+    // newDisplayName: yup.string(),
+    // newDisplayName: yup.string().required().min(1).test(
+    //   'Enter a name!',
+    // )
+    
     //.test('is user's phone number', 'Invalid Phone Number', (val) => {
     //   val === userData.phoneNumber;
     // })

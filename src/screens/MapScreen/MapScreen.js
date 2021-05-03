@@ -15,7 +15,6 @@ export default function MapScreen({
   loaded,
   sessionId,
 }) {
-
   const navigation = useNavigation();
   let mapRef = useRef(null);
   const userData = useContext(UserContext);
@@ -85,6 +84,22 @@ export default function MapScreen({
           .filter((user) => user.userId !== userData.id)
           .map((user, idx) => {
             if (user.userId) {
+              const renderName = () => {
+                let output = '';
+                let recentChar = false;
+                let space = false;
+                for (const char of user.fullName) {
+                  if (char != ' ' && recentChar === false) {
+                    output += char;
+                    recentChar = true;
+                    if (space === true) return output + '..';
+                  } else if (char == ' ') {
+                    recentChar = false;
+                    space = true;
+                  }
+                }
+                return output;
+              }         
               return (
                 <Marker
                   anchor={{x: 0.5, y: 0.5}}
@@ -105,10 +120,7 @@ export default function MapScreen({
                   >
                     <Avatar
                       rounded
-                      title={user.fullName
-                        .split(' ')
-                        .map((name) => name[0])
-                        .join('')}
+                      title={renderName()}
                       overlayContainerStyle={{
                         backgroundColor:
                           colorArray[user.index % colorArray.length],
