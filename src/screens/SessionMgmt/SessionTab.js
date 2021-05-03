@@ -34,23 +34,28 @@ const SessionTab = (props) => {
   };
 
   const renderItem = ({ item }) => {
-
+    
     const renderName = () => {
       let output = '';
-      let recentChar = false;
-      let space = false;
-      for (const char of item.fullName) {
-        if (char != ' ' && recentChar === false) {
-          output += char;
-          recentChar = true;
-          if (space === true) return output + '..';
-        } else if (char == ' ') {
-          recentChar = false;
-          space = true;
-        }
+      let uniqueSpaceCount = 0;
+      let prevChar = false;
+      let i = 0;
+      while (i < item.fullName.length) {
+        if (item.fullName[i] != ' ' && !prevChar) {
+          if (uniqueSpaceCount >= 2) return output + '..'
+          output += item.fullName[i];
+          prevChar = true;
+          i++;
+        } else if (item.fullName[i] == ' ') {
+          prevChar = false;
+          uniqueSpaceCount++;
+          while (item.fullName[i] == ' ') {
+            i++;
+          }
+        } else i++;
       }
       return output;
-    }         
+    };
 
     return (
       // <View style={styles.userContainer}>

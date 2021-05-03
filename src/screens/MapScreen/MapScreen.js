@@ -86,20 +86,25 @@ export default function MapScreen({
             if (user.userId) {
               const renderName = () => {
                 let output = '';
-                let recentChar = false;
-                let space = false;
-                for (const char of user.fullName) {
-                  if (char != ' ' && recentChar === false) {
-                    output += char;
-                    recentChar = true;
-                    if (space === true) return output + '..';
-                  } else if (char == ' ') {
-                    recentChar = false;
-                    space = true;
-                  }
+                let uniqueSpaceCount = 0;
+                let prevChar = false;
+                let i = 0;
+                while (i < user.fullName.length) {
+                  if (user.fullName[i] != ' ' && !prevChar) {
+                    if (uniqueSpaceCount >= 2) return output + '..'
+                    output += user.fullName[i];
+                    prevChar = true;
+                    i++;
+                  } else if (user.fullName[i] == ' ') {
+                    prevChar = false;
+                    uniqueSpaceCount++;
+                    while (user.fullName[i] == ' ') {
+                      i++;
+                    }
+                  } else i++;
                 }
                 return output;
-              }         
+              };         
               return (
                 <Marker
                   anchor={{x: 0.5, y: 0.5}}
