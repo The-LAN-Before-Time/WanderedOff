@@ -15,6 +15,7 @@ export default function MapScreen({
   loaded,
   sessionId,
 }) {
+
   const navigation = useNavigation();
   let mapRef = useRef(null);
   const userData = useContext(UserContext);
@@ -86,6 +87,7 @@ export default function MapScreen({
             if (user.userId) {
               return (
                 <Marker
+                  anchor={{x: 0.5, y: 0.5}}
                   key={user.userId}
                   coordinate={{
                     latitude: user.location.latitude,
