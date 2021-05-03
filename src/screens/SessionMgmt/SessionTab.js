@@ -34,7 +34,6 @@ const SessionTab = (props) => {
   };
 
   const renderItem = ({ item }) => {
-    
     const renderName = () => {
       let output = '';
       let uniqueSpaceCount = 0;
@@ -56,7 +55,6 @@ const SessionTab = (props) => {
       }
       return output;
     };
-
     return (
       // <View style={styles.userContainer}>
       //   <Text style={styles.userName}>
