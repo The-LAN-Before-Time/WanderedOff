@@ -95,24 +95,12 @@ export default function MapScreen({
                 >
                   <View
                     style={{
-                      padding: 10,
+                      // padding: 10,
                       alignItems: 'center',
                       justifyContent: 'center',
                       border: 'black',
                     }}
                   >
-                    {/* <Text
-                                        style={{
-                                            color: colors[user.index % colors.length],
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        {user.fullName
-                                            .split(' ')
-                                            .map((name) => name[0])
-                                            .join('')}
-                                    </Text> */}
-                    {/* <Ionicons name='person-circle' size={24} color={colors[user.index % colors.length]}/> */}
                     <Avatar
                       rounded
                       title={user.fullName
