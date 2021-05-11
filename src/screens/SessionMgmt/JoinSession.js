@@ -62,7 +62,8 @@ const JoinSession = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView
+    keyboardShouldPersistTaps="handled">
       <Formik
         initialValues={{ newCode: '' }}
         validationSchema={reviewSchema}

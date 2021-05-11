@@ -66,7 +66,7 @@ const CreateSession = (props) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps="handled">
       <Formik
         initialValues={initialState}
         validationSchema={reviewSchema}

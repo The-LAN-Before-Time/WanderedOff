@@ -19,11 +19,12 @@ const OptionsScreen = ({ radius, setRadius }) => {
 
   const handleSubmit = () => {
     setRadius(Number(newRadius));
-    navigation.navigate('Sessions');
+    // navigation.navigate('Sessions');
+    Keyboard.dismiss();
   };
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps="handled">
       <View style={styles.container}>
         <View>
           <Text style={styles.label}>Radius (in meters)</Text>

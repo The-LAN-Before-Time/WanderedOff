@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Text,
   ScrollView,
+  Keyboard
 } from 'react-native';
 import styles from '../../styles/styles';
 import { UserContext } from '../../../shared/UserContext';
@@ -12,6 +13,7 @@ import { firebase } from '../../firebase/config';
 import { useNavigation } from '@react-navigation/native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Account = ({ setUser }) => {
   const navigation = useNavigation();
@@ -32,6 +34,7 @@ const Account = ({ setUser }) => {
   const updateName = (values) => {
     const userRef = firebase.firestore().collection('users').doc(userData.id);
     userRef.update({ fullName: values.newDisplayName });
+    Keyboard.dismiss();
   };
 
   const onLogoutButtonPress = () => {
@@ -62,7 +65,8 @@ const Account = ({ setUser }) => {
   }, []);
 
   return (
-    <ScrollView>
+    <ScrollView
+    keyboardShouldPersistTaps="handled">
       <Formik
         initialValues={{ newDisplayName: userData.fullName }}
         validationSchema={reviewSchema}
