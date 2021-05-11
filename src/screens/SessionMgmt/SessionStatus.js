@@ -25,16 +25,11 @@ const UpdateStatus = (props) => {
   };
 
   const customOrNot = () => {
-    // if (newStatus === 'Active' || newStatus === 'On Break' || newStatus === 'Need Assistance') {
-    //   return "";
-    // } else {
-    //   console.log(status)
-    //   return newStatus;
-    // }
-  }
-
-  const updateCustom = (customStatus) => {
-    setNewStatus(customStatus)
+    if (status.status === 'Active' || status.status === 'On Break' || status.status === 'Need Assistance') {
+      return "";
+    } else {
+      return status.status;
+    }
   }
 
   return (
@@ -103,15 +98,9 @@ const UpdateStatus = (props) => {
         </View>
 
         <View >
-          {/* <RadioButton
-            value='Need Assistanc'
-            status={newStatus === 'Need Assistanc' ? 'checked' : 'unchecked'}
-            onPress={() => setNewStatus('Need Assistanc')}
-            color='#0061b2'
-          /> */}
           <ScrollView>
           <Formik
-            initialValues={{ newCustomStatus: ''}}
+            initialValues={{ newCustomStatus: customOrNot()}}
             // validationSchema={reviewSchema}
           //   onSubmit={(values) => {
           //  setNewStatus(values)
@@ -121,13 +110,13 @@ const UpdateStatus = (props) => {
           <View style={styles.radioView}>
             <RadioButton
             value={props.values.newCustomStatus}
-            status={newStatus === props.values.newCustomStatus || status.status === props.values.newCustomStatus ? 'checked' : 'unchecked'}
+            status={newStatus === props.values.newCustomStatus ? 'checked' : 'unchecked'}
             onPress={() => setNewStatus(props.values.newCustomStatus)}
             color='#0061b2'
           />
             <TextInput
             keyboardShouldPersistTaps="never"
-              // onFocus={() => setNewStatus(props.values.newCustomStatus)}
+              onFocus={() => setNewStatus(props.values.newCustomStatus)}
               style={styles.input/*, styles.radioLabel*/}
               placeholder='Custom status'
               value={props.values.newCustomStatus}
