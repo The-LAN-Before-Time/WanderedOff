@@ -26,7 +26,7 @@ const UpdateStatus = (props) => {
 
   const customOrNot = () => {
     if (status.status === 'Active' || status.status === 'On Break' || status.status === 'Need Assistance') {
-      return "";
+      return;
     } else {
       return status.status;
     }
@@ -100,7 +100,7 @@ const UpdateStatus = (props) => {
         <View >
           <ScrollView>
           <Formik
-            initialValues={{ newCustomStatus: customOrNot()}}
+            initialValues={{newCustomStatus:customOrNot()}}
             // validationSchema={reviewSchema}
           //   onSubmit={(values) => {
           //  setNewStatus(values)
@@ -117,12 +117,11 @@ const UpdateStatus = (props) => {
             <TextInput
             keyboardShouldPersistTaps="never"
               onFocus={() => setNewStatus(props.values.newCustomStatus)}
-              style={styles.input/*, styles.radioLabel*/}
+              style={styles.input} //styles.radioLabel
               placeholder='Custom status'
               value={props.values.newCustomStatus}
               onChangeText={(e) => {
                 // props.handleChange('newCustomStatus')
-                console.log(e)
                 props.setFieldValue('newCustomStatus', e)
                 setNewStatus(e)
               }}
