@@ -20,8 +20,16 @@ const UpdateStatus = (props) => {
   const [newStatus, setNewStatus] = useState(status.status);
 
   const handleSubmit = () => {
-    setStatus({ status: newStatus, notify });
-    navigation.navigate('Sessions');
+    // console.log(newStatus)
+    if (!newStatus) {}
+    else if (newStatus === status.status) {
+      navigation.navigate('Sessions');
+    }
+    else {
+      setStatus({ status: newStatus, notify });
+    // Keyboard.dismiss();
+      navigation.navigate('Sessions');
+    }
   };
 
   const customOrNot = () => {
@@ -135,7 +143,7 @@ const UpdateStatus = (props) => {
       </View>
       <View>
         <View style={styles.switchView}>
-          <Text style={styles.label}>Alert group of status change?</Text>
+          <Text style={styles.label}>Notify group of status change?</Text>
           <Switch
             style={styles.switch}
             trackColor={{ false: 'gray', true: '#0061b2' }}
