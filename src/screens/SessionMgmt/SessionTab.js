@@ -34,6 +34,27 @@ const SessionTab = (props) => {
   };
 
   const renderItem = ({ item }) => {
+    const renderName = () => {
+      let output = '';
+      let uniqueSpaceCount = 0;
+      let prevChar = false;
+      let i = 0;
+      while (i < item.fullName.length) {
+        if (item.fullName[i] != ' ' && !prevChar) {
+          if (uniqueSpaceCount >= 2) return output + '..'
+          output += item.fullName[i];
+          prevChar = true;
+          i++;
+        } else if (item.fullName[i] == ' ') {
+          prevChar = false;
+          uniqueSpaceCount++;
+          while (item.fullName[i] == ' ') {
+            i++;
+          }
+        } else i++;
+      }
+      return output;
+    };
     return (
       // <View style={styles.userContainer}>
       //   <Text style={styles.userName}>
@@ -50,10 +71,7 @@ const SessionTab = (props) => {
       <ListItem bottomDivider>
         <Avatar
           rounded
-          title={item.fullName
-            .split(' ')
-            .map((name) => name[0])
-            .join('')}
+          title={renderName()}
           overlayContainerStyle={{
             backgroundColor: colorArray[item.index % colorArray.length],
           }}

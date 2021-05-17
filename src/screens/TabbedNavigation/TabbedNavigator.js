@@ -36,7 +36,7 @@ const TabbedNavigation = (props) => {
   const [radius, setRadius] = useState(4000);
   const navigation = useNavigation();
   let interval;
-  const [status, setStatus] = useState({ status: 'Active', notify: false });
+  const [status, setStatus] = useState({ status: 'Active', notify: true });
 
   /** Set the initial region on user */
   const setInitialRegion = () => {

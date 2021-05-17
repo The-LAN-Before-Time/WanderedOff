@@ -18,7 +18,7 @@ export default function (sessionId, user, status) {
             lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
             location,
             fullName: user.fullName,
-            status: status.status || 'active',
+            status: status.status || 'Active', //'active'
             userId: user.id,
             notify: status.notify,
           },
