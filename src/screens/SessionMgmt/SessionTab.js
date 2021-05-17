@@ -17,22 +17,21 @@ import { Ionicons } from '@expo/vector-icons';
 import { Avatar, ListItem } from 'react-native-elements';
 import LoadingScreen from '../../../shared/LoadingScreen';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { firebase } from '../../firebase/config';
 
 const SessionTab = (props) => {
   const userData = useContext(UserContext);
   const navigation = useNavigation();
   const sessionInfo = props.route.params.session;
-  const { setActiveUsers, setSessionId, exitSession, activeUsers } = props;
-  const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index);
-  // const [users, setUsers] = useState(
-  //   Object.values(activeUsers).map((user, index) => ({
-  //     key: `${index}`,
-  //     fullName: user.fullName,
-  //     status: user.status,
-  //   }))
-  // );
+  const {
+    setActiveUsers,
+    setSessionId,
+    exitSession,
+    activeUsers,
+    leaveSession,
+  } = props;
 
-  console.log('USSERS', userList);
+  const userList = Object.values(activeUsers).sort((a, b) => a.index - b.index);
 
   const onShare = async () => {
     try {
@@ -73,9 +72,33 @@ const SessionTab = (props) => {
   //     </ListItem>
   //   );
   // };
+
+  const closeRow = (rowMap, userId) => {
+    //console.log('CLOSE ROW', rowMap);
+    if (rowMap[userId]) {
+      rowMap[userId].closeRow();
+    }
+  };
+
+  const deleteRow = (rowMap, userId) => {
+    closeRow(rowMap, userId);
+    //console.log('SESSION INFO', sessionInfo);
+    const userLocationRef = firebase
+      .firestore()
+      .collection('sessionUsers')
+      .doc(sessionInfo.id);
+
+    // setTimeout(() => {
+    //   console.log('IN SWIPE DELETE');
+    userLocationRef.update({
+      [`${userId}.active`]: false,
+    });
+    //   console.log('USER LOCATION DELETED');
+    // }, 15000);
+  };
+
   const VisibleItem = (props) => {
     const { data } = props;
-    console.log('VIS ITEM', data.item);
     return (
       <TouchableHighlight style={swipeStyles.rowFrontVisible}>
         <View style={swipeStyles.statusRowContainer}>
@@ -102,7 +125,39 @@ const SessionTab = (props) => {
     return <VisibleItem data={data} />;
   };
 
-  const renderHiddenItem = () => {};
+  const HiddenItemWithActions = (props) => {
+    const { onClose, onDelete } = props;
+
+    return (
+      <View style={swipeStyles.rowBack}>
+        <Text>Left</Text>
+        <TouchableOpacity
+          style={[swipeStyles.backRightBtn, swipeStyles.backRightBtnLeft]}
+          onPress={onClose}
+        >
+          <Text>Close</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[swipeStyles.backRightBtn, swipeStyles.backRightBtnRight]}
+          onPress={onDelete}
+        >
+          <Text>Delete</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const renderHiddenItem = (data, rowMap) => {
+    //console.log('DATA ITEM', data.item.index);
+    return (
+      <HiddenItemWithActions
+        data={data}
+        rowMap={rowMap}
+        onClose={() => closeRow(rowMap, data.item.userId)}
+        onDelete={() => deleteRow(rowMap, data.item.userId)}
+      />
+    );
+  };
 
   if (!userList.length) {
     return <LoadingScreen name='Session Management' />;
@@ -140,6 +195,8 @@ const SessionTab = (props) => {
             data={userList}
             renderItem={renderItem}
             renderHiddenItem={renderHiddenItem}
+            leftOpenValue={75}
+            rightOpenValue={-150}
             keyExtractor={(item) => item.userId}
           />
         </View>

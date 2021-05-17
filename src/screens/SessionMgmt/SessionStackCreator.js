@@ -25,7 +25,7 @@ const SessionStackCreator = (props) => {
     terminateSession,
     setSessionInformation,
     sessionInformation,
-    setIsActive
+    setIsActive,
   } = props;
   const Stack = createStackNavigator();
 
@@ -81,6 +81,7 @@ const SessionStackCreator = (props) => {
             setActiveUsers={setActiveUsers}
             activeUsers={activeUsers}
             setSessionId={setSessionId}
+            leaveSession={leaveSession}
           />
         )}
       </Stack.Screen>
