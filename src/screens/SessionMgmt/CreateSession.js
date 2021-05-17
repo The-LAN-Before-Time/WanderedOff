@@ -51,7 +51,7 @@ const CreateSession = (props) => {
 
   const updateState = (values) => {
     //setInitialState(values);
-    setRadius(Number(values.radius));
+    setRadius(Math.round(Number(values.radius)/3.281*1000)/1000);
     const sessionRef = firebase.firestore().collection('sessions');
     sessionRef.add(values).then((response) => {
       firebase.firestore().collection('sessionUsers').doc(response.id).set({});

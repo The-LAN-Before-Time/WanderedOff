@@ -18,7 +18,7 @@ const OptionsScreen = ({ radius, setRadius }) => {
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-    setRadius(Number(newRadius));
+    setRadius(Math.round(Number(newRadius)/3.281*1000)/1000);
     // navigation.navigate('Sessions');
     Keyboard.dismiss();
   };

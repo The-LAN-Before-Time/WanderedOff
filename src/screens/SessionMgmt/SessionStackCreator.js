@@ -68,7 +68,7 @@ const SessionStackCreator = (props) => {
       </Stack.Screen>
       <Stack.Screen name='Session Options'>
         {(props) => (
-          <SessionOptions {...props} setRadius={setRadius} radius={radius} />
+          <SessionOptions {...props} setRadius={setRadius} radius={Math.round(Math.round(radius*3.281*1000)/1000)} />
         )}
       </Stack.Screen>
       <Stack.Screen name='Update Status'>
