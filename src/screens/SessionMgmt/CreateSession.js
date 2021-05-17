@@ -26,7 +26,7 @@ const CreateSession = (props) => {
   const [initialState, setInitialState] = useState({
     name: '',
     code: '',
-    radius: '20',
+    radius: '',
     centerMovable: true,
     owner: userData.id,
     active: true,
@@ -44,8 +44,8 @@ const CreateSession = (props) => {
       .required()
       .test(
         'valid radius',
-        'Radius must be greater than 20 meters',
-        (val) => val >= '20'
+        'radius must be greater than 10 feet',
+        (val) => val > 10
       ),
   });
 
@@ -103,7 +103,7 @@ const CreateSession = (props) => {
               <Text style={styles.errorText}>
                 {props.touched.code && props.errors.code}
               </Text>
-              <Text style={styles.label}>Enter radius (in meters)</Text>
+              <Text style={styles.label}>Radius (in feet)</Text>
               {/* <View style={testStyles.container}>
               <Slider
                 style={{width: 300, height: 30, borderRadius: 50, marginLeft: 50}}
@@ -127,7 +127,7 @@ const CreateSession = (props) => {
 
               <TextInput
                 style={styles.input}
-                placeholder='Enter radius'
+                placeholder='Ex: 50'
                 value={props.values.radius}
                 onChangeText={props.handleChange('radius')}
                 onBlur={props.handleBlur('radius')}

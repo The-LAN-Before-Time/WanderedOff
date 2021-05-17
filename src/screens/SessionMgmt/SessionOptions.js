@@ -27,7 +27,7 @@ const OptionsScreen = ({ radius, setRadius }) => {
     <ScrollView keyboardShouldPersistTaps="handled">
       <View style={styles.container}>
         <View>
-          <Text style={styles.label}>Radius (in meters)</Text>
+          <Text style={styles.label}>Radius (in feet)</Text>
         </View>
         <View>
           <View>
