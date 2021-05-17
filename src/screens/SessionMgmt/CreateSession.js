@@ -44,8 +44,8 @@ const CreateSession = (props) => {
       .required()
       .test(
         'valid radius',
-        'radius must be greater than 10 feet',
-        (val) => val > 10
+        'radius must be at least 10 feet',
+        (val) => val >= 10
       ),
   });
 
