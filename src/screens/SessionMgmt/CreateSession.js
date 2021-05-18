@@ -37,8 +37,6 @@ const CreateSession = (props) => {
     expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
   });
 
-  console.log(initialState);
-
   const reviewSchema = yup.object({
     name: yup.string().required().min(4),
     code: yup.string().required().min(3),
@@ -56,7 +54,6 @@ const CreateSession = (props) => {
   });
 
   const updateState = (values) => {
-    console.log(values)
     //setInitialState(values);
     setRadius(Math.round(Number(values.radius)/3.281*1000)/1000);
     const sessionRef = firebase.firestore().collection('sessions');
@@ -114,7 +111,6 @@ const CreateSession = (props) => {
 
               <View style={testStyles.container}>
               <Slider
-                // disabled={true}
                 style={{width: '85%'}}
                 value={props.values.radius}
                 onSlidingStart={() => setScrollable({scrollEnabled: false})}
@@ -125,7 +121,6 @@ const CreateSession = (props) => {
                 onValueChange={(e) => {
                   props.setFieldValue(`radius`, e)
                   Keyboard.dismiss();
-                  console.log(e)
                 }}
                 minimumValue={10}
                 maximumValue={1000}
