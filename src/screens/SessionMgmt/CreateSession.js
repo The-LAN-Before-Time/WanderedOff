@@ -7,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   Switch,
-  Slider,
   StyleSheet,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -17,6 +16,8 @@ import { UserContext } from '../../../shared/UserContext';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import styles from '../../styles/styles';
+import Slider from '@react-native-community/slider';
+import { Keyboard } from 'react-native';
 
 const CreateSession = (props) => {
   const { setSessionId, setRadius } = props;
@@ -26,7 +27,7 @@ const CreateSession = (props) => {
   const [initialState, setInitialState] = useState({
     name: '',
     code: '',
-    radius: '',
+    radius: '500',
     centerMovable: true,
     owner: userData.id,
     active: true,
@@ -103,29 +104,33 @@ const CreateSession = (props) => {
               <Text style={styles.errorText}>
                 {props.touched.code && props.errors.code}
               </Text>
-              <Text style={styles.label}>Radius (in feet)</Text>
-              {/* <View style={testStyles.container}>
+              <Text style={styles.label}>Radius</Text>
+
+              <View style={testStyles.container}>
               <Slider
-                style={{width: 300, height: 30, borderRadius: 50, marginLeft: 50}}
-                placeholder="Enter radius"
-                value={radiusTest}
-                onValueChange={(val) => setRadiusTest(val)}
-                minimumValue={20}
+                style={{width: '85%'}}
+                value={props.values.radius}
+                onValueChange={(e) => {
+                  props.setFieldValue(`radius`, e)
+                  Keyboard.dismiss();
+                  console.log(e)
+                }}
+                minimumValue={10}
                 maximumValue={1000}
-                step={100}
-                // value={String(initialState.radius)}
-                // onChangeText={(val) => setInitialState({...initialState, radius: val})}
+                step={10}
               />
                 <View style={testStyles.textCon}>
-                  <Text>20m</Text>
+                  {/* <Text>10</Text> */}
                   <Text>
-                      {radiusTest + 'm'}
+                      {props.values.radius + ' feet'}
                   </Text>
-                  <Text >1000m</Text>
+                  {/* <Text>1000</Text> */}
                 </View>
-            </View> */}
+            </View>
 
-              <TextInput
+
+
+              {/* <TextInput
                 style={styles.input}
                 placeholder='Ex: 50'
                 value={props.values.radius}
@@ -134,7 +139,9 @@ const CreateSession = (props) => {
                 keyboardType='number-pad'
                 // value={String(initialState.radius)}
                 // onChangeText={(val) => setInitialState({...initialState, radius: val})}
-              />
+              /> */}
+
+
               <Text style={styles.errorText}>
                 {props.touched.radius && props.errors.radius}
               </Text>
@@ -174,9 +181,10 @@ const testStyles = StyleSheet.create({
     alignItems: 'center',
   },
   textCon: {
-    width: 320,
+    // width: 286,
+    width: '85%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
 });
 
