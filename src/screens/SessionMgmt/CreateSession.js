@@ -114,10 +114,14 @@ const CreateSession = (props) => {
 
               <View style={testStyles.container}>
               <Slider
+                // disabled={true}
                 style={{width: '85%'}}
                 value={props.values.radius}
                 onSlidingStart={() => setScrollable({scrollEnabled: false})}
-                onSlidingComplete={() => setScrollable({scrollEnabled: true})}
+                onSlidingComplete={(e) => {
+                  setScrollable({scrollEnabled: true})
+                  props.setFieldValue(`radius`, e)
+                }}
                 onValueChange={(e) => {
                   props.setFieldValue(`radius`, e)
                   Keyboard.dismiss();
@@ -125,7 +129,7 @@ const CreateSession = (props) => {
                 }}
                 minimumValue={10}
                 maximumValue={1000}
-                step={10}
+                step={10}              
               />
                 <View style={testStyles.textCon}>
                   {/* <Text>10</Text> */}
