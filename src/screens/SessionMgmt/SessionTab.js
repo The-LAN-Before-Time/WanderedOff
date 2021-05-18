@@ -18,6 +18,7 @@ import { Avatar, ListItem } from 'react-native-elements';
 import LoadingScreen from '../../../shared/LoadingScreen';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { firebase } from '../../firebase/config';
+import { AntDesign } from '@expo/vector-icons';
 
 const SessionTab = (props) => {
   const userData = useContext(UserContext);
@@ -74,7 +75,6 @@ const SessionTab = (props) => {
   // };
 
   const closeRow = (rowMap, userId) => {
-    //console.log('CLOSE ROW', rowMap);
     if (rowMap[userId]) {
       rowMap[userId].closeRow();
     }
@@ -82,19 +82,21 @@ const SessionTab = (props) => {
 
   const deleteRow = (rowMap, userId) => {
     closeRow(rowMap, userId);
-    //console.log('SESSION INFO', sessionInfo);
-    const userLocationRef = firebase
-      .firestore()
-      .collection('sessionUsers')
-      .doc(sessionInfo.id);
 
-    // setTimeout(() => {
-    //   console.log('IN SWIPE DELETE');
-    userLocationRef.update({
-      [`${userId}.active`]: false,
-    });
-    //   console.log('USER LOCATION DELETED');
-    // }, 15000);
+    if (activeUsers[userId] && activeUsers[userId].active) {
+      const userLocationRef = firebase
+        .firestore()
+        .collection('sessionUsers')
+        .doc(sessionInfo.id);
+      //leaveSession();
+      // setTimeout(() => {
+      //   console.log('IN SWIPE DELETE');
+      userLocationRef.update({
+        [`${userId}.active`]: false,
+      });
+      //   console.log('USER LOCATION DELETED');
+      // }, 15000);
+    }
   };
 
   const VisibleItem = (props) => {
@@ -126,37 +128,56 @@ const SessionTab = (props) => {
   };
 
   const HiddenItemWithActions = (props) => {
-    const { onClose, onDelete } = props;
+    const { swipeAnimatedValue, onClose, onDelete } = props;
 
     return (
       <View style={swipeStyles.rowBack}>
-        <Text>Left</Text>
         <TouchableOpacity
           style={[swipeStyles.backRightBtn, swipeStyles.backRightBtnLeft]}
           onPress={onClose}
         >
-          <Text>Close</Text>
+          <View style={swipeStyles.trash}>
+            <AntDesign name='closecircleo' size={24} color='white' />
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
           style={[swipeStyles.backRightBtn, swipeStyles.backRightBtnRight]}
           onPress={onDelete}
         >
-          <Text>Delete</Text>
+          <Animated.View
+            style={[
+              swipeStyles.trash,
+              {
+                transform: [
+                  {
+                    scale: swipeAnimatedValue.interpolate({
+                      inputRange: [-90, -45],
+                      outputRange: [1, 0],
+                      extrapolate: 'clamp',
+                    }),
+                  },
+                ],
+              },
+            ]}
+          >
+            <AntDesign name='deleteuser' size={24} color='white' />
+          </Animated.View>
         </TouchableOpacity>
       </View>
     );
   };
 
   const renderHiddenItem = (data, rowMap) => {
-    //console.log('DATA ITEM', data.item.index);
-    return (
-      <HiddenItemWithActions
-        data={data}
-        rowMap={rowMap}
-        onClose={() => closeRow(rowMap, data.item.userId)}
-        onDelete={() => deleteRow(rowMap, data.item.userId)}
-      />
-    );
+    if (userData.id !== data.item.userId && sessionInfo.owner === userData.id) {
+      return (
+        <HiddenItemWithActions
+          data={data}
+          rowMap={rowMap}
+          onClose={() => closeRow(rowMap, data.item.userId)}
+          onDelete={() => deleteRow(rowMap, data.item.userId)}
+        />
+      );
+    }
   };
 
   if (!userList.length) {
@@ -197,6 +218,7 @@ const SessionTab = (props) => {
             renderHiddenItem={renderHiddenItem}
             leftOpenValue={75}
             rightOpenValue={-150}
+            disableRightSwipe
             keyExtractor={(item) => item.userId}
           />
         </View>
@@ -288,11 +310,11 @@ const swipeStyles = StyleSheet.create({
     paddingRight: 17,
   },
   backRightBtnLeft: {
-    backgroundColor: '#1f65ff',
+    backgroundColor: '#0061b2',
     right: 75,
   },
   backRightBtnRight: {
-    backgroundColor: 'red',
+    backgroundColor: '#d9202b',
     right: 0,
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,

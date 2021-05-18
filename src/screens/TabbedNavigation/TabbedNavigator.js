@@ -141,10 +141,7 @@ const TabbedNavigation = (props) => {
         3000
       );
     }
-    const unsubscribeToQuery = queryLocations(
-      sessionId,
-      setNewUsers
-    );
+    const unsubscribeToQuery = queryLocations(sessionId, setNewUsers);
     return () => {
       console.log('ATTEMPTING TO UNMOUNT');
       clearInterval(interval);
@@ -158,9 +155,12 @@ const TabbedNavigation = (props) => {
   /** Add new users */
   useEffect(() => {
     if (Object.keys(newUsers).length) {
-
       //checks if user is inactive due to an owner terminating session - if inactive then immediately leaves sesion
-      if(activeUsers.list[userData.id] && activeUsers.list[userData.id].active && !newUsers[userData.id].active) {
+      if (
+        activeUsers.list[userData.id] &&
+        activeUsers.list[userData.id].active &&
+        !newUsers[userData.id].active
+      ) {
         leaveSession();
       }
 
@@ -211,10 +211,14 @@ const TabbedNavigation = (props) => {
       center.latitude = lats / Object.keys(filteredNewUsers).length;
       center.longitude = longs / Object.keys(filteredNewUsers).length;
       Object.entries(filteredNewUsers).forEach(([id, user]) => {
-        filteredNewUsers[id].inbounds = haversine(center, filteredNewUsers[id].location, {
-          unit: 'meter',
-          threshold: radius,
-        });
+        filteredNewUsers[id].inbounds = haversine(
+          center,
+          filteredNewUsers[id].location,
+          {
+            unit: 'meter',
+            threshold: radius,
+          }
+        );
         if (
           !filteredNewUsers[id].inbounds &&
           activeUsers.list[id] &&
