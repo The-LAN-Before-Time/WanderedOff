@@ -30,7 +30,7 @@ const CreateSession = (props) => {
   const [initialState, setInitialState] = useState({
     name: '',
     code: '',
-    radius: '500',
+    radius: '5',
     centerMovable: true,
     owner: userData.id,
     active: true,
@@ -68,6 +68,15 @@ const CreateSession = (props) => {
       });
     });
   };
+
+  const radiusValues = [10,20,50,100,150,200,500,1000,2640,5280,10560]
+
+  const labelGenerator = (val) => {
+    if (val == 8) return '1/2 mile'
+    if (val == 9) return '1 mile'
+    if (val == 10) return '2 miles'
+    return radiusValues[val] + ' feet'
+  }
 
   return (
     <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={scrollable.scrollEnabled}>
@@ -121,15 +130,16 @@ const CreateSession = (props) => {
                 onValueChange={(e) => {
                   props.setFieldValue(`radius`, e)
                   Keyboard.dismiss();
+                  console.log(e)
                 }}
-                minimumValue={10}
-                maximumValue={1000}
-                step={10}              
+                minimumValue={0}
+                maximumValue={10}
+                step={1}              
               />
                 <View style={testStyles.textCon}>
                   {/* <Text>10</Text> */}
                   <Text>
-                      {props.values.radius + ' feet'}
+                      {labelGenerator(props.values.radius)}
                   </Text>
                   {/* <Text>1000</Text> */}
                 </View>
