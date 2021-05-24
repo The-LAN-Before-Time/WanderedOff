@@ -16,8 +16,9 @@ import { UserContext } from '../../../shared/UserContext';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import styles from '../../styles/styles';
-import Slider from '@react-native-community/slider';
+// import Slider from '@react-native-community/slider';
 import { Keyboard } from 'react-native';
+import MultiSlider from '@ptomasroos/react-native-multi-slider'
 
 const CreateSession = (props) => {
   const { setSessionId, setRadius } = props;
@@ -30,7 +31,7 @@ const CreateSession = (props) => {
   const [initialState, setInitialState] = useState({
     name: '',
     code: '',
-    radius: '500',
+    radius: '10',
     centerMovable: true,
     owner: userData.id,
     active: true,
@@ -55,6 +56,7 @@ const CreateSession = (props) => {
 
   const updateState = (values) => {
     //setInitialState(values);
+    console.log(values.radius)
     setRadius(Math.round(Number(values.radius)/3.281*1000)/1000);
     const sessionRef = firebase.firestore().collection('sessions');
     sessionRef.add(values).then((response) => {
@@ -68,6 +70,13 @@ const CreateSession = (props) => {
       });
     });
   };
+
+  const labelGenerator = (val) => {
+    if (val == 2640) return '1/2 mile'
+    if (val == 5280) return '1 mile'
+    if (val == 10560) return '2 miles'
+    return val + ' feet'
+  }
 
   return (
     <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={scrollable.scrollEnabled}>
@@ -109,7 +118,53 @@ const CreateSession = (props) => {
               </Text>
               <Text style={styles.label}>Radius</Text>
 
+              
               <View style={testStyles.container}>
+              <MultiSlider
+              style={{width: '85%'}}
+              sliderLength={274}
+              // enableLabel={true}
+              values={[10]}
+              optionsArray={[10, 20, 50, 100, 150, 200, 500, 1000, 2640, 5280, 10560]}
+              // stepsAs={[{index: 0, stepLabel: '0 feet', prefix: 'hi', suffix: 'yo'}, {index: 1, stepLabel: '20 feet', prefix: 'i', suffix: 'o'},{index: 2, stepLabel: '10 feet', prefix: 'hi', suffix: 'yo'}, {index: 3, stepLabel: '20 feet', prefix: 'i', suffix: 'o'}, {index: 4, stepLabel: '20 feet', prefix: 'i', suffix: 'o'}]}
+              // showSteps={true}
+              // showStepMarkers={true}
+              // showStepLabels={true}
+              min={10}
+              max={10560}
+              snapped={true}
+              // value={props.values.radius}
+              onValuesChange={([e]) => {
+                setScrollable({scrollEnabled: false})
+                props.setFieldValue(`radius`, e)
+                Keyboard.dismiss();
+              }}
+
+              onValuesChangeStart={() => {
+                setScrollable({scrollEnabled: false})
+                // props.setFieldValue(`radius`, e)
+                Keyboard.dismiss();
+              }
+            }
+              onValuesChangeFinish={([e]) => {
+                setScrollable({scrollEnabled: true})
+                props.setFieldValue(`radius`, e)
+                Keyboard.dismiss();
+              }}
+              />
+                <View style={testStyles.textCon}>
+                  <Text>
+                      {labelGenerator(props.values.radius)}
+                  </Text>
+                </View>
+              </View>
+
+
+
+
+
+
+              {/* <View style={testStyles.container}> 
               <Slider
                 style={{width: '85%'}}
                 value={props.values.radius}
@@ -127,13 +182,16 @@ const CreateSession = (props) => {
                 step={10}              
               />
                 <View style={testStyles.textCon}>
-                  {/* <Text>10</Text> */}
                   <Text>
                       {props.values.radius + ' feet'}
                   </Text>
-                  {/* <Text>1000</Text> */}
                 </View>
-            </View>
+            </View> */}
+
+
+
+
+
 
 
 
@@ -147,6 +205,9 @@ const CreateSession = (props) => {
                 // value={String(initialState.radius)}
                 // onChangeText={(val) => setInitialState({...initialState, radius: val})}
               /> */}
+
+
+
 
 
               <Text style={styles.errorText}>
