@@ -84,8 +84,30 @@ export default function MapScreen({
           .filter((user) => user.userId !== userData.id)
           .map((user, idx) => {
             if (user.userId) {
+              const renderName = () => {
+                let output = '';
+                let uniqueSpaceCount = 0;
+                let prevChar = false;
+                let i = 0;
+                while (i < user.fullName.length) {
+                  if (user.fullName[i] != ' ' && !prevChar) {
+                    if (uniqueSpaceCount >= 2) return output + '..'
+                    output += user.fullName[i];
+                    prevChar = true;
+                    i++;
+                  } else if (user.fullName[i] == ' ') {
+                    prevChar = false;
+                    uniqueSpaceCount++;
+                    while (user.fullName[i] == ' ') {
+                      i++;
+                    }
+                  } else i++;
+                }
+                return output;
+              };         
               return (
                 <Marker
+                  anchor={{x: 0.5, y: 0.5}}
                   key={user.userId}
                   coordinate={{
                     latitude: user.location.latitude,
@@ -95,30 +117,15 @@ export default function MapScreen({
                 >
                   <View
                     style={{
-                      padding: 10,
+                      // padding: 10,
                       alignItems: 'center',
                       justifyContent: 'center',
                       border: 'black',
                     }}
                   >
-                    {/* <Text
-                                        style={{
-                                            color: colors[user.index % colors.length],
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        {user.fullName
-                                            .split(' ')
-                                            .map((name) => name[0])
-                                            .join('')}
-                                    </Text> */}
-                    {/* <Ionicons name='person-circle' size={24} color={colors[user.index % colors.length]}/> */}
                     <Avatar
                       rounded
-                      title={user.fullName
-                        .split(' ')
-                        .map((name) => name[0])
-                        .join('')}
+                      title={renderName()}
                       overlayContainerStyle={{
                         backgroundColor:
                           colorArray[user.index % colorArray.length],
