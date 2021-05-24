@@ -121,7 +121,7 @@ const CreateSession = (props) => {
               
               <View style={testStyles.container}>
               <MultiSlider
-              style={{width: '85%'}}
+              style={{width: '100%'}}
               sliderLength={274}
               // enableLabel={true}
               values={[10]}
