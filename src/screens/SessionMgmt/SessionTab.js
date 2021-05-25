@@ -53,27 +53,6 @@ const SessionTab = (props) => {
     }
   };
 
-  // const renderItem = ({ item }) => {
-  //   return (
-  //     <ListItem bottomDivider>
-  //       <Avatar
-  //         rounded
-  //         title={item.fullName
-  //           .split(' ')
-  //           .map((name) => name[0])
-  //           .join('')}
-  //         overlayContainerStyle={{
-  //           backgroundColor: colorArray[item.index % colorArray.length],
-  //         }}
-  //       />
-  //       <ListItem.Content>
-  //         <ListItem.Title>{item.fullName}</ListItem.Title>
-  //         <ListItem.Subtitle>{item.status}</ListItem.Subtitle>
-  //       </ListItem.Content>
-  //     </ListItem>
-  //   );
-  // };
-
   const closeRow = (rowMap, userId) => {
     if (rowMap[userId]) {
       rowMap[userId].closeRow();
