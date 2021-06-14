@@ -1,12 +1,8 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState, useRef } from 'react';
+import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  LoginScreen,
-  RegistrationScreen,
-  TabbedNavigator,
-} from './src/screens';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Setting a timer', 'Remote debugger']);
 LogBox.ignoreAllLogs();
@@ -17,6 +13,9 @@ import { firebase } from './src/firebase/config';
 import { UserContext } from './shared/UserContext';
 import LoadingScreen from './shared/LoadingScreen';
 import registerForPushNotificationsAsync from './shared/registerForPushNotifications';
+import store, { rrfProps } from './src/store/index';
+import HomeStack from './src/screens/HomeStack/HomeStackCreator';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -24,8 +23,6 @@ if (!global.btoa) {
 if (!global.atob) {
   global.atob = decode;
 }
-
-const Stack = createStackNavigator();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -45,26 +42,26 @@ export default function App() {
   const [locationPermission, setLocationPermission] = useState(false);
 
   //keeps user signed
-  useEffect(() => {
-    const usersRef = firebase.firestore().collection('users');
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        usersRef
-          .doc(user.uid)
-          .get()
-          .then((document) => {
-            const userData = document.data();
-            setUser(userData);
-            setLoading(false);
-          })
-          .catch((error) => {
-            setLoading(false);
-          });
-      } else {
-        setLoading(false);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   const usersRef = firebase.firestore().collection('users');
+  //   firebase.auth().onAuthStateChanged((user) => {
+  //     if (user) {
+  //       usersRef
+  //         .doc(user.uid)
+  //         .get()
+  //         .then((document) => {
+  //           const userData = document.data();
+  //           setUser(userData);
+  //           setLoading(false);
+  //         })
+  //         .catch((error) => {
+  //           setLoading(false);
+  //         });
+  //     } else {
+  //       setLoading(false);
+  //     }
+  //   });
+  // }, []);
 
   //sets push notifcations permissions
   useEffect(() => {
@@ -104,44 +101,16 @@ export default function App() {
       }
     })();
   }, []);
-
+  // store.firebaseAuthIsReady.then(() => {
   if (loading || !locationPermission) {
     return <LoadingScreen name='app' />;
   }
-
   return (
-    <NavigationContainer test='test'>
-      <UserContext.Provider value={user}>
-        <Stack.Navigator
-          initialRouteName={user ? 'Tabbed Nav' : 'Login'}
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen
-            name='Tabbed Nav'
-            options={{
-              headerLeft: () => {
-                return null;
-              },
-            }}
-          >
-            {(props) => (
-              <TabbedNavigator
-                {...props}
-                token={expoPushToken}
-                setUser={setUser}
-              />
-            )}
-          </Stack.Screen>
-          <Stack.Screen name='Login'>
-            {(props) => <LoginScreen {...props} setUser={setUser} />}
-          </Stack.Screen>
-          <Stack.Screen name='Registration'>
-            {(props) => <RegistrationScreen {...props} setUser={setUser} />}
-          </Stack.Screen>
-        </Stack.Navigator>
-      </UserContext.Provider>
-    </NavigationContainer>
+    <Provider store={store}>
+      <ReactReduxFirebaseProvider {...rrfProps}>
+        <HomeStack />
+      </ReactReduxFirebaseProvider>
+    </Provider>
   );
+  // });
 }
